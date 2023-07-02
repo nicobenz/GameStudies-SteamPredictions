@@ -1,5 +1,5 @@
 # GameStudies-SteamPredictions
-Repository for my Computational Game Studies paper in SoSe 2023
+Repository for my project report for Computational Game Studies in SoSe 2023
 
 ## Acknowledgements
 Computations for this work were done (in part) using resources of the Leipzig University Computing Center.
