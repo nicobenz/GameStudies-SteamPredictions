@@ -14,6 +14,7 @@ import json
 from tqdm import tqdm
 import logging
 import random
+import spacy
 
 
 def sort_appid_by_tags(max_tags, save_output=True):
@@ -113,6 +114,8 @@ logging.basicConfig(
     filename='/Volumes/Data/steam/logs/create_corpus.log',
     level=logging.ERROR,
     format='%(asctime)s, %(levelname)s: %(message)s')
+
+nlp = spacy.load("en_core_web_sm")
 
 selected_tags = [
     "Adventure",

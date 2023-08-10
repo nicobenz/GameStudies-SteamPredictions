@@ -7,16 +7,17 @@ lxml==4.9.2
 netaddr==0.8.0
 openvpn-api==0.3.0
 openvpn-status==0.2.2
-requests==2.30.0
+requests~=2.31.0
 six==1.16.0
 soupsieve==2.4.1
 steamreviews==0.9.5
 urllib3==2.0.2
 
-tqdm~=4.65.0
+tqdm~=4.66.0
 pandas~=2.0.2
 scikit-learn~=1.3.0
 seaborn~=0.12.2
 matplotlib~=3.7.1
 chardet~=5.1.0
 gensim~=4.3.1
+spacy~=3.6.1
