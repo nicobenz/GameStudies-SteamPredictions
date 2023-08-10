@@ -63,6 +63,7 @@ def select_random_review_from_random_game_by_tag_list(
     - count token
     - select review if within token range
     - add to list of reviews
+    :param max_reviews_per_game:
     :param tag_list: list of tags
     :param num_of_reviews_per_tag: desired number of selected reviews per tag
     :param min_token: minimum token of a review to have
@@ -83,50 +84,51 @@ def select_random_review_from_random_game_by_tag_list(
     # select fitting reviews until specified number is reached
     while sum(len(rev_list) for rev_list in selected_reviews.values()) < num_of_reviews_per_tag * len(tag_list):
         random_tag = random.choice(tag_list)  # select random tag
-        filtered_app_ids = app_ids_by_tag[random_tag]  # get all games/appids that have this tag
-        random_game = random.choice(filtered_app_ids)  # select random game for a tag
+        if len(selected_reviews[random_tag]) < num_of_reviews_per_tag:
+            filtered_app_ids = app_ids_by_tag[random_tag]  # get all games/appids that have this tag
+            random_game = random.choice(filtered_app_ids)  # select random game for a tag
 
-        # check if the selected game only has the selected tag and none of the other tags
-        tag_only_once = True
-        if tag_exclusive:
-            for tag in tag_list:
-                if tag != random_tag:
-                    if random_game in app_ids_by_tag[tag]:
-                        tag_only_once = False
+            # check if the selected game only has the selected tag and none of the other tags
+            tag_only_once = True
+            if tag_exclusive:
+                for tag in tag_list:
+                    if tag != random_tag:
+                        if random_game in app_ids_by_tag[tag]:
+                            tag_only_once = False
 
-        # only process further if the check above is true or if exclusivity is disabled
-        if tag_exclusive and tag_only_once or not tag_exclusive:
-            try:  # try-catch block for file not found errors
-                # open game to get review file
-                with open(f'/Volumes/Data/steam/reviews/{random_game}', 'r') as f:
-                    games_reviews = json.load(f)
-                if len(games_reviews["reviews"]) != 0:
-                    random_review = random.choice(games_reviews["reviews"])
-                    if random_review["language"] == "english":
-                        # select random review and count tokens
-                        random_review_text = random_review["review"]
-                        text = nlp(random_review_text)
-                        token_count = len(text)
+            # only process further if the check above is true or if exclusivity is disabled
+            if tag_exclusive and tag_only_once or not tag_exclusive:
+                try:  # try-catch block for file not found errors
+                    # open game to get review file
+                    with open(f'/Volumes/Data/steam/reviews/{random_game}', 'r') as f:
+                        games_reviews = json.load(f)
+                    if len(games_reviews["reviews"]) != 0:
+                        random_review = random.choice(games_reviews["reviews"])
+                        if random_review["language"] == "english":
+                            # select random review and count tokens
+                            random_review_text = random_review["review"]
+                            text = nlp(random_review_text)
+                            token_count = len(text)
 
-                        # only process further if token count of review is within desired range
-                        if min_token <= token_count <= max_token:
-                            if random_review_text not in selected_reviews[random_tag]:
-                                # increment counter for selected game and add to processing list or pass if already full
-                                if random_game in game_count.keys():
-                                    game_count[random_game] += 1
-                                else:
-                                    game_count[random_game] = 1
+                            # only process further if token count of review is within desired range
+                            if min_token <= token_count <= max_token:
+                                if random_review_text not in selected_reviews[random_tag]:
+                                    # increment counter for selected game and add to processing list or pass if already full
+                                    if random_game in game_count.keys():
+                                        game_count[random_game] += 1
+                                    else:
+                                        game_count[random_game] = 1
 
-                                if game_count[random_game] <= max_reviews_per_game:
-                                    selected_reviews[random_tag].append(random_review_text)
+                                    if game_count[random_game] <= max_reviews_per_game:
+                                        selected_reviews[random_tag].append(random_review_text)
 
-            except FileNotFoundError as e:
-                logging.error(str(e))
+                except FileNotFoundError as e:
+                    logging.error(str(e))
 
-        # display current amount of collected reviews for monitoring purposes
-        current_values = " | ".join([f"{key}: {len(value):0{len(str(num_of_reviews_per_tag))}}"
-                                     for key, value in selected_reviews.items()])
-        print(f"\r{current_values}", end="")
+            # display current amount of collected reviews for monitoring purposes
+            current_values = " | ".join([f"{key}: {len(value):0{len(str(num_of_reviews_per_tag))}}"
+                                         for key, value in selected_reviews.items()])
+            print(f"\r{current_values}", end="")
     # save collection for further processing (nlp stuff)
     print("")
     print("Collection finished! Saving...")
@@ -152,7 +154,7 @@ selected_tags = [
 
 select_random_review_from_random_game_by_tag_list(
     selected_tags,
-    10000,
+    20000,
     20,
     1000,
     1000
