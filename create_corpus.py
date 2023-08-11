@@ -11,10 +11,17 @@ from os import listdir
 from os.path import isfile, join
 import ast
 import json
+
+import numpy as np
 from tqdm import tqdm
 import logging
 import random
 import spacy
+import matplotlib.pyplot as plt
+import squarify
+import seaborn as sns
+from collections import Counter
+
 
 
 def sort_appid_by_tags(max_tags, save_output=True):
@@ -79,7 +86,7 @@ def select_random_review_from_random_game_by_tag_list(
     # prepare dict for selecting fitting reviews
     selected_reviews = {tag: [] for tag in tag_list}
     # dict for counting how many times a review of a specific game has been selected
-    game_count = {}
+    game_count = {tag: {} for tag in tag_list}
 
     # select fitting reviews until specified number is reached
     while sum(len(rev_list) for rev_list in selected_reviews.values()) < num_of_reviews_per_tag * len(tag_list):
@@ -107,19 +114,19 @@ def select_random_review_from_random_game_by_tag_list(
                         if random_review["language"] == "english":
                             # select random review and count tokens
                             random_review_text = random_review["review"]
-                            text = nlp(random_review_text)
+                            text = nlp(random_review_text)  # tokenize
                             token_count = len(text)
 
                             # only process further if token count of review is within desired range
                             if min_token <= token_count <= max_token:
                                 if random_review_text not in selected_reviews[random_tag]:
-                                    # increment counter for selected game and add to processing list or pass if already full
-                                    if random_game in game_count.keys():
-                                        game_count[random_game] += 1
+                                    # increment counter for selected game and add to processing list or pass if full
+                                    if random_game in game_count[random_tag].keys():
+                                        game_count[random_tag][random_game] += 1
                                     else:
-                                        game_count[random_game] = 1
+                                        game_count[random_tag][random_game] = 1
 
-                                    if game_count[random_game] <= max_reviews_per_game:
+                                    if game_count[random_tag][random_game] <= max_reviews_per_game:
                                         selected_reviews[random_tag].append(random_review_text)
 
                 except FileNotFoundError as e:
@@ -134,6 +141,64 @@ def select_random_review_from_random_game_by_tag_list(
     print("Collection finished! Saving...")
     with open("/Volumes/Data/steam/finished_corpus/corpus.json", "w") as corpus_out:
         json.dump(selected_reviews, corpus_out)
+    with open("/Volumes/Data/steam/finished_corpus/game_count.json", "w") as games_out:
+        json.dump(game_count, games_out)
+
+
+def plot_treemap(data):
+    # prepare dimensions
+    num_pairs = len(data)
+    num_columns = 3
+    num_rows = (num_pairs + num_columns - 1) // num_columns
+
+    # fig and subplots
+    fig, axes = plt.subplots(num_rows, num_columns, figsize=(12, 6 * num_rows))
+
+    # create treemap for each tag
+    for i, (pair, items) in enumerate(data.items()):
+        row_idx = i // num_columns
+        col_idx = i % num_columns
+
+        labels = ["" for _ in items.values()]  # empty labels
+        sizes = list(items.values())
+
+        # generate treemap
+        squarify.plot(sizes=sizes, label=labels, ax=axes[row_idx][col_idx], alpha=0.7, edgecolor='white')
+        axes[row_idx][col_idx].set_title(f'{pair}')
+        axes[row_idx][col_idx].axis('off')
+
+    # save
+    plt.tight_layout()
+    plt.savefig("/Volumes/Data/steam/finished_corpus/tag_treemap.png", dpi=600)
+
+
+def plot_distribution(data):
+    # filter data to only include games with more than one review
+    filtered_data = {tag: [value for value in vals.values() if value > 1] for tag, vals in data.items()}
+
+    # get the highest number of reviews for a single game across all tags (to set as max x value in plot)
+    max_x = max(value for values in filtered_data.values() for value in values)
+
+    # reshape data to fit plt requirements
+    y = []
+    x = range(2, max_x+1)
+    for tag, values in filtered_data.items():
+        tag_count = []
+        for i in x:
+            tag_count.append(values.count(i))
+        y.append(tag_count)
+
+    plt.figure(figsize=(8, 6))
+    plt.stackplot(x, y, labels=filtered_data.keys())
+
+    plt.xlabel("Number of reviews")
+    plt.ylabel("Number of games")
+    plt.title("Distribution of games with more than one review")
+    plt.legend()
+    plt.xlim(left=2)  # put graphs directly on left spine
+
+    plt.tight_layout()
+    plt.savefig("/Volumes/Data/steam/finished_corpus/tag_distribution.png", dpi=600)
 
 
 logging.basicConfig(
@@ -152,10 +217,9 @@ selected_tags = [
     "Sports"
 ]
 
-select_random_review_from_random_game_by_tag_list(
-    selected_tags,
-    20000,
-    20,
-    1000,
-    1000
-)
+#select_random_review_from_random_game_by_tag_list(selected_tags,50000, 20, 1000, 1000)
+
+with open("/Volumes/Data/steam/finished_corpus/game_count.json", "r") as file_in:
+    game_count = json.load(file_in)
+
+plot_distribution(game_count)
