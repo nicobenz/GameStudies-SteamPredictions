@@ -188,17 +188,49 @@ def plot_distribution(data):
             tag_count.append(values.count(i))
         y.append(tag_count)
 
-    plt.figure(figsize=(8, 6))
-    plt.stackplot(x, y, labels=filtered_data.keys())
+    #plt.figure(figsize=(8, 6))
+    color_options = [
+        "viridis",
+        "plasma",
+        "inferno",
+        "magma",
+        "Spectral",
+        "RdYlBu",
+        "cool",
+        "Wistia",
+        "spring",
+        "summer",
+        "autumn",
+        "winter",
+        "cool",
+        "PiYG",
+        "PRGn",
+        "Blues",
+        "RdPu",
+        "BuPu",
+        "PuBu",
+        "PuBuGn",
+        "YlGnBu"
+    ]
+    sns.set_theme()  # makes everything pretty
+    sns.set_context("paper")
 
-    plt.xlabel("Number of reviews")
-    plt.ylabel("Number of games")
-    plt.title("Distribution of games with more than one review")
-    plt.legend()
-    plt.xlim(left=2)  # put graphs directly on left spine
+    #palette = sns.color_palette("plasma", n_colors=len(filtered_data))
+    for option in color_options:
+        palette = sns.color_palette(option, n_colors=len(filtered_data))
 
-    plt.tight_layout()
-    plt.savefig("/Volumes/Data/steam/finished_corpus/tag_distribution.png", dpi=600)
+        plt.stackplot(x, y, labels=filtered_data.keys(), colors=palette)
+
+        plt.xlabel("Number of reviews")
+        plt.ylabel("Number of games")
+        plt.title("Distribution of games with more than one review")
+        plt.legend()
+        plt.xlim(left=2)  # put graphs directly on left spine
+
+        plt.tight_layout()
+        #plt.savefig("/Volumes/Data/steam/finished_corpus/tag_distribution.png", dpi=600)
+        plt.savefig(f"/Volumes/Data/steam/finished_corpus/color_options/{option}.png", dpi=600)
+        plt.close()
 
 
 logging.basicConfig(
