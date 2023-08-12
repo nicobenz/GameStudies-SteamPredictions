@@ -83,14 +83,15 @@ def select_random_review_from_random_game_by_tag_list(
     with open('/Volumes/Data/steam/stats/tags_by_appid.json', 'r') as f:
         app_ids_by_tag = json.load(f)
 
+    current_tags = tag_list
     # prepare dict for selecting fitting reviews
-    selected_reviews = {tag: [] for tag in tag_list}
+    selected_reviews = {tag: [] for tag in current_tags}
     # dict for counting how many times a review of a specific game has been selected
-    game_count = {tag: {} for tag in tag_list}
+    game_count = {tag: {} for tag in current_tags}
 
     # select fitting reviews until specified number is reached
-    while sum(len(rev_list) for rev_list in selected_reviews.values()) < num_of_reviews_per_tag * len(tag_list):
-        random_tag = random.choice(tag_list)  # select random tag
+    while sum(len(rev_list) for rev_list in selected_reviews.values()) < num_of_reviews_per_tag * len(current_tags):
+        random_tag = random.choice(current_tags)  # select random tag
         if len(selected_reviews[random_tag]) < num_of_reviews_per_tag:
             filtered_app_ids = app_ids_by_tag[random_tag]  # get all games/appids that have this tag
             random_game = random.choice(filtered_app_ids)  # select random game for a tag
@@ -98,7 +99,7 @@ def select_random_review_from_random_game_by_tag_list(
             # check if the selected game only has the selected tag and none of the other tags
             tag_only_once = True
             if tag_exclusive:
-                for tag in tag_list:
+                for tag in current_tags:
                     if tag != random_tag:
                         if random_game in app_ids_by_tag[tag]:
                             tag_only_once = False
@@ -126,8 +127,10 @@ def select_random_review_from_random_game_by_tag_list(
                                     else:
                                         game_count[random_tag][random_game] = 1
 
-                                    if game_count[random_tag][random_game] <= max_reviews_per_game:
+                                    if game_count[random_tag][random_game] < max_reviews_per_game:
                                         selected_reviews[random_tag].append(random_review_text)
+                                    else:
+                                        app_ids_by_tag[random_tag].remove(random_game)
 
                 except FileNotFoundError as e:
                     logging.error(str(e))
@@ -136,6 +139,8 @@ def select_random_review_from_random_game_by_tag_list(
             current_values = " | ".join([f"{key}: {len(value):0{len(str(num_of_reviews_per_tag))}}"
                                          for key, value in selected_reviews.items()])
             print(f"\r{current_values}", end="")
+        else:
+            current_tags.remove(random_tag)
     # save collection for further processing (nlp stuff)
     print("")
     print("Collection finished! Saving...")
@@ -245,13 +250,12 @@ selected_tags = [
     "Strategy",
     "Simulation",
     "RPG",
-    "Puzzle",
-    "Sports"
+    "Puzzle"
 ]
 
-#select_random_review_from_random_game_by_tag_list(selected_tags,50000, 20, 1000, 1000)
+select_random_review_from_random_game_by_tag_list(selected_tags,50000, 20, 1000, 1000)
 
 with open("/Volumes/Data/steam/finished_corpus/game_count.json", "r") as file_in:
-    game_count = json.load(file_in)
+    games = json.load(file_in)
 
-plot_distribution(game_count)
+plot_distribution(games)
