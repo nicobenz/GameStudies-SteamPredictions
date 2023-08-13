@@ -1,18 +1,16 @@
 """
-Korpus erstellen
-Ziele:
-- maximale Menge an Daten nutzen
-- kein Tag darf übermäßig vertreten sein
-- kein Spiel darf übermäßig vertreten sein
-- tags: adventure, strategy, simulation, rpg, puzzle, sports
+create corpus
+goals:
+- use maximum amount of data without creating bias
+- even distribution of reviews across tags
+- set maximum amount of reviews possible for each game
+- tags: adventure, strategy, simulation, rpg, puzzle, (sports?)
 """
 
 from os import listdir
 from os.path import isfile, join
 import ast
 import json
-
-import numpy as np
 from tqdm import tqdm
 import logging
 import random
@@ -20,17 +18,25 @@ import spacy
 import matplotlib.pyplot as plt
 import squarify
 import seaborn as sns
-from collections import Counter
 
 
-
-def sort_appid_by_tags(max_tags, save_output=True):
+def sort_appid_by_tags(
+        max_tags: int,
+        save_output=True
+):
+    """
+    creates a dictionary with entries for every tag containing lists with games associated with that tag
+    :param max_tags: upper bound for most common tags that will be processed
+    :param save_output: save result to json file or not
+    """
     file_path = "/Volumes/Data/steam/tags"
 
+    # load all files containing each games tags along with the tag count
     files = [f for f in listdir(file_path) if isfile(join(file_path, f)) and f != ".DS_Store"]
     app_ids = [f.split("_")[0] for f in files]
     rev_files = [f"{file_path}/{i}" for i in files]
 
+    # map tags with the associated games
     tag_map = {}
     tqdm_total = len(rev_files)
     for idx, (app_id, rev, file) in tqdm(enumerate(zip(app_ids, rev_files, files)), total=tqdm_total):
@@ -45,6 +51,7 @@ def sort_appid_by_tags(max_tags, save_output=True):
             else:
                 tag_bound = max_tags
 
+            # only include the most common tags
             for i in range(tag_bound):
                 if sorted_tags[i]["name"] in tag_map:
                     tag_map[sorted_tags[i]["name"]].append(file)
@@ -150,7 +157,7 @@ def select_random_review_from_random_game_by_tag_list(
         json.dump(game_count, games_out)
 
 
-def plot_treemap(data):
+def plot_treemap(data: dict):
     # prepare dimensions
     num_pairs = len(data)
     num_columns = 3
@@ -177,7 +184,14 @@ def plot_treemap(data):
     plt.savefig("/Volumes/Data/steam/finished_corpus/tag_treemap.png", dpi=600)
 
 
-def plot_distribution(data):
+def plot_distribution(
+        data: dict
+):
+    """
+    visualize the number of games that have an above average number of reviews selected to check for possible bias
+    :param data: dictionary containing pairs of tags with dicts containing each selected game with the number of
+    reviews in the corpus, e.g. {'RPG': {123_Game_title: 5}, ... }
+    """
     # filter data to only include games with more than one review
     filtered_data = {tag: [value for value in vals.values() if value > 1] for tag, vals in data.items()}
 
@@ -193,49 +207,22 @@ def plot_distribution(data):
             tag_count.append(values.count(i))
         y.append(tag_count)
 
-    #plt.figure(figsize=(8, 6))
-    color_options = [
-        "viridis",
-        "plasma",
-        "inferno",
-        "magma",
-        "Spectral",
-        "RdYlBu",
-        "cool",
-        "Wistia",
-        "spring",
-        "summer",
-        "autumn",
-        "winter",
-        "cool",
-        "PiYG",
-        "PRGn",
-        "Blues",
-        "RdPu",
-        "BuPu",
-        "PuBu",
-        "PuBuGn",
-        "YlGnBu"
-    ]
     sns.set_theme()  # makes everything pretty
     sns.set_context("paper")
 
-    #palette = sns.color_palette("plasma", n_colors=len(filtered_data))
-    for option in color_options:
-        palette = sns.color_palette(option, n_colors=len(filtered_data))
+    palette = sns.color_palette("Spectral", n_colors=len(filtered_data))
 
-        plt.stackplot(x, y, labels=filtered_data.keys(), colors=palette)
+    plt.stackplot(x, y, labels=filtered_data.keys(), colors=palette)
 
-        plt.xlabel("Number of reviews")
-        plt.ylabel("Number of games")
-        plt.title("Distribution of games with more than one review")
-        plt.legend()
-        plt.xlim(left=2)  # put graphs directly on left spine
+    plt.xlabel("Number of reviews")
+    plt.ylabel("Number of games")
+    plt.title("Distribution of games with more than one review")
+    plt.legend()
+    plt.xlim(left=2)  # put graphs directly on left spine
 
-        plt.tight_layout()
-        #plt.savefig("/Volumes/Data/steam/finished_corpus/tag_distribution.png", dpi=600)
-        plt.savefig(f"/Volumes/Data/steam/finished_corpus/color_options/{option}.png", dpi=600)
-        plt.close()
+    plt.tight_layout()
+    plt.savefig("/Volumes/Data/steam/finished_corpus/tag_distribution.png", dpi=600)
+    plt.close()
 
 
 logging.basicConfig(
@@ -253,7 +240,7 @@ selected_tags = [
     "Puzzle"
 ]
 
-select_random_review_from_random_game_by_tag_list(selected_tags,50000, 20, 1000, 1000)
+#select_random_review_from_random_game_by_tag_list(selected_tags,50000, 20, 1000, 1000)
 
 with open("/Volumes/Data/steam/finished_corpus/game_count.json", "r") as file_in:
     games = json.load(file_in)
