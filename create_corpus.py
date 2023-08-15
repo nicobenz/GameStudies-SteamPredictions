@@ -92,7 +92,9 @@ def select_random_review_from_random_game_by_tag_list(
 
     current_tags = tag_list
     # prepare dict for selecting fitting reviews
+    review_embeddings = {tag: [] for tag in current_tags}
     selected_reviews = {tag: [] for tag in current_tags}
+
     # dict for counting how many times a review of a specific game has been selected
     game_count = {tag: {} for tag in current_tags}
 
@@ -122,13 +124,21 @@ def select_random_review_from_random_game_by_tag_list(
                         if random_review["language"] == "english":
                             # select random review and count tokens
                             random_review_text = random_review["review"]
-                            text = nlp(random_review_text)  # tokenize
-                            token_count = len(text)
+
+                            cleaned_text = remove_special_characters(random_review_text)
+                            cleaned_text = remove_named_entities(cleaned_text)
+
+                            doc = nlp(cleaned_text)  # tokenize
+                            token_count = len(doc)
 
                             # only process further if token count of review is within desired range
                             if min_token <= token_count <= max_token:
+                                word_embeddings = [token.vector for token in doc]
                                 if random_review_text not in selected_reviews[random_tag]:
                                     # increment counter for selected game and add to processing list or pass if full
+                                    selected_reviews[random_tag].append(random_review_text)
+                                    review_embeddings[random_tag].append(word_embeddings)
+
                                     if random_game in game_count[random_tag].keys():
                                         game_count[random_tag][random_game] += 1
                                     else:
@@ -155,6 +165,25 @@ def select_random_review_from_random_game_by_tag_list(
         json.dump(selected_reviews, corpus_out)
     with open("/Volumes/Data/steam/finished_corpus/game_count.json", "w") as games_out:
         json.dump(game_count, games_out)
+
+
+def remove_special_characters(text):
+    doc = nlp(text)
+    cleaned_tokens = [token.text for token in doc if token.is_alpha or token.is_punct]
+    cleaned_text = " ".join(cleaned_tokens)
+    return cleaned_text
+
+
+def remove_named_entities(text):
+    doc = nlp(text)
+
+    # Create a list of tokens that are not named entities
+    tokens_without_entities = [token.text if not token.ent_type_ else '' for token in doc]
+
+    # Join the non-entity tokens to create the cleaned text
+    cleaned_text = ' '.join(tokens_without_entities).strip()
+
+    return cleaned_text
 
 
 def plot_treemap(data: dict):
@@ -230,7 +259,7 @@ logging.basicConfig(
     level=logging.ERROR,
     format='%(asctime)s, %(levelname)s: %(message)s')
 
-nlp = spacy.load("en_core_web_sm")
+nlp = spacy.load("en_core_web_md")
 
 selected_tags = [
     "Adventure",
@@ -240,7 +269,7 @@ selected_tags = [
     "Puzzle"
 ]
 
-#select_random_review_from_random_game_by_tag_list(selected_tags,50000, 20, 1000, 1000)
+select_random_review_from_random_game_by_tag_list(selected_tags,50000, 20, 1000, 1000)
 
 with open("/Volumes/Data/steam/finished_corpus/game_count.json", "r") as file_in:
     games = json.load(file_in)
