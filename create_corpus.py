@@ -99,7 +99,7 @@ def select_random_review_from_random_game_by_tag_list(
     game_count = {tag: {} for tag in current_tags}
 
     # select fitting reviews until specified number is reached
-    while sum(len(rev_list) for rev_list in selected_reviews.values()) < num_of_reviews_per_tag * len(current_tags):
+    while sum(len(rev_list) for rev_list in review_embeddings.values()) < num_of_reviews_per_tag * len(tag_list):
         random_tag = random.choice(current_tags)  # select random tag
         if len(selected_reviews[random_tag]) < num_of_reviews_per_tag:
             filtered_app_ids = app_ids_by_tag[random_tag]  # get all games/appids that have this tag
@@ -154,7 +154,7 @@ def select_random_review_from_random_game_by_tag_list(
 
             # display current amount of collected reviews for monitoring purposes
             current_values = " | ".join([f"{key}: {len(value):0{len(str(num_of_reviews_per_tag))}}"
-                                         for key, value in selected_reviews.items()])
+                                         for key, value in review_embeddings.items()])
             print(f"\r{current_values}", end="")
         else:
             current_tags.remove(random_tag)
