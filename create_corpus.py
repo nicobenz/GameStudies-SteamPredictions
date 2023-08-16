@@ -278,8 +278,15 @@ selected_tags = [
     "Puzzle"
 ]
 
-select_random_review_from_random_game_by_tag_list(selected_tags, 50000, 20, 1000, 1000)
+select_random_review_from_random_game_by_tag_list(
+    selected_tags,
+    50000,
+    20,
+    1000,
+    1000
+)
 
 with open("/Volumes/Data/steam/finished_corpus/game_count.json", "r") as file_in:
     games = json.load(file_in)
+
 plot_distribution(games)
