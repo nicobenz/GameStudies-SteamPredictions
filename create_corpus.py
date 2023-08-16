@@ -94,6 +94,7 @@ def select_random_review_from_random_game_by_tag_list(
     current_tags = tag_list.copy()
     # prepare dict for selecting fitting reviews
     review_embeddings = {tag: [] for tag in current_tags}
+    review_tokens = {tag: [] for tag in current_tags}
     selected_reviews = {tag: [] for tag in current_tags}
 
     # dict for counting how many times a review of a specific game has been selected
@@ -136,10 +137,12 @@ def select_random_review_from_random_game_by_tag_list(
                             # only process further if token count of review is within desired range
                             if min_token <= token_count <= max_token:
                                 word_embeddings = [token.vector for token in doc]
+                                tokens = [token.text for token in doc]
                                 if random_review["recommendationid"] not in selected_reviews[random_tag]:
                                     # increment counter for selected game and add to processing list or pass if full
                                     selected_reviews[random_tag].append(random_review["recommendationid"])
                                     review_embeddings[random_tag].append(word_embeddings)
+                                    review_tokens[random_tag].append(tokens)
 
                                     if random_game in game_count[random_tag].keys():
                                         game_count[random_tag][random_game] += 1
@@ -165,13 +168,15 @@ def select_random_review_from_random_game_by_tag_list(
     print("Collection finished! Saving...")
     with open("/Volumes/Data/steam/finished_corpus/corpus.pickle", "wb") as corpus_out:
         pickle.dump(review_embeddings, corpus_out)
+    with open("/Volumes/Data/steam/finished_corpus/tokens.json", "w") as tokens_out:
+        json.dump(review_tokens, tokens_out)
     with open("/Volumes/Data/steam/finished_corpus/game_count.json", "w") as games_out:
         json.dump(game_count, games_out)
 
 
 def remove_special_characters(text):
     doc = nlp(text)
-    cleaned_tokens = [token.text for token in doc if token.is_alpha or token.is_punct]
+    cleaned_tokens = [token.text for token in doc if token.is_alpha]
     cleaned_text = " ".join(cleaned_tokens)
     return cleaned_text
 
