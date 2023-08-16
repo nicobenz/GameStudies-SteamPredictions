@@ -163,7 +163,7 @@ def select_random_review_from_random_game_by_tag_list(
     print("")
     print("Collection finished! Saving...")
     with open("/Volumes/Data/steam/finished_corpus/corpus.json", "w") as corpus_out:
-        json.dump(selected_reviews, corpus_out)
+        json.dump(review_embeddings, corpus_out)
     with open("/Volumes/Data/steam/finished_corpus/game_count.json", "w") as games_out:
         json.dump(game_count, games_out)
 

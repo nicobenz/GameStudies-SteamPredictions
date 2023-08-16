@@ -20,25 +20,28 @@ def vectorize_sentence(sentence, embedding_model):
 
 
 # Load pre-trained GloVe model
-model_path = "/Volumes/Data/steam/models/word2vec/GoogleNews-vectors-negative300.bin"
-word2vec_model = KeyedVectors.load_word2vec_format(model_path)
+#model_path = "/Volumes/Data/steam/models/word2vec/GoogleNews-vectors-negative300.bin"
+#word2vec_model = KeyedVectors.load_word2vec_format(model_path)
 
 # Load and preprocess data
 with open("/Volumes/Data/steam/finished_corpus/corpus.json", "r") as file_in:
     data = json.load(file_in)
 
-sentences = []
+print(data)
+
+"""
+embeddings = []
 labels = []
-for label, sentence_list in data.items():
-    sentences.extend(sentence_list)
-    labels.extend([label] * len(sentence_list))
+for label, embedding_list in data.items():
+    embeddings.extend(embedding_list)
+    labels.extend([label] * len(embedding_list))
 
 # Convert labels to numeric values using LabelEncoder
 label_encoder = LabelEncoder()
 y_encoded = label_encoder.fit_transform(labels)
 
 # Split the data
-X_train, X_test, y_train, y_test = train_test_split(sentences, y_encoded, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(embeddings, y_encoded, test_size=0.2, random_state=42)
 
 # Convert sentences to vectorized representations using pre-trained embedding
 
@@ -55,3 +58,4 @@ y_pred = naive_bayes_classifier.predict(X_test_vec)
 # Calculate accuracy
 accuracy = accuracy_score(y_test, y_pred)
 print(f"Accuracy: {accuracy:.2f}")
+"""
