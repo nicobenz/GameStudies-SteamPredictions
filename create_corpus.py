@@ -18,6 +18,7 @@ import spacy
 import matplotlib.pyplot as plt
 import squarify
 import seaborn as sns
+import pickle
 
 
 def sort_appid_by_tags(
@@ -126,6 +127,7 @@ def select_random_review_from_random_game_by_tag_list(
                             random_review_text = random_review["review"]
 
                             cleaned_text = remove_special_characters(random_review_text)
+                            cleaned_text = remove_stopwords(cleaned_text)
                             cleaned_text = remove_named_entities(cleaned_text)
 
                             doc = nlp(cleaned_text)  # tokenize
@@ -155,15 +157,14 @@ def select_random_review_from_random_game_by_tag_list(
             # display current amount of collected reviews for monitoring purposes
             current_values = " | ".join([f"{key}: {len(value):0{len(str(num_of_reviews_per_tag))}}"
                                          for key, value in review_embeddings.items()])
-            print(f"\r{current_values}: {current_tags}", end="")
-
+            print(f"\r{current_values} | Active Tags: {current_tags}", end="")
         else:
             current_tags.remove(random_tag)
     # save collection for further processing (nlp stuff)
     print("")
     print("Collection finished! Saving...")
-    with open("/Volumes/Data/steam/finished_corpus/corpus.json", "w") as corpus_out:
-        json.dump(review_embeddings, corpus_out)
+    with open("/Volumes/Data/steam/finished_corpus/corpus.pickle", "wb") as corpus_out:
+        pickle.dump(review_embeddings, corpus_out)
     with open("/Volumes/Data/steam/finished_corpus/game_count.json", "w") as games_out:
         json.dump(game_count, games_out)
 
@@ -175,15 +176,17 @@ def remove_special_characters(text):
     return cleaned_text
 
 
+def remove_stopwords(text):
+    doc = nlp(text)
+    cleaned_tokens = [token.text for token in doc if not token.is_stop]
+    cleaned_text = " ".join(cleaned_tokens)
+    return cleaned_text
+
+
 def remove_named_entities(text):
     doc = nlp(text)
-
-    # Create a list of tokens that are not named entities
     tokens_without_entities = [token.text if not token.ent_type_ else '' for token in doc]
-
-    # Join the non-entity tokens to create the cleaned text
-    cleaned_text = ' '.join(tokens_without_entities).strip()
-
+    cleaned_text = " ".join(tokens_without_entities).strip()
     return cleaned_text
 
 
