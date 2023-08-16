@@ -1,61 +1,104 @@
 import json
+import pickle
 import numpy as np
-from sklearn.preprocessing import LabelEncoder
 from sklearn.naive_bayes import MultinomialNB
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
-from gensim.models import KeyedVectors
+from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import StandardScaler
 
 
-def vectorize_sentence(sentence, embedding_model):
-    words = sentence.split()
-    word_embeddings = [embedding_model[word] for word in words if word in embedding_model]
+def naive_bayes(data):
+    token_list = []
+    label_list = []
+    for label, tokens in data.items():
+        for tok in tokens:
+            toks = ' '.join(tok)
+            token_list.append(toks)
+            label_list.append(label)
 
-    if word_embeddings:
-        sentence_embedding = np.mean(word_embeddings, axis=0)
-        return sentence_embedding
-    else:
-        # Handle the case where none of the words are in the embeddings vocabulary
-        return None
+    X_train, X_test, y_train, y_test = train_test_split(
+        token_list,
+        label_list,
+        test_size=0.2,
+        random_state=42
+    )
+
+    tfidf_vectorizer = TfidfVectorizer()
+
+    # Fit and transform the tokenized reviews to obtain TF-IDF vectors
+    X_train_tfidf = tfidf_vectorizer.fit_transform(X_train)
+    X_test_tfidf = tfidf_vectorizer.transform(X_test)
+
+    # Initialize and train Multinomial Naive Bayes classifier
+    nb_classifier = MultinomialNB()
+    nb_classifier.fit(X_train_tfidf, y_train)
+
+    # Predict using the trained classifier
+    y_pred = nb_classifier.predict(X_test_tfidf)
+
+    # Evaluate the classifier
+    evaluate_model("naive_bayes.json", y_test, y_pred)
 
 
-# Load pre-trained GloVe model
-#model_path = "/Volumes/Data/steam/models/word2vec/GoogleNews-vectors-negative300.bin"
-#word2vec_model = KeyedVectors.load_word2vec_format(model_path)
+def logistic_regression(data):
+    X = []
+    y = []
+    for label, reviews in data.items():
+        for review in reviews:
+            avg_embedding = np.mean(review, axis=0)  # Average embeddings for the review
+            X.append(avg_embedding)
+            y.append(label)
 
-# Load and preprocess data
+    # Convert lists to numpy arrays
+    X = np.array(X)
+    y = np.array(y)
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.transform(X_test)
+
+    clf = LogisticRegression(max_iter=1000)
+    clf.fit(X_train_scaled, y_train)
+
+    # Predict using the trained classifier
+    y_pred = clf.predict(X_test_scaled)
+
+    # Evaluate the classifier
+    evaluate_model("log_reg.json", y_test, y_pred)
+
+
+def evaluate_model(file_name, test, pred, print_results=True):
+    eval_dict = {}
+    accuracy = accuracy_score(test, pred)
+    precision = precision_score(test, pred, average='weighted')
+    recall = recall_score(test, pred, average='weighted')
+    f1 = f1_score(test, pred, average='weighted')
+    eval_dict["Accuracy"] = round(accuracy, 2)
+    eval_dict["Precision"] = round(precision, 2)
+    eval_dict["Recall"] = round(recall, 2)
+    eval_dict["F1-score"] = round(f1, 2)
+
+    if print_results:
+        max_key_length = max(len(key) for key in eval_dict.keys())
+        for k, v in eval_dict.items():
+            print(f"{k:{max_key_length}}\t{v:.2f}")
+        print("---")
+
+    save_path = f"/Volumes/Data/steam/results/{file_name}"
+    with open(save_path, "w") as file_out:
+        json.dump(eval_dict,file_out)
+
+
+
+with open("/Volumes/Data/steam/finished_corpus/corpus.pickle", "rb") as file_in:
+    embedding_data = pickle.load(file_in)
+
 with open("/Volumes/Data/steam/finished_corpus/corpus.json", "r") as file_in:
-    data = json.load(file_in)
+    token_data = json.load(file_in)
 
-print(data)
-
-"""
-embeddings = []
-labels = []
-for label, embedding_list in data.items():
-    embeddings.extend(embedding_list)
-    labels.extend([label] * len(embedding_list))
-
-# Convert labels to numeric values using LabelEncoder
-label_encoder = LabelEncoder()
-y_encoded = label_encoder.fit_transform(labels)
-
-# Split the data
-X_train, X_test, y_train, y_test = train_test_split(embeddings, y_encoded, test_size=0.2, random_state=42)
-
-# Convert sentences to vectorized representations using pre-trained embedding
-
-X_train_vec = [vectorize_sentence(sentence, word2vec_model) for sentence in X_train]
-X_test_vec = [vectorize_sentence(sentence, word2vec_model) for sentence in X_test]
-
-# Train a Multinomial Naive Bayes classifier
-naive_bayes_classifier = MultinomialNB()
-naive_bayes_classifier.fit(X_train_vec, y_train)
-
-# Predict on the test data
-y_pred = naive_bayes_classifier.predict(X_test_vec)
-
-# Calculate accuracy
-accuracy = accuracy_score(y_test, y_pred)
-print(f"Accuracy: {accuracy:.2f}")
-"""
+naive_bayes(token_data)
+logistic_regression(embedding_data)
