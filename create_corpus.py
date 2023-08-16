@@ -90,7 +90,7 @@ def select_random_review_from_random_game_by_tag_list(
     with open('/Volumes/Data/steam/stats/tags_by_appid.json', 'r') as f:
         app_ids_by_tag = json.load(f)
 
-    current_tags = tag_list
+    current_tags = tag_list.copy()
     # prepare dict for selecting fitting reviews
     review_embeddings = {tag: [] for tag in current_tags}
     selected_reviews = {tag: [] for tag in current_tags}
@@ -101,7 +101,7 @@ def select_random_review_from_random_game_by_tag_list(
     # select fitting reviews until specified number is reached
     while sum(len(rev_list) for rev_list in review_embeddings.values()) < num_of_reviews_per_tag * len(tag_list):
         random_tag = random.choice(current_tags)  # select random tag
-        if len(selected_reviews[random_tag]) < num_of_reviews_per_tag:
+        if len(review_embeddings[random_tag]) < num_of_reviews_per_tag:
             filtered_app_ids = app_ids_by_tag[random_tag]  # get all games/appids that have this tag
             random_game = random.choice(filtered_app_ids)  # select random game for a tag
 
@@ -119,7 +119,7 @@ def select_random_review_from_random_game_by_tag_list(
                     # open game to get review file
                     with open(f'/Volumes/Data/steam/reviews/{random_game}', 'r') as f:
                         games_reviews = json.load(f)
-                    if len(games_reviews["reviews"]) != 0:
+                    if len(games_reviews["reviews"]) > 0:
                         random_review = random.choice(games_reviews["reviews"])
                         if random_review["language"] == "english":
                             # select random review and count tokens
@@ -134,9 +134,9 @@ def select_random_review_from_random_game_by_tag_list(
                             # only process further if token count of review is within desired range
                             if min_token <= token_count <= max_token:
                                 word_embeddings = [token.vector for token in doc]
-                                if random_review_text not in selected_reviews[random_tag]:
+                                if random_review["recommendationid"] not in selected_reviews[random_tag]:
                                     # increment counter for selected game and add to processing list or pass if full
-                                    selected_reviews[random_tag].append(random_review_text)
+                                    selected_reviews[random_tag].append(random_review["recommendationid"])
                                     review_embeddings[random_tag].append(word_embeddings)
 
                                     if random_game in game_count[random_tag].keys():
@@ -155,7 +155,8 @@ def select_random_review_from_random_game_by_tag_list(
             # display current amount of collected reviews for monitoring purposes
             current_values = " | ".join([f"{key}: {len(value):0{len(str(num_of_reviews_per_tag))}}"
                                          for key, value in review_embeddings.items()])
-            print(f"\r{current_values}", end="")
+            print(f"\r{current_values}: {current_tags}", end="")
+
         else:
             current_tags.remove(random_tag)
     # save collection for further processing (nlp stuff)
@@ -269,9 +270,9 @@ selected_tags = [
     "Puzzle"
 ]
 
-select_random_review_from_random_game_by_tag_list(selected_tags,50000, 20, 1000, 1000)
+select_random_review_from_random_game_by_tag_list(selected_tags, 50, 20, 1000, 1000)
 
-with open("/Volumes/Data/steam/finished_corpus/game_count.json", "r") as file_in:
-    games = json.load(file_in)
+#with open("/Volumes/Data/steam/finished_corpus/game_count.json", "r") as file_in:
+#    games = json.load(file_in)
 
-plot_distribution(games)
+#plot_distribution(games)
