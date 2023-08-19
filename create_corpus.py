@@ -11,6 +11,8 @@ from os import listdir
 from os.path import isfile, join
 import ast
 import json
+
+import numpy as np
 from tqdm import tqdm
 import logging
 import random
@@ -19,6 +21,8 @@ import matplotlib.pyplot as plt
 import squarify
 import seaborn as sns
 import pickle
+import h5py
+import multiprocessing
 
 
 def sort_appid_by_tags(
@@ -91,104 +95,137 @@ def select_random_review_from_random_game_by_tag_list(
     with open('/Volumes/Data/steam/stats/tags_by_appid.json', 'r') as f:
         app_ids_by_tag = json.load(f)
 
-    current_tags = tag_list.copy()
     # prepare dict for selecting fitting reviews
-    review_embeddings = {tag: [] for tag in current_tags}
-    review_tokens = {tag: [] for tag in current_tags}
-    selected_reviews = {tag: [] for tag in current_tags}
 
-    # dict for counting how many times a review of a specific game has been selected
-    game_count = {tag: {} for tag in current_tags}
+    pool = multiprocessing.Pool(processes=len(tag_list))
 
-    # select fitting reviews until specified number is reached
-    while sum(len(rev_list) for rev_list in review_embeddings.values()) < num_of_reviews_per_tag * len(tag_list):
-        random_tag = random.choice(current_tags)  # select random tag
-        if len(review_embeddings[random_tag]) < num_of_reviews_per_tag:
-            filtered_app_ids = app_ids_by_tag[random_tag]  # get all games/appids that have this tag
-            random_game = random.choice(filtered_app_ids)  # select random game for a tag
+    # List of tags to process
+    tags_to_process = tag_list.copy()
 
-            # check if the selected game only has the selected tag and none of the other tags
-            tag_only_once = True
-            if tag_exclusive:
-                for tag in current_tags:
-                    if tag != random_tag:
-                        if random_game in app_ids_by_tag[tag]:
-                            tag_only_once = False
+    # params needed: tag, max_reviews, filtered_app_ids, all_tags, all_games, min_token, max_token, max_revs_per_game
+    params = [(tag, num_of_reviews_per_tag, app_ids_by_tag[tag], tag_list, app_ids_by_tag, min_token, max_token,
+              max_reviews_per_game) for tag in tags_to_process]
 
-            # only process further if the check above is true or if exclusivity is disabled
-            if tag_exclusive and tag_only_once or not tag_exclusive:
-                try:  # try-catch block for file not found errors
-                    # open game to get review file
-                    with open(f'/Volumes/Data/steam/reviews/{random_game}', 'r') as f:
-                        games_reviews = json.load(f)
-                    if len(games_reviews["reviews"]) > 0:
-                        random_review = random.choice(games_reviews["reviews"])
-                        if random_review["language"] == "english":
-                            # select random review and count tokens
-                            random_review_text = random_review["review"]
+    params = [list(param) for param in params]
+    # Map the process function to the list of tags
+    results = pool.map(process_tag, params)
 
-                            cleaned_text = remove_special_characters(random_review_text)
-                            cleaned_text = remove_stopwords(cleaned_text)
-                            cleaned_text = remove_named_entities(cleaned_text)
+    # Close the pool to stop accepting new tasks
+    pool.close()
+    # Wait for all processes to finish
+    pool.join()
 
-                            doc = nlp(cleaned_text)  # tokenize
-                            token_count = len(doc)
+    embeddings_dict = {}
+    tokens_dict = {}
+    for tag, (emb, tok) in zip(tags_to_process, results):
+        #emb = [np.mean(sublist) for sublist in emb]
+        #emb = np.array(emb, dtype=object)
+        #embeddings_dict[tag] = emb
+        tokens_dict[tag] = tok
 
-                            # only process further if token count of review is within desired range
-                            if min_token <= token_count <= max_token:
-                                word_embeddings = [token.vector for token in doc]
-                                tokens = [token.text for token in doc]
-                                if random_review["recommendationid"] not in selected_reviews[random_tag]:
-                                    # increment counter for selected game and add to processing list or pass if full
-                                    selected_reviews[random_tag].append(random_review["recommendationid"])
-                                    review_embeddings[random_tag].append(word_embeddings)
-                                    review_tokens[random_tag].append(tokens)
-
-                                    if random_game in game_count[random_tag].keys():
-                                        game_count[random_tag][random_game] += 1
-                                    else:
-                                        game_count[random_tag][random_game] = 1
-
-                                    if game_count[random_tag][random_game] < max_reviews_per_game:
-                                        selected_reviews[random_tag].append(random_review_text)
-                                    else:
-                                        app_ids_by_tag[random_tag].remove(random_game)
-
-                except FileNotFoundError as e:
-                    logging.error(str(e))
-
-            # display current amount of collected reviews for monitoring purposes
-            current_values = " | ".join([f"{key}: {len(value):0{len(str(num_of_reviews_per_tag))}}"
-                                         for key, value in review_embeddings.items()])
-            print(f"\r{current_values} | Active Tags: {current_tags}", end="")
-        else:
-            current_tags.remove(random_tag)
-    # save collection for further processing (nlp stuff)
-    print("")
-    print("Collection finished! Saving...")
-    with open("/Volumes/Data/steam/finished_corpus/corpus.pickle", "wb") as corpus_out:
-        pickle.dump(review_embeddings, corpus_out)
     with open("/Volumes/Data/steam/finished_corpus/corpus.json", "w") as tokens_out:
-        json.dump(review_tokens, tokens_out)
-    with open("/Volumes/Data/steam/finished_corpus/game_count.json", "w") as games_out:
-        json.dump(game_count, games_out)
+        json.dump(tokens_dict, tokens_out)
+    #with open("/Volumes/Data/steam/finished_corpus/game_count.json", "w") as games_out:
+    #    json.dump(game_count, games_out),
+    #with h5py.File("/Volumes/Data/steam/finished_corpus/corpus.h5", "w") as file:
+    #    # Store embeddings
+    ##    embeddings_group = file.create_group("embeddings")
+     #   for label, embeddings in embeddings_dict.items():
+    #        embeddings_group.create_dataset(label, data=embeddings, compression="gzip")
+
+    print("Saved successfully!")
 
 
-def remove_special_characters(text):
+def process_tag(parameters: list):
+    tag, max_reviews, filtered_app_ids, all_tags, all_games, min_token, max_token, max_reviews_per_game = parameters
+    tag_exclusive = True
+    review_embeddings = []
+    review_tokens = []
+    selected_reviews = []
+    game_count = {}
+
+    nlp = spacy.load("en_core_web_md")
+
+    print(f"Tag {tag}: Collection started.")
+    current_step = 0
+    while len(review_tokens) < max_reviews:
+        progress_steps = [20, 40, 60, 80]
+        progress = (len(review_tokens) / max_reviews) * 100
+
+        if current_step < len(progress_steps) and progress >= progress_steps[current_step]:
+            print(f"{progress_steps[current_step]}% reached {tag}")
+            current_step += 1
+        random_game = random.choice(filtered_app_ids)  # select random game for a tag
+
+        # check if the selected game only has the selected tag and none of the other tags
+        tag_only_once = True
+        if tag_exclusive:
+            for t in all_tags:
+                if t != tag:
+                    if random_game in all_games[t]:
+                        tag_only_once = False
+
+        # only process further if the check above is true or if exclusivity is disabled
+        if tag_exclusive and tag_only_once or not tag_exclusive:
+            try:  # try-catch block for file not found errors
+                # open game to get review file
+                with open(f'/Volumes/Data/steam/reviews/{random_game}', 'r') as f:
+                    games_reviews = json.load(f)
+                if len(games_reviews["reviews"]) > 0:
+                    random_review = random.choice(games_reviews["reviews"])
+                    if random_review["language"] == "english":
+                        # select random review and count tokens
+                        random_review_text = random_review["review"]
+
+                        cleaned_text = remove_special_characters(random_review_text, nlp)
+                        cleaned_text = remove_stopwords(cleaned_text, nlp)
+                        #cleaned_text = remove_named_entities(cleaned_text, nlp)
+
+                        doc = nlp(cleaned_text)  # tokenize
+                        token_count = len(doc)
+
+                        # only process further if token count of review is within desired range
+                        if min_token <= token_count <= max_token:
+                            #word_embeddings = [token.vector for token in doc]
+                            tokens = [token.text for token in doc]
+                            if random_review["recommendationid"] not in selected_reviews:
+                                # increment counter for selected game and add to processing list or pass if full
+                                selected_reviews.append(random_review["recommendationid"])
+                                #review_embeddings.append(np.array(word_embeddings))
+                                review_tokens.append(tokens)
+
+                                if random_game in game_count.keys():
+                                    game_count[random_game] += 1
+                                else:
+                                    game_count[random_game] = 1
+
+                                if game_count[random_game] < max_reviews_per_game:
+                                    selected_reviews.append(random_review_text)
+                                else:
+                                    filtered_app_ids.remove(random_game)
+
+            except:
+                #logging.error(str(e))
+                pass
+    print(f"Finished:    {tag}")
+    return review_embeddings, review_tokens
+
+
+def remove_special_characters(text, nlp):
     doc = nlp(text)
     cleaned_tokens = [token.text for token in doc if token.is_alpha]
     cleaned_text = " ".join(cleaned_tokens)
     return cleaned_text
 
 
-def remove_stopwords(text):
+def remove_stopwords(text, nlp):
     doc = nlp(text)
     cleaned_tokens = [token.text for token in doc if not token.is_stop]
     cleaned_text = " ".join(cleaned_tokens)
     return cleaned_text
 
 
-def remove_named_entities(text):
+def remove_named_entities(text, nlp):
     doc = nlp(text)
     tokens_without_entities = [token.text if not token.ent_type_ else '' for token in doc]
     cleaned_text = " ".join(tokens_without_entities).strip()
@@ -263,30 +300,33 @@ def plot_distribution(
     plt.close()
 
 
-logging.basicConfig(
-    filename='/Volumes/Data/steam/logs/create_corpus.log',
-    level=logging.ERROR,
-    format='%(asctime)s, %(levelname)s: %(message)s')
+if __name__ == '__main__':
+    logging.basicConfig(
+        filename='/Volumes/Data/steam/logs/create_corpus.log',
+        level=logging.ERROR,
+        format='%(asctime)s, %(levelname)s: %(message)s')
 
-nlp = spacy.load("en_core_web_md")
 
-selected_tags = [
-    "Adventure",
-    "Strategy",
-    "Simulation",
-    "RPG",
-    "Puzzle"
-]
 
-select_random_review_from_random_game_by_tag_list(
-    selected_tags,
-    50000,
-    20,
-    1000,
-    1000
-)
+    selected_tags = [
+        "Adventure",
+        "Strategy",
+        "Simulation",
+        "RPG",
+        "Puzzle"
+    ]
 
-with open("/Volumes/Data/steam/finished_corpus/game_count.json", "r") as file_in:
-    games = json.load(file_in)
+    select_random_review_from_random_game_by_tag_list(
+        selected_tags,
+        50000,
+        20,
+        1000,
+        1000
+    )
 
-plot_distribution(games)
+    #with open("/Volumes/Data/steam/finished_corpus/game_count.json", "r") as file_in:
+    #    games = json.load(file_in)
+
+    #plot_distribution(games)
+
+
