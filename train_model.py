@@ -1,5 +1,7 @@
 import json
 import pickle
+
+import h5py
 import numpy as np
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
@@ -49,8 +51,7 @@ def logistic_regression(data):
     y = []
     for label, reviews in data.items():
         for review in reviews:
-            avg_embedding = np.mean(review, axis=0)  # Average embeddings for the review
-            X.append(avg_embedding)
+            X.append(review)
             y.append(label)
 
     # convert to np arrays
@@ -105,8 +106,16 @@ def evaluate_model(file_name, test, pred, print_results=True):
 
 
 # load embeddings for log regression
-with open("/Volumes/Data/steam/finished_corpus/corpus.pickle", "rb") as file_in:
-    embedding_data = pickle.load(file_in)
+with h5py.File("/Volumes/Data/steam/finished_corpus/corpus.h5", "r") as file_in:
+    embeddings_data = {}
+
+    embeddings_group = file_in["embeddings"]
+
+    for label in embeddings_group:
+        embeddings_data[label] = embeddings_group[label][:]
+
+#with open("/Volumes/Data/steam/finished_corpus/corpus.pickle", "rb") as file_in:
+#    embedding_data = pickle.load(file_in)
 
 # load token for naive bayes
 with open("/Volumes/Data/steam/finished_corpus/corpus.json", "r") as file_in:
@@ -114,4 +123,4 @@ with open("/Volumes/Data/steam/finished_corpus/corpus.json", "r") as file_in:
 
 # train models
 naive_bayes(token_data)
-logistic_regression(embedding_data)
+#logistic_regression(embeddings_data)
