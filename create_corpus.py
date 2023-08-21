@@ -106,6 +106,8 @@ def select_random_review_from_random_game_by_tag_list(
     params = [(tag, num_of_reviews_per_tag, app_ids_by_tag[tag], tag_list, app_ids_by_tag, min_token, max_token,
               max_reviews_per_game) for tag in tags_to_process]
 
+    print("Starting collection.")
+
     params = [list(param) for param in params]
     # Map the process function to the list of tags
     results = pool.map(process_tag, params)
@@ -146,14 +148,14 @@ def process_tag(parameters: list):
 
     nlp = spacy.load("en_core_web_md")
 
-    print(f"Tag {tag}: Collection started.")
+    #print(f"Tag {tag}: Collection started.")
     current_step = 0
     while len(review_tokens) < max_reviews:
         progress_steps = [20, 40, 60, 80]
         progress = (len(review_tokens) / max_reviews) * 100
 
         if current_step < len(progress_steps) and progress >= progress_steps[current_step]:
-            print(f"{progress_steps[current_step]}% reached {tag}")
+            print(f"{progress_steps[current_step]}% reached: {tag}")
             current_step += 1
         random_game = random.choice(filtered_app_ids)  # select random game for a tag
 
