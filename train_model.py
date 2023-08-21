@@ -11,7 +11,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 
 
-def naive_bayes(data):
+def prepare_tfidf(data, test_size=0.2):
     # create lists with token strings and labels
     token_list = []
     label_list = []
@@ -25,7 +25,7 @@ def naive_bayes(data):
     X_train, X_test, y_train, y_test = train_test_split(
         token_list,
         label_list,
-        test_size=0.2,
+        test_size=test_size,
         random_state=42
     )
 
@@ -34,46 +34,43 @@ def naive_bayes(data):
     X_train_tfidf = tfidf_vectorizer.fit_transform(X_train)
     X_test_tfidf = tfidf_vectorizer.transform(X_test)
 
+    return X_train_tfidf, X_test_tfidf, y_train, y_test
+
+
+def naive_bayes(data):
+    X_train, X_test, y_train, y_test = prepare_tfidf(data)
+
     # fit naive bayes
     nb_classifier = MultinomialNB()
-    nb_classifier.fit(X_train_tfidf, y_train)
+    nb_classifier.fit(X_train, y_train)
 
     # predict
-    y_pred = nb_classifier.predict(X_test_tfidf)
+    y_pred = nb_classifier.predict(X_test)
 
     # evaluate and save results
+    print("Naive Bayes results:")
     evaluate_model("naive_bayes.json", y_test, y_pred)
 
 
-def logistic_regression(data):
+def logistic_regression(data, normalize=False):
     # prepare lists for training
-    X = []
-    y = []
-    for label, reviews in data.items():
-        for review in reviews:
-            X.append(review)
-            y.append(label)
-
-    # convert to np arrays
-    X = np.array(X)
-    y = np.array(y)
-
-    # separate sets
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    X_train, X_test, y_train, y_test = prepare_tfidf(data)
 
     # normalize
-    scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-    X_test_scaled = scaler.transform(X_test)
+    if normalize:
+        scaler = StandardScaler()
+        X_train = scaler.fit_transform(X_train)
+        X_test = scaler.transform(X_test)
 
     # fit log regression model
     clf = LogisticRegression(max_iter=1000)
-    clf.fit(X_train_scaled, y_train)
+    clf.fit(X_train, y_train)
 
     # predict
-    y_pred = clf.predict(X_test_scaled)
+    y_pred = clf.predict(X_test)
 
     # evaluate and save
+    print("Logistic Regression results:")
     evaluate_model("log_reg.json", y_test, y_pred)
 
 
@@ -97,7 +94,6 @@ def evaluate_model(file_name, test, pred, print_results=True):
         max_key_length = max(len(key) for key in eval_dict.keys())
         for k, v in eval_dict.items():
             print(f"{k:{max_key_length}}\t{v:.2f}")
-        print("---")
 
     # save to disk
     save_path = f"/Volumes/Data/steam/results/{file_name}"
@@ -123,4 +119,5 @@ with open("/Volumes/Data/steam/finished_corpus/corpus.json", "r") as file_in:
 
 # train models
 naive_bayes(token_data)
-#logistic_regression(embeddings_data)
+print("---")
+logistic_regression(token_data)
