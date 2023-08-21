@@ -9,6 +9,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
+from sklearn.metrics import classification_report
 
 
 def prepare_tfidf(data, test_size=0.2):
@@ -52,7 +54,13 @@ def naive_bayes(data):
 
     # evaluate and save results
     print("Results:")
-    evaluate_model("naive_bayes.json", y_test, y_pred)
+    model_evaluation_overview("naive_bayes.json", y_test, y_pred)
+
+    report = classification_report(y_test, y_pred)
+
+    # save classification report to a file
+    with open("naive_bayes_full_report.txt", "w") as f:
+        f.write(report)
 
 
 def logistic_regression(data):
@@ -71,7 +79,13 @@ def logistic_regression(data):
 
     # evaluate and save
     print("Results:")
-    evaluate_model("log_reg.json", y_test, y_pred)
+    model_evaluation_overview("log_reg.json", y_test, y_pred)
+
+    report = classification_report(y_test, y_pred)
+
+    # save classification report to a file
+    with open("log_reg_full_report.txt", "w") as f:
+        f.write(report)
 
 
 def random_forest(data):
@@ -90,10 +104,43 @@ def random_forest(data):
 
     # evaluate and save
     print("Results:")
-    evaluate_model("random_forest.json", y_test, y_pred)
+    model_evaluation_overview("random_forest.json", y_test, y_pred)
+
+    report = classification_report(y_test, y_pred)
+
+    # save classification report to a file
+    with open("random_forest_full_report.txt", "w") as f:
+        f.write(report)
 
 
-def evaluate_model(file_name, test, pred, print_results=True):
+def support_vector_machine(data):
+    print("Support Vector Machine")
+    # prepare lists for training
+    X_train, X_test, y_train, y_test = prepare_tfidf(data)
+
+    # initialize SVM with a linear kernel (you can experiment with other kernels)
+    clf = SVC(kernel='linear')
+
+    print("Fitting...")
+    # fit SVM model
+    clf.fit(X_train, y_train)
+
+    print("Predicting...")
+    # predict
+    y_pred = clf.predict(X_test)
+
+    print("Results:")
+    # evaluate and save
+    model_evaluation_overview("svm.json", y_test, y_pred)
+
+    report = classification_report(y_test, y_pred)
+
+    # save classification report to a file
+    with open("svm_full_report.txt", "w") as f:
+        f.write(report)
+
+
+def model_evaluation_overview(file_name, test, pred, print_results=True):
     eval_dict = {}
 
     # calculate relevant metrics
@@ -137,6 +184,7 @@ with open("/Volumes/Data/steam/finished_corpus/corpus.json", "r") as file_in:
     token_data = json.load(file_in)
 
 # train models
-#naive_bayes(token_data)
+support_vector_machine(token_data)
+#random_forest(token_data)
 #logistic_regression(token_data)
-random_forest(token_data)
+#naive_bayes(token_data)
