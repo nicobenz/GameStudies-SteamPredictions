@@ -1,6 +1,5 @@
 import json
 import pickle
-
 import h5py
 import numpy as np
 from sklearn.naive_bayes import MultinomialNB
@@ -9,6 +8,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestClassifier
 
 
 def prepare_tfidf(data, test_size=0.2):
@@ -38,40 +38,59 @@ def prepare_tfidf(data, test_size=0.2):
 
 
 def naive_bayes(data):
+    print("Naive Bayes")
     X_train, X_test, y_train, y_test = prepare_tfidf(data)
 
     # fit naive bayes
     nb_classifier = MultinomialNB()
+    print("Fitting...")
     nb_classifier.fit(X_train, y_train)
 
     # predict
+    print("Predicting...")
     y_pred = nb_classifier.predict(X_test)
 
     # evaluate and save results
-    print("Naive Bayes results:")
+    print("Results:")
     evaluate_model("naive_bayes.json", y_test, y_pred)
 
 
-def logistic_regression(data, normalize=False):
+def logistic_regression(data):
+    print("Logistic Regression")
     # prepare lists for training
     X_train, X_test, y_train, y_test = prepare_tfidf(data)
 
-    # normalize
-    if normalize:
-        scaler = StandardScaler()
-        X_train = scaler.fit_transform(X_train)
-        X_test = scaler.transform(X_test)
-
     # fit log regression model
     clf = LogisticRegression(max_iter=1000)
+    print("Fitting...")
     clf.fit(X_train, y_train)
 
     # predict
+    print("Predicting...")
     y_pred = clf.predict(X_test)
 
     # evaluate and save
-    print("Logistic Regression results:")
+    print("Results:")
     evaluate_model("log_reg.json", y_test, y_pred)
+
+
+def random_forest(data):
+    print("Random Forest")
+    # prepare lists for training
+    X_train, X_test, y_train, y_test = prepare_tfidf(data)
+
+    # fit random forest model
+    clf = RandomForestClassifier(n_estimators=100, random_state=42)
+    print("Fitting...")
+    clf.fit(X_train, y_train)
+
+    # predict
+    print("Predicting...")
+    y_pred = clf.predict(X_test)
+
+    # evaluate and save
+    print("Results:")
+    evaluate_model("random_forest.json", y_test, y_pred)
 
 
 def evaluate_model(file_name, test, pred, print_results=True):
@@ -118,6 +137,6 @@ with open("/Volumes/Data/steam/finished_corpus/corpus.json", "r") as file_in:
     token_data = json.load(file_in)
 
 # train models
-naive_bayes(token_data)
-print("---")
-logistic_regression(token_data)
+#naive_bayes(token_data)
+#logistic_regression(token_data)
+random_forest(token_data)
