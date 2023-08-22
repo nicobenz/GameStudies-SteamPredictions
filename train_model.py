@@ -1,16 +1,17 @@
 import json
-import pickle
-import h5py
 import numpy as np
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
-from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
 from sklearn.metrics import classification_report
+from keras.models import Sequential
+from keras.layers import Embedding, LSTM, Dense
+from sklearn.preprocessing import MultiLabelBinarizer
+import tensorflow as tf
 
 
 def prepare_tfidf(data, test_size=0.2):
@@ -41,18 +42,16 @@ def prepare_tfidf(data, test_size=0.2):
 
 def naive_bayes(data):
     print("Naive Bayes")
+    # prepare lists for training
     X_train, X_test, y_train, y_test = prepare_tfidf(data)
 
-    # fit naive bayes
     nb_classifier = MultinomialNB()
     print("Fitting...")
     nb_classifier.fit(X_train, y_train)
 
-    # predict
     print("Predicting...")
     y_pred = nb_classifier.predict(X_test)
 
-    # evaluate and save results
     print("Results:")
     model_evaluation_overview("naive_bayes.json", y_test, y_pred)
 
@@ -68,16 +67,13 @@ def logistic_regression(data):
     # prepare lists for training
     X_train, X_test, y_train, y_test = prepare_tfidf(data)
 
-    # fit log regression model
     clf = LogisticRegression(max_iter=1000)
     print("Fitting...")
     clf.fit(X_train, y_train)
 
-    # predict
     print("Predicting...")
     y_pred = clf.predict(X_test)
 
-    # evaluate and save
     print("Results:")
     model_evaluation_overview("log_reg.json", y_test, y_pred)
 
@@ -93,16 +89,13 @@ def random_forest(data):
     # prepare lists for training
     X_train, X_test, y_train, y_test = prepare_tfidf(data)
 
-    # fit random forest model
     clf = RandomForestClassifier(n_estimators=100, random_state=42)
     print("Fitting...")
     clf.fit(X_train, y_train)
 
-    # predict
     print("Predicting...")
     y_pred = clf.predict(X_test)
 
-    # evaluate and save
     print("Results:")
     model_evaluation_overview("random_forest.json", y_test, y_pred)
 
@@ -118,25 +111,75 @@ def support_vector_machine(data):
     # prepare lists for training
     X_train, X_test, y_train, y_test = prepare_tfidf(data)
 
-    # initialize SVM with a linear kernel (you can experiment with other kernels)
-    clf = SVC(kernel='linear')
-
+    clf = SVC(kernel='linear')  # maybe try other kernels?
     print("Fitting...")
     # fit SVM model
     clf.fit(X_train, y_train)
 
     print("Predicting...")
-    # predict
     y_pred = clf.predict(X_test)
 
     print("Results:")
-    # evaluate and save
     model_evaluation_overview("svm.json", y_test, y_pred)
 
     report = classification_report(y_test, y_pred)
 
     # save classification report to a file
     with open("svm_full_report.txt", "w") as f:
+        f.write(report)
+
+
+def recurrent_neural_network(data):
+    # parse data in batches for memory efficiency
+    def batch_generator(features, labels, batch_size):
+        num_samples = features.shape[0]
+        while True:
+            indices = np.random.permutation(num_samples)
+            for start_idx in range(0, num_samples, batch_size):
+                end_idx = start_idx + batch_size
+                batch_indices = indices[start_idx:end_idx]
+                X_batch = tf.convert_to_tensor(features[batch_indices].toarray(), dtype=tf.float32)
+                y_batch = np.array(labels)[batch_indices]
+                yield X_batch, y_batch
+
+    print("Recurrent Neural Network")
+    # prepare lists for training
+    X_train, X_test, y_train, y_test = prepare_tfidf(data)
+
+    # binarize
+    mlb = MultiLabelBinarizer()
+    y_train = mlb.fit_transform(y_train)
+    y_test = mlb.transform(y_test)
+
+    # define model
+    num_classes = y_train.shape[1]
+    model = Sequential()
+    model.add(Embedding(input_dim=X_train.shape[1], output_dim=64))
+    model.add(LSTM(128))
+    model.add(Dense(num_classes, activation='sigmoid'))
+
+    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+    print("Fitting...")
+    batch_size = 32  # adjust maybe?
+    train_generator = batch_generator(X_train, y_train, batch_size)
+    steps_per_epoch = X_train.shape[0] // batch_size
+    model.fit(train_generator, steps_per_epoch=steps_per_epoch, epochs=10, verbose=1)
+
+    print("Predicting...")
+    y_pred_prob = model.predict(X_test)
+
+    # get prediction lists
+    y_pred = mlb.inverse_transform(y_pred_prob > 0.5)
+
+    # evaluate and save
+    print("Results:")
+    model_evaluation_overview("rnn.json", y_test, y_pred)
+
+    report = classification_report(y_test, y_pred)
+
+    # save classification report to a file
+    with open("rnn_full_report.txt", "w") as f:
         f.write(report)
 
 
@@ -167,24 +210,13 @@ def model_evaluation_overview(file_name, test, pred, print_results=True):
         json.dump(eval_dict,file_out)
 
 
-# load embeddings for log regression
-with h5py.File("/Volumes/Data/steam/finished_corpus/corpus.h5", "r") as file_in:
-    embeddings_data = {}
-
-    embeddings_group = file_in["embeddings"]
-
-    for label in embeddings_group:
-        embeddings_data[label] = embeddings_group[label][:]
-
-#with open("/Volumes/Data/steam/finished_corpus/corpus.pickle", "rb") as file_in:
-#    embedding_data = pickle.load(file_in)
-
-# load token for naive bayes
+# load token
 with open("/Volumes/Data/steam/finished_corpus/corpus.json", "r") as file_in:
     token_data = json.load(file_in)
 
 # train models
-support_vector_machine(token_data)
+#support_vector_machine(token_data)
 #random_forest(token_data)
 #logistic_regression(token_data)
 #naive_bayes(token_data)
+recurrent_neural_network(token_data)

@@ -24,3 +24,4 @@ spacy~=3.6.1
 squarify~=0.4.3
 numpy~=1.25.2
 h5py~=3.9.0
+keras~=2.13.1
