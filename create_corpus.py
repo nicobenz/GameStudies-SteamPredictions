@@ -302,6 +302,83 @@ def plot_distribution(
     plt.close()
 
 
+def create_full_corpus(
+        max_reviews_per_game,
+        min_token,
+        max_token
+):
+    game_path = "/Volumes/Data/steam/reviews"
+    all_games = [x for x in listdir("/Volumes/Data/steam/reviews") if ".DS_Store" not in x]
+
+    games_dict = {}
+    for game in all_games:
+        with open(f"{game_path}/{game}") as file_in:
+            game_file = file_in.read()
+
+        print(game_file)
+        game_infos = {game: {}}
+
+    # continue coding here
+
+
+def create_flat_json_corpus(most_common_tags=5):
+    missing_tags = []  # download missing files later
+    game_path = "/Volumes/Data/steam/reviews"
+    tags_path = "/Volumes/Data/steam/tags"
+    all_games = [x for x in listdir("/Volumes/Data/steam/reviews") if ".DS_Store" not in x]
+
+    # create a corpus only containing review dicts to eliminate the need to open files every time
+    flat_corpus = {}
+    for game in tqdm(all_games, desc="Games"):
+        with open(f"{game_path}/{game}", "r") as file_in:
+            game_file = json.loads(file_in.read())
+
+        app_id = game.split("_")[0]
+        if game_file["reviews"]:
+            # loop over all reviews
+            for rev in game_file["reviews"]:
+                if rev["language"] == "english":
+                    try:
+                        # load all tags
+                        with open(f"{tags_path}/{game}", "r") as file_in:
+                            tags_file = ast.literal_eval(file_in.read())
+
+                        num_of_tags = len(tags_file)
+                        tags = []
+                        # only use up to the specified amount of tags
+                        if num_of_tags < most_common_tags:
+                            for i in range(len(tags_file)):
+                                tag_dict = {"name": tags_file[i]["name"], "count": tags_file[i]["count"]}
+                                tags.append(tag_dict)
+                        else:
+                            for i in range(most_common_tags):
+                                tag_dict = {"name": tags_file[i]["name"], "count": tags_file[i]["count"]}
+                                tags.append(tag_dict)
+
+                        # bundle up dict with everything that could be useful
+                        review_data = {
+                            "app_id": app_id,
+                            "rev_id": rev["recommendationid"],
+                            "sorted_tags": tags,
+                            "voted_up": rev["voted_up"],
+                            "votes_up": rev["votes_up"],
+                            "weighted_vote_score": rev["weighted_vote_score"],
+                            "review": rev["review"]
+                        }
+
+                        # add to corpus under review id
+                        flat_corpus[rev["recommendationid"]] = review_data
+                    except FileNotFoundError as e:
+                        # add to missing list if file not found
+                        missing_tags.append(game)
+    # save
+    with open("/Volumes/Data/steam/finished_corpus/flat_corpus.json", "w") as file_out:
+        json.dump(flat_corpus, file_out)
+
+
+
+
+
 if __name__ == '__main__':
     logging.basicConfig(
         filename='/Volumes/Data/steam/logs/create_corpus.log',
@@ -318,17 +395,18 @@ if __name__ == '__main__':
         "Puzzle"
     ]
 
-    select_random_review_from_random_game_by_tag_list(
-        selected_tags,
-        50000,
-        20,
-        1000,
-        1000
-    )
+    #select_random_review_from_random_game_by_tag_list(
+    #    selected_tags,
+    #    50000,
+    #    20,
+    #    1000,
+    #    1000
+    #)
 
     #with open("/Volumes/Data/steam/finished_corpus/game_count.json", "r") as file_in:
     #    games = json.load(file_in)
 
     #plot_distribution(games)
-
+    #create_full_corpus(1000, 20, 1000)
+    create_flat_json_corpus()
 
