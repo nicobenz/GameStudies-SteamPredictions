@@ -6,13 +6,11 @@ goals:
 - set maximum amount of reviews possible for each game
 - tags: adventure, strategy, simulation, rpg, puzzle, (sports?)
 """
-
 from os import listdir
 from os.path import isfile, join
 import ast
 import json
-
-import numpy as np
+import sqlite3
 from tqdm import tqdm
 import logging
 import random
@@ -20,8 +18,6 @@ import spacy
 import matplotlib.pyplot as plt
 import squarify
 import seaborn as sns
-import pickle
-import h5py
 import multiprocessing
 
 
@@ -321,14 +317,32 @@ def create_full_corpus(
     # continue coding here
 
 
-def create_flat_json_corpus(most_common_tags=5):
+def create_flat_json_corpus(most_common_tags=10):
+    # prepare db
+    conn = sqlite3.connect("/Volumes/Data/steam/finished_corpus/reviews.db")
+    cursor = conn.cursor()
+
+    # create table if not existing
+    create_db = """
+    CREATE TABLE IF NOT EXISTS reviews (
+        app_id INTEGER,
+        rev_id INTEGER PRIMARY KEY,
+        sorted_tags TEXT,
+        voted_up BOOLEAN,
+        votes_up INTEGER,
+        weighted_vote_score REAL,
+        review TEXT
+    );
+    """
+    cursor.execute(create_db)
+    conn.commit()
+
     missing_tags = []  # download missing files later
     game_path = "/Volumes/Data/steam/reviews"
     tags_path = "/Volumes/Data/steam/tags"
     all_games = [x for x in listdir("/Volumes/Data/steam/reviews") if ".DS_Store" not in x]
 
     # create a corpus only containing review dicts to eliminate the need to open files every time
-    flat_corpus = {}
     for game in tqdm(all_games, desc="Games"):
         with open(f"{game_path}/{game}", "r") as file_in:
             game_file = json.loads(file_in.read())
@@ -356,10 +370,13 @@ def create_flat_json_corpus(most_common_tags=5):
                                 tags.append(tag_dict)
 
                         # bundle up dict with everything that could be useful
+                        tags_json = json.dumps(tags)
+                        # make rev id more unique in case of duplicates
+                        better_rev_id = int(f"{rev['recommendationid']}{random.randint(1000, 9999)}")
                         review_data = {
                             "app_id": app_id,
-                            "rev_id": rev["recommendationid"],
-                            "sorted_tags": tags,
+                            "rev_id": better_rev_id,
+                            "sorted_tags": tags_json,
                             "voted_up": rev["voted_up"],
                             "votes_up": rev["votes_up"],
                             "weighted_vote_score": rev["weighted_vote_score"],
@@ -367,13 +384,31 @@ def create_flat_json_corpus(most_common_tags=5):
                         }
 
                         # add to corpus under review id
-                        flat_corpus[rev["recommendationid"]] = review_data
-                    except FileNotFoundError as e:
+                        try:
+                            insert_query = """
+                            INSERT INTO reviews
+                            (app_id, rev_id, sorted_tags, voted_up, votes_up, weighted_vote_score, review)
+                            VALUES (?, ?, ?, ?, ?, ?, ?)
+                            """
+                            cursor.execute(insert_query, (
+                                review_data["app_id"],
+                                review_data["rev_id"],
+                                review_data["sorted_tags"],
+                                review_data["voted_up"],
+                                review_data["votes_up"],
+                                review_data["weighted_vote_score"],
+                                review_data["review"]
+                            ))
+                            conn.commit()
+                        except sqlite3.IntegrityError as e:
+                            print(f"Error adding record {review_data['rev_id']} of '{game}' to DB:", e)
+                    except FileNotFoundError:
                         # add to missing list if file not found
                         missing_tags.append(game)
     # save
-    with open("/Volumes/Data/steam/finished_corpus/flat_corpus.json", "w") as file_out:
-        json.dump(flat_corpus, file_out)
+    with open("/Volumes/Data/steam/stats/missing_tags.txt", "w") as file_out:
+        for line in missing_tags:
+            file_out.write(f"{line}\n")
 
 
 
