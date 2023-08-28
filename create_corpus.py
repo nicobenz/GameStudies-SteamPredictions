@@ -19,6 +19,7 @@ import matplotlib.pyplot as plt
 import squarify
 import seaborn as sns
 import multiprocessing
+import time
 
 
 def sort_appid_by_tags(
@@ -317,7 +318,7 @@ def create_full_corpus(
     # continue coding here
 
 
-def create_flat_json_corpus(most_common_tags=10):
+def create_flat_db_corpus(most_common_tags=10):
     # prepare db
     conn = sqlite3.connect("/Volumes/Data/steam/finished_corpus/reviews.db")
     cursor = conn.cursor()
@@ -411,6 +412,58 @@ def create_flat_json_corpus(most_common_tags=10):
             file_out.write(f"{line}\n")
 
 
+def process_db(tag_num, max_games, min_reviews_per_game, min_token, max_token):
+    conn = sqlite3.connect('/Volumes/Data/steam/finished_corpus/reviews.db')
+    cursor = conn.cursor()
+
+    #cursor.execute("SELECT COUNT(*) FROM reviews")
+    #num_rows = cursor.fetchone()[0]
+    num_rows = 10
+
+    initial_order = [x for x in range(1, num_rows+1)]
+    random.shuffle(initial_order)
+
+    corpus_data = {"reviews": [], "labels": [], "weights": []}
+    app_id_counter = {}
+    for i in tqdm(initial_order):
+        cursor.execute("SELECT review, app_id, sorted_tags FROM reviews WHERE row_index = ?", (i,))
+        result = cursor.fetchall()
+        app_id = result[0][1]
+
+        # only proceed if count of game under specified value
+        if app_id not in app_id_counter or app_id in app_id_counter and app_id_counter[app_id] < max_games:
+            tag_list = ast.literal_eval(result[0][2])
+            if tag_list:
+                # process review
+                review = result[0][0]
+                nlp = spacy.load("en_core_web_md")
+                # do more nlp stuff here:
+                # casing, tokenizing, removing of special characters, numbers, ascii art and stop words, lemmatizing
+
+                # filter tag list
+                tag_count = tag_num if tag_num < len(tag_list) else len(tag_list)
+                tag_list = [tag_list[i] for i in range(tag_count)]
+
+                # process labels and weights
+                labels = [tag["name"] for tag in tag_list]
+                weights = [(tag["count"] / sum(d['count'] for d in tag_list)) for tag in tag_list]
+
+                # add everything to collection
+                corpus_data["reviews"].append(review)
+                corpus_data["labels"].append(labels)
+                corpus_data["weights"].append(weights)
+
+                # update app_id counter
+                if app_id in app_id_counter:
+                    app_id_counter[app_id] += 1
+                else:
+                    app_id_counter[app_id] = 1
+
+    with open("/Volumes/Data/steam/finished_corpus/reviews.json", "w") as file_out:
+        json.dump(corpus_data, file_out)
+
+    conn.close()
+
 
 
 
@@ -443,5 +496,6 @@ if __name__ == '__main__':
 
     #plot_distribution(games)
     #create_full_corpus(1000, 20, 1000)
-    create_flat_json_corpus()
+    #create_flat_db_corpus()
+    process_db(5, 1000, 10, 20, 1000)
 
