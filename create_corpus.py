@@ -19,7 +19,11 @@ import matplotlib.pyplot as plt
 import squarify
 import seaborn as sns
 import multiprocessing
+import itertools
 import time
+import re
+from send_notification import send_mail, format_time
+from datetime import datetime
 
 
 def sort_appid_by_tags(
@@ -65,7 +69,7 @@ def sort_appid_by_tags(
 
 
 def select_random_review_from_random_game_by_tag_list(
-        tag_list: list,
+        tag_lists: list,
         num_of_reviews_per_tag: int,
         min_token: int,
         max_token: int,
@@ -80,72 +84,69 @@ def select_random_review_from_random_game_by_tag_list(
     - select review if within token range
     - add to list of reviews
     :param max_reviews_per_game:
-    :param tag_list: list of tags
+    :param tag_lists: list of lists of tags
     :param num_of_reviews_per_tag: desired number of selected reviews per tag
     :param min_token: minimum token of a review to have
     :param max_token: maximum token of a review to have
     :param tag_exclusive: boolean if a game should only contain one tag from the list or not
     :return: list of reviews for each tag
     """
+    for idx, tag_list in enumerate(tag_lists, start=1):
+        # open dict of all tags with the respective games that have this tag under their most common tags
+        with open('/Volumes/Data/steam/stats/tags_by_appid.json', 'r') as f:
+            app_ids_by_tag = json.load(f)
 
-    # open dict of all tags with the respective games that have this tag under their most common tags
-    with open('/Volumes/Data/steam/stats/tags_by_appid.json', 'r') as f:
-        app_ids_by_tag = json.load(f)
+        # prepare dict for selecting fitting reviews
 
-    # prepare dict for selecting fitting reviews
+        pool = multiprocessing.Pool(processes=len(tag_list))
 
-    pool = multiprocessing.Pool(processes=len(tag_list))
+        # List of tags to process
+        tags_to_process = tag_list.copy()
 
-    # List of tags to process
-    tags_to_process = tag_list.copy()
+        # params needed: tag, max_reviews, filtered_app_ids, all_tags, all_games, min_token, max_token, max_revs_per_game
+        params = [(tag, num_of_reviews_per_tag, app_ids_by_tag[tag], tag_list, app_ids_by_tag, min_token, max_token,
+                  max_reviews_per_game) for tag in tags_to_process]
 
-    # params needed: tag, max_reviews, filtered_app_ids, all_tags, all_games, min_token, max_token, max_revs_per_game
-    params = [(tag, num_of_reviews_per_tag, app_ids_by_tag[tag], tag_list, app_ids_by_tag, min_token, max_token,
-              max_reviews_per_game) for tag in tags_to_process]
+        print("Starting collection.")
 
-    print("Starting collection.")
+        params = [list(param) for param in params]
+        # Map the process function to the list of tags
+        start_time = time.time()
+        results = pool.map(process_tag, params)
 
-    params = [list(param) for param in params]
-    # Map the process function to the list of tags
-    results = pool.map(process_tag, params)
+        # Close the pool to stop accepting new tasks
+        pool.close()
+        # Wait for all processes to finish
+        pool.join()
 
-    # Close the pool to stop accepting new tasks
-    pool.close()
-    # Wait for all processes to finish
-    pool.join()
+        tokens_dict = {}
+        for tag, tok in zip(tags_to_process, results):
+            tokens_dict[tag] = tok
 
-    embeddings_dict = {}
-    tokens_dict = {}
-    for tag, (emb, tok) in zip(tags_to_process, results):
-        #emb = [np.mean(sublist) for sublist in emb]
-        #emb = np.array(emb, dtype=object)
-        #embeddings_dict[tag] = emb
-        tokens_dict[tag] = tok
-
-    with open("/Volumes/Data/steam/finished_corpus/corpus.json", "w") as tokens_out:
-        json.dump(tokens_dict, tokens_out)
-    #with open("/Volumes/Data/steam/finished_corpus/game_count.json", "w") as games_out:
-    #    json.dump(game_count, games_out),
-    #with h5py.File("/Volumes/Data/steam/finished_corpus/corpus.h5", "w") as file:
-    #    # Store embeddings
-    ##    embeddings_group = file.create_group("embeddings")
-     #   for label, embeddings in embeddings_dict.items():
-    #        embeddings_group.create_dataset(label, data=embeddings, compression="gzip")
-
-    print("Saved successfully!")
+        with open(f"/Volumes/Data/steam/finished_corpus/corpus-{''.join(tag_list)}.json", "w") as tokens_out:
+            json.dump(tokens_dict, tokens_out)
+        #with open("/Volumes/Data/steam/finished_corpus/game_count.json", "w") as games_out:
+        #    json.dump(game_count, games_out),
+        #with h5py.File("/Volumes/Data/steam/finished_corpus/corpus.h5", "w") as file:
+        #    # Store embeddings
+        ##    embeddings_group = file.create_group("embeddings")
+         #   for label, embeddings in embeddings_dict.items():
+        #        embeddings_group.create_dataset(label, data=embeddings, compression="gzip")
+        end_time = time.time()
+        time_taken = end_time - start_time
+        time_taken = format_time(time_taken)
+        now = datetime.now().strftime('%H:%M')
+        msg = f"Saved corpus {idx} of {len(tag_list)} '{''.join(tag_list)}' after {time_taken} at {now}."
+        send_mail("nico-benz@gmx.net", msg)
 
 
 def process_tag(parameters: list):
     tag, max_reviews, filtered_app_ids, all_tags, all_games, min_token, max_token, max_reviews_per_game = parameters
     tag_exclusive = True
-    review_embeddings = []
     review_tokens = []
     selected_reviews = []
     game_count = {}
-
     nlp = spacy.load("en_core_web_md")
-
-    #print(f"Tag {tag}: Collection started.")
     current_step = 0
     while len(review_tokens) < max_reviews:
         progress_steps = [20, 40, 60, 80]
@@ -176,22 +177,16 @@ def process_tag(parameters: list):
                         # select random review and count tokens
                         random_review_text = random_review["review"]
 
-                        cleaned_text = remove_special_characters(random_review_text, nlp)
-                        cleaned_text = remove_stopwords(cleaned_text, nlp)
-                        #cleaned_text = remove_named_entities(cleaned_text, nlp)
+                        cleaned_text = clean_text(random_review_text, nlp)
 
-                        doc = nlp(cleaned_text)  # tokenize
-                        token_count = len(doc)
+                        token_count = len(cleaned_text)
 
                         # only process further if token count of review is within desired range
                         if min_token <= token_count <= max_token:
-                            #word_embeddings = [token.vector for token in doc]
-                            tokens = [token.text for token in doc]
                             if random_review["recommendationid"] not in selected_reviews:
                                 # increment counter for selected game and add to processing list or pass if full
                                 selected_reviews.append(random_review["recommendationid"])
-                                #review_embeddings.append(np.array(word_embeddings))
-                                review_tokens.append(tokens)
+                                review_tokens.append(cleaned_text)
 
                                 if random_game in game_count.keys():
                                     game_count[random_game] += 1
@@ -203,11 +198,24 @@ def process_tag(parameters: list):
                                 else:
                                     filtered_app_ids.remove(random_game)
 
-            except:
-                #logging.error(str(e))
-                pass
+            except Exception as e:
+                logging.error(e)
+
     print(f"Finished:    {tag}")
-    return review_embeddings, review_tokens
+    return review_tokens
+
+
+def clean_text(text, nlp):
+    # Tokenize, lowercase, remove stopwords, and lemmatize
+    doc = nlp(remove_ascii_art(text))
+    cleaned_tokens = [token.lemma_.lower() for token in doc if token.is_alpha and not token.is_stop]
+    cleaned_text = " ".join(cleaned_tokens)
+    return cleaned_text
+
+
+def remove_ascii_art(text):
+    ascii_removed = re.sub(r'[^\x00-\x7F]+', '', text)
+    return ascii_removed
 
 
 def remove_special_characters(text, nlp):
@@ -228,6 +236,13 @@ def remove_named_entities(text, nlp):
     doc = nlp(text)
     tokens_without_entities = [token.text if not token.ent_type_ else '' for token in doc]
     cleaned_text = " ".join(tokens_without_entities).strip()
+    return cleaned_text
+
+
+def lemmatise(text, nlp):
+    doc = nlp(text)
+    cleaned_tokens = [token.lemma_ for token in doc]
+    cleaned_text = " ".join(cleaned_tokens)
     return cleaned_text
 
 
@@ -474,22 +489,26 @@ if __name__ == '__main__':
         format='%(asctime)s, %(levelname)s: %(message)s')
 
 
-
+    most_common_tags = [
+        "Indie", "Action", "Casual", "Adventure", "Strategy",
+        "Simulation", "RPG", "FreetoPlay", "Puzzle", "EarlyAccess",
+        "SexualContent", "Nudity", "Racing", "Sports", "VisualNovel"
+    ]
     selected_tags = [
-        "Adventure",
-        "Strategy",
-        "Simulation",
-        "RPG",
-        "Puzzle"
+        ["Strategy", "Simulation", "RPG", "Puzzle"],
+        ["Indie", "Action", "Casual", "Adventure"],
+        random.sample(most_common_tags, 4),
+        random.sample(most_common_tags, 4),
+        random.sample(most_common_tags, 4)
     ]
 
-    #select_random_review_from_random_game_by_tag_list(
-    #    selected_tags,
-    #    50000,
-    #    20,
-    #    1000,
-    #    1000
-    #)
+    select_random_review_from_random_game_by_tag_list(
+        selected_tags,
+        1,
+        20,
+        1000,
+        1000
+    )
 
     #with open("/Volumes/Data/steam/finished_corpus/game_count.json", "r") as file_in:
     #    games = json.load(file_in)
@@ -497,5 +516,5 @@ if __name__ == '__main__':
     #plot_distribution(games)
     #create_full_corpus(1000, 20, 1000)
     #create_flat_db_corpus()
-    process_db(5, 1000, 10, 20, 1000)
+    #process_db(5, 1000, 10, 20, 1000)
 
