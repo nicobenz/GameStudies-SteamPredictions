@@ -181,7 +181,6 @@ def process_tag(parameters: list):
                         if min_token <= len(random_review_text) <= max_token:
                             cleaned_text = clean_text(random_review_text, nlp)
                             token_count = len(cleaned_text)
-
                             # only process further if token count of review is within desired range
                             if min_token <= token_count <= max_token:
                                 if random_review["recommendationid"] not in selected_reviews:
