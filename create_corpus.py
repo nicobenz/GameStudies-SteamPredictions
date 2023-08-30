@@ -74,6 +74,7 @@ def select_random_review_from_random_game_by_tag_list(
         min_token: int,
         max_token: int,
         max_reviews_per_game: int,
+        path: str,
         tag_exclusive=True
 ):
     """
@@ -93,7 +94,7 @@ def select_random_review_from_random_game_by_tag_list(
     """
     for idx, tag_list in enumerate(tag_lists, start=1):
         # open dict of all tags with the respective games that have this tag under their most common tags
-        with open('/Volumes/Data/steam/stats/tags_by_appid.json', 'r') as f:
+        with open(f'{path}/steam/stats/tags_by_appid.json', 'r') as f:
             app_ids_by_tag = json.load(f)
 
         # prepare dict for selecting fitting reviews
@@ -102,11 +103,11 @@ def select_random_review_from_random_game_by_tag_list(
         # List of tags to process
         tags_to_process = tag_list.copy()
 
-        # params: tag, max_reviews, filtered_app_ids, all_tags, all_games, min_token, max_token, max_revs_per_game
+        # params: tag, max_reviews, filtered_app_ids, all_tags, all_games, min_token, max_token, max_revs_per_game, path
         params = [(tag, num_of_reviews_per_tag, app_ids_by_tag[tag], tag_list, app_ids_by_tag, min_token, max_token,
-                  max_reviews_per_game) for tag in tags_to_process]
+                  max_reviews_per_game, path) for tag in tags_to_process]
 
-        print("Starting collection.")
+        progress_logger.info("Starting collection.")
 
         params = [list(param) for param in params]
 
@@ -125,7 +126,7 @@ def select_random_review_from_random_game_by_tag_list(
         for tag, tok in zip(tags_to_process, results):
             tokens_dict[tag] = tok
 
-        with open(f"/Volumes/Data/steam/finished_corpus/corpora/corpus-{idx}-{''.join(tag_list)}.json", "w") as tokens_out:
+        with open(f"{path}/steam/finished_corpus/corpora/corpus-{idx}-{''.join(tag_list)}.json", "w") as tokens_out:
             json.dump(tokens_dict, tokens_out)
 
         end_time = time.time()
@@ -137,7 +138,7 @@ def select_random_review_from_random_game_by_tag_list(
 
 
 def process_tag(parameters: list):
-    tag, max_reviews, filtered_app_ids, all_tags, all_games, min_token, max_token, max_reviews_per_game = parameters
+    tag, max_reviews, filtered_app_ids, all_tags, all_games, min_token, max_token, max_reviews_per_game, path = parameters
     tag_exclusive = True
     review_tokens = []
     selected_reviews = []
@@ -149,7 +150,7 @@ def process_tag(parameters: list):
         progress = (len(review_tokens) / max_reviews) * 100
 
         if current_step < len(progress_steps) and progress >= progress_steps[current_step]:
-            print(f"{progress_steps[current_step]}% reached: {tag}")
+            progress_logger.info(f"{progress_steps[current_step]}% reached: {tag}")
             current_step += 1
         random_game = random.choice(filtered_app_ids)  # select random game for a tag
 
@@ -165,7 +166,7 @@ def process_tag(parameters: list):
         if tag_exclusive and tag_only_once or not tag_exclusive:
             try:  # try-catch block for file not found errors
                 # open game to get review file
-                with open(f'/Volumes/Data/steam/reviews/{random_game}', 'r') as f:
+                with open(f'{path}/steam/reviews/{random_game}', 'r') as f:
                     games_reviews = json.load(f)
                 if len(games_reviews["reviews"]) > 0:
                     random_review = random.choice(games_reviews["reviews"])
@@ -197,7 +198,7 @@ def process_tag(parameters: list):
             except Exception as e:
                 logging.error(e)
 
-    print(f"Finished:    {tag}")
+    progress_logger.info(f"Finished:    {tag}")
     return review_tokens
 
 
@@ -523,17 +524,32 @@ def process_db(tag_num, max_games, min_reviews_per_game, min_token, max_token):
 
 
 if __name__ == '__main__':
+    # set main working directory here (to use code on nas with mirrored data in different dir)
+    volume_path = "/Volumes/Data"
+
+    # error logger
     logging.basicConfig(
-        filename='/Volumes/Data/steam/logs/create_corpus.log',
+        filename=f'{volume_path}/steam/logs/corpus_creation_errors.log',
         level=logging.ERROR,
         format='%(asctime)s, %(levelname)s: %(message)s')
 
+    # progress logger
+    progress_logger = logging.getLogger('custom')
+    progress_logger.setLevel(logging.INFO)
+    # set format
+    formatter = logging.Formatter('%(asctime)s, %(levelname)s: %(message)s')
+    handler = logging.StreamHandler()
+    handler.setFormatter(formatter)
+    progress_logger.addHandler(handler)
 
+    # most common tags in raw corpus
     most_common_tags = [
         "Indie", "Action", "Casual", "Adventure", "Strategy",
         "Simulation", "RPG", "FreetoPlay", "Puzzle", "EarlyAccess",
         "SexualContent", "Nudity", "Racing", "Sports", "VisualNovel"
     ]
+
+    # tags i want to create a corpus with
     selected_tags = [
         ["Strategy", "Simulation", "RPG", "Puzzle"],
         ["Indie", "Action", "Casual", "Adventure"],
@@ -542,12 +558,14 @@ if __name__ == '__main__':
         random.sample(most_common_tags, 4)
     ]
 
+    # create a corpus with given parameters
     select_random_review_from_random_game_by_tag_list(
         selected_tags,
-        1,
+        50,
         20,
         1000,
-        1000
+        1000,
+        volume_path
     )
 
     #with open("/Volumes/Data/steam/finished_corpus/game_count.json", "r") as file_in:
