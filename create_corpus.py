@@ -107,7 +107,7 @@ def select_random_review_from_random_game_by_tag_list(
         params = [(tag, num_of_reviews_per_tag, app_ids_by_tag[tag], tag_list, app_ids_by_tag, min_token, max_token,
                   max_reviews_per_game, path) for tag in tags_to_process]
 
-        logging.info("Starting collection.")
+        print("Starting collection.")
 
         params = [list(param) for param in params]
 
@@ -133,7 +133,12 @@ def select_random_review_from_random_game_by_tag_list(
         time_taken = end_time - start_time
         time_taken = format_time(time_taken)
         now = datetime.now().strftime('%H:%M')
-        msg = f"Saved corpus {idx} of {len(tag_list)} '{''.join(tag_list)}' after {time_taken} at {now}."
+        collected = []
+        for k, v in tokens_dict.items():
+            collected.append(f"{k}: {len(v)} revs")
+
+        msg = (f"Saved corpus {idx} of {len(tag_lists)} '{''.join(tag_list)}' after {time_taken} at {now}.\n\n"
+               f"Data collected:\n{', '.join(collected)}")
         send_mail("nico-benz@gmx.net", msg)
 
 
@@ -150,7 +155,7 @@ def process_tag(parameters: list):
         progress = (len(review_tokens) / max_reviews) * 100
 
         if current_step < len(progress_steps) and progress >= progress_steps[current_step]:
-            logging.info(f"{progress_steps[current_step]}% reached: {tag}")
+            print(f"{progress_steps[current_step]}% reached: {tag}")
             current_step += 1
         random_game = random.choice(filtered_app_ids)  # select random game for a tag
 
@@ -173,32 +178,28 @@ def process_tag(parameters: list):
                     if random_review["language"] == "english":
                         # select random review and count tokens
                         random_review_text = random_review["review"]
+                        if min_token <= len(random_review_text) <= max_token:
+                            cleaned_text = clean_text(random_review_text, nlp)
+                            token_count = len(cleaned_text)
 
-                        cleaned_text = clean_text(random_review_text, nlp)
+                            # only process further if token count of review is within desired range
+                            if min_token <= token_count <= max_token:
+                                if random_review["recommendationid"] not in selected_reviews:
+                                    # increment counter for selected game and add to processing list or pass if full
+                                    selected_reviews.append(random_review["recommendationid"])
+                                    review_tokens.append(cleaned_text)
 
-                        token_count = len(cleaned_text)
+                                    if random_game in game_count.keys():
+                                        game_count[random_game] += 1
+                                    else:
+                                        game_count[random_game] = 1
 
-                        # only process further if token count of review is within desired range
-                        if min_token <= token_count <= max_token:
-                            if random_review["recommendationid"] not in selected_reviews:
-                                # increment counter for selected game and add to processing list or pass if full
-                                selected_reviews.append(random_review["recommendationid"])
-                                review_tokens.append(cleaned_text)
-
-                                if random_game in game_count.keys():
-                                    game_count[random_game] += 1
-                                else:
-                                    game_count[random_game] = 1
-
-                                if game_count[random_game] < max_reviews_per_game:
-                                    selected_reviews.append(random_review_text)
-                                else:
-                                    filtered_app_ids.remove(random_game)
-
+                                    if game_count[random_game] >= max_reviews_per_game:
+                                        filtered_app_ids.remove(random_game)
             except Exception as e:
                 logging.error(e)
 
-    logging.info(f"Finished:    {tag}")
+    print(f"Finished:    {tag}")
     return review_tokens
 
 
@@ -316,9 +317,7 @@ def plot_treemap(data: dict):
     plt.savefig("/Volumes/Data/steam/finished_corpus/tag_treemap.png", dpi=600)
 
 
-def plot_distribution(
-        data: dict
-):
+def plot_distribution(data: dict):
     """
     visualize the number of games that have an above average number of reviews selected to check for possible bias
     :param data: dictionary containing pairs of tags with dicts containing each selected game with the number of
@@ -357,11 +356,7 @@ def plot_distribution(
     plt.close()
 
 
-def create_full_corpus(
-        max_reviews_per_game,
-        min_token,
-        max_token
-):
+def create_full_corpus(max_reviews_per_game, min_token, max_token):
     game_path = "/Volumes/Data/steam/reviews"
     all_games = [x for x in listdir("/Volumes/Data/steam/reviews") if ".DS_Store" not in x]
 
@@ -554,7 +549,7 @@ if __name__ == '__main__':
     # create a corpus with given parameters
     select_random_review_from_random_game_by_tag_list(
         selected_tags,
-        50,
+        50000,
         20,
         1000,
         1000,
