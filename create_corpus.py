@@ -107,7 +107,7 @@ def select_random_review_from_random_game_by_tag_list(
         params = [(tag, num_of_reviews_per_tag, app_ids_by_tag[tag], tag_list, app_ids_by_tag, min_token, max_token,
                   max_reviews_per_game, path) for tag in tags_to_process]
 
-        progress_logger.info("Starting collection.")
+        logging.info("Starting collection.")
 
         params = [list(param) for param in params]
 
@@ -150,7 +150,7 @@ def process_tag(parameters: list):
         progress = (len(review_tokens) / max_reviews) * 100
 
         if current_step < len(progress_steps) and progress >= progress_steps[current_step]:
-            progress_logger.info(f"{progress_steps[current_step]}% reached: {tag}")
+            logging.info(f"{progress_steps[current_step]}% reached: {tag}")
             current_step += 1
         random_game = random.choice(filtered_app_ids)  # select random game for a tag
 
@@ -198,7 +198,7 @@ def process_tag(parameters: list):
             except Exception as e:
                 logging.error(e)
 
-    progress_logger.info(f"Finished:    {tag}")
+    logging.info(f"Finished:    {tag}")
     return review_tokens
 
 
@@ -532,17 +532,8 @@ if __name__ == '__main__':
     # error logger
     logging.basicConfig(
         filename=f'{volume_path}/Volumes/Data/steam/logs/corpus_creation_errors.log',
-        level=logging.ERROR,
+        level=logging.INFO,
         format='%(asctime)s, %(levelname)s: %(message)s')
-
-    # progress logger
-    progress_logger = logging.getLogger('custom')
-    progress_logger.setLevel(logging.INFO)
-    # set format
-    formatter = logging.Formatter('%(asctime)s, %(levelname)s: %(message)s')
-    handler = logging.StreamHandler()
-    handler.setFormatter(formatter)
-    progress_logger.addHandler(handler)
 
     # most common tags in raw corpus
     most_common_tags = [
