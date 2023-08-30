@@ -125,7 +125,7 @@ def select_random_review_from_random_game_by_tag_list(
         for tag, tok in zip(tags_to_process, results):
             tokens_dict[tag] = tok
 
-        with open(f"/Volumes/Data/steam/finished_corpus/corpus-{''.join(tag_list)}.json", "w") as tokens_out:
+        with open(f"/Volumes/Data/steam/finished_corpus/corpora/corpus-{idx}-{''.join(tag_list)}.json", "w") as tokens_out:
             json.dump(tokens_dict, tokens_out)
 
         end_time = time.time()
@@ -203,8 +203,12 @@ def process_tag(parameters: list):
 
 def clean_text(text, nlp):
     # Tokenize, lowercase, remove stopwords, and lemmatize
+    custom_stops = remove_custom_stopwords()  # based on tf-idf values from earlier corpora where these ranked high
     doc = nlp(remove_ascii_art(text))
-    cleaned_tokens = [token.lemma_.lower() for token in doc if token.is_alpha and not token.is_stop]
+    cleaned_tokens = [
+        token.lemma_.lower() for token in doc
+        if token.is_alpha and not token.is_stop and token.text.lower() not in custom_stops
+    ]
     cleaned_text = " ".join(cleaned_tokens)
     return cleaned_text
 
@@ -212,6 +216,48 @@ def clean_text(text, nlp):
 def remove_ascii_art(text):
     ascii_removed = re.sub(r'[^\x00-\x7F]+', '', text)
     return ascii_removed
+
+
+def remove_custom_stopwords():
+    custom_stop_words = [
+        "game",
+        "like",
+        "good",
+        "games",
+        "time",
+        "play",
+        "fun",
+        "way",
+        "great",
+        "little",
+        "bit",
+        "lot",
+        "pretty",
+        "feel",
+        "think",
+        "recommend",
+        "playing",
+        "things",
+        "want",
+        "different",
+        "played",
+        "worth",
+        "got",
+        "love",
+        "better",
+        "new",
+        "need",
+        "find",
+        "bad",
+        "nice",
+        "steam",
+        "know",
+        "dlc",
+        "use",
+        "hours",
+        "people"
+    ]
+    return custom_stop_words
 
 
 def remove_special_characters(text, nlp):
@@ -474,8 +520,6 @@ def process_db(tag_num, max_games, min_reviews_per_game, min_token, max_token):
         json.dump(corpus_data, file_out)
 
     conn.close()
-
-
 
 
 if __name__ == '__main__':
