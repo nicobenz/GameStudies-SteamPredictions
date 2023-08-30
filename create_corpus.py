@@ -527,7 +527,7 @@ if __name__ == '__main__':
     # set main working directory here (to use code on nas with mirrored data in different dir)
     # set to empty string when working with external drive mounted to local machine
     # set to "/volume1/Cloud/code/steam_corpus" when working on synology nas
-    volume_path = "/volume1/Cloud/code/steam_corpus"
+    volume_path = ""
 
     # error logger
     logging.basicConfig(
