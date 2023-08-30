@@ -13,6 +13,55 @@ from keras.layers import Embedding, LSTM, Dense
 from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.model_selection import KFold
 import tensorflow as tf
+from collections import Counter
+
+
+def prepare_tfidf_old(data, file_name, folds=5):
+    # create lists with token strings and labels
+    token_list = []
+    label_list = []
+    for label, tokens in data.items():
+        for tok in tokens:
+            toks = ' '.join(tok)
+            token_list.append(toks)
+            label_list.append(label)
+
+    # initialise vectorizer for whole dataset
+    tfidf_vectorizer = TfidfVectorizer()
+    tfidf_vectorizer.fit(token_list)
+
+    # calculate most prominent tokens for each label
+    label_prominent_tokens = {}
+    for label, tokens in data.items():
+        combined_tokens = [' '.join(tok) for tok in tokens]  # Combine token lists into single strings
+        token_tfidf_scores = tfidf_vectorizer.transform(combined_tokens).toarray()[0]
+        token_indices_sorted_by_tfidf = token_tfidf_scores.argsort()[::-1]  # Sort indices in descending order of TF-IDF
+        top_prominent_tokens = []
+        for idx in token_indices_sorted_by_tfidf[:10]:  # Top 10 most prominent tokens
+            token = tfidf_vectorizer.get_feature_names_out()[idx]
+            tfidf_score = token_tfidf_scores[idx]
+            top_prominent_tokens.append({"token": token, "tfidf_score": tfidf_score})
+        label_prominent_tokens[label] = top_prominent_tokens
+
+    with open(f"/Volumes/Data/steam/results/{file_name}_frequency.json", 'w') as json_file:
+        json.dump(label_prominent_tokens, json_file)
+
+    # randomised k-folds
+    kf = KFold(n_splits=folds, shuffle=True, random_state=42)
+
+    for train_index, val_index in kf.split(token_list):
+        X_train, X_val = [token_list[i] for i in train_index], [token_list[i] for i in val_index]
+        y_train, y_val = [label_list[i] for i in train_index], [label_list[i] for i in val_index]
+
+        # Initialize the TF-IDF vectorizer and fit it on the entire dataset
+        tfidf_vectorizer = TfidfVectorizer()
+        tfidf_vectorizer.fit(token_list)
+
+        # Transform X_train and X_val into TF-IDF vectors
+        X_train_tfidf = tfidf_vectorizer.transform(X_train)
+        X_val_tfidf = tfidf_vectorizer.transform(X_val)
+
+        yield X_train_tfidf, X_val_tfidf, y_train, y_val
 
 
 def prepare_tfidf(data, folds=5):
@@ -43,29 +92,67 @@ def prepare_tfidf(data, folds=5):
         yield X_train_tfidf, X_val_tfidf, y_train, y_val
 
 
-"""
-    # separate sets
-    X_train, X_test, y_train, y_test = train_test_split(
-        token_list,
-        label_list,
-        test_size=test_size,
-        random_state=42
-    )
+def calculate_prominent_tokens(data, num_of_tokens=50):
+    token_list = []
+    label_list = []
+    for label, tokens in data.items():
+        for tok in tokens:
+            toks = ' '.join(tok)
+            token_list.append(toks)
+            label_list.append(label)
 
-    # get tf-idf from token strings
     tfidf_vectorizer = TfidfVectorizer()
-    X_train_tfidf = tfidf_vectorizer.fit_transform(X_train)
-    X_test_tfidf = tfidf_vectorizer.transform(X_test)
+    tfidf_vectorizer.fit(token_list)
 
-    return X_train_tfidf, X_test_tfidf, y_train, y_test
-"""
+    # calculate most prominent tokens for each label using streaming-like approach
+    label_prominent_tokens = {}
+
+    for label, combined_tokens in data_generator(data):
+        document = ' '.join(combined_tokens)  # Combine tokens into a single document
+        token_tfidf_scores = tfidf_vectorizer.transform([document]).toarray()[0]
+        token_indices_sorted_by_tfidf = token_tfidf_scores.argsort()[::-1]
+        top_prominent_tokens = []
+        for idx in token_indices_sorted_by_tfidf[:num_of_tokens]:
+            token = tfidf_vectorizer.get_feature_names_out()[idx]
+            tfidf_score = token_tfidf_scores[idx]
+            top_prominent_tokens.append((token, round(tfidf_score, 2)))
+        label_prominent_tokens[label] = top_prominent_tokens
+
+    with open(f"/Volumes/Data/steam/results/tf-idf_frequency.json", 'w') as json_file:
+        json.dump(label_prominent_tokens, json_file)
+
+
+def evaluate_most_prominent_tokens_for_stopword_removal():
+    with open(f"/Volumes/Data/steam/results/tf-idf_frequency.json", 'r') as json_file:
+        tfidf_data = json.loads(json_file.read())
+
+    # gather all tokens throughout all genres
+    all_tokens = []
+    for label, token_list in tfidf_data.items():
+        for item in token_list:
+            all_tokens.append(item[0])
+
+    # count all duplicates and sort descending
+    token_counts = Counter(all_tokens)
+    token_counts = sorted(token_counts.items(), key=lambda item: item[1], reverse=True)
+
+    # show only tokens that are very prominent for more than one genre
+    for t, c in token_counts:
+        if c > 2:
+            print(t, c)
+
+
+def data_generator(data):
+    for label, tokens in data.items():
+        yield label, [' '.join(tok) for tok in tokens]
 
 
 def naive_bayes(data, folds=5):
+    model_name = "naive_bayes"
     print("Naive Bayes")
     collected_metrics = []
     # iterate over folds
-    for fold, (X_train, X_test, y_train, y_test) in enumerate(prepare_tfidf(data, folds), start=1):
+    for fold, (X_train, X_test, y_train, y_test) in enumerate(prepare_tfidf(data, model_name, folds), start=1):
         nb_classifier = MultinomialNB()
         print(f"Fitting fold {fold}...")
         nb_classifier.fit(X_train, y_train)
@@ -74,14 +161,15 @@ def naive_bayes(data, folds=5):
         report = classification_report(y_test, y_pred, output_dict=True)
         collected_metrics.append(report)
 
-    mean_folding_report(collected_metrics, "naive_bayes_full_report.json")
+    mean_folding_report(collected_metrics, model_name)
 
 
 def logistic_regression(data, folds=5):
+    model_name = "log_reg"
     print("Logistic Regression")
     collected_metrics = []
     # iterate over folds
-    for fold, (X_train, X_test, y_train, y_test) in enumerate(prepare_tfidf(data, folds), start=1):
+    for fold, (X_train, X_test, y_train, y_test) in enumerate(prepare_tfidf(data, model_name, folds), start=1):
         nb_classifier = MultinomialNB()
         print(f"Fitting fold {fold}...")
         nb_classifier.fit(X_train, y_train)
@@ -90,10 +178,11 @@ def logistic_regression(data, folds=5):
         report = classification_report(y_test, y_pred, output_dict=True)
         collected_metrics.append(report)
 
-    mean_folding_report(collected_metrics, "log_reg_full_report.json")
+    mean_folding_report(collected_metrics, model_name)
 
 
 def random_forest(data):
+    model_name = "random_forest"
     print("Random Forest")
     # prepare lists for training
     X_train, X_test, y_train, y_test = prepare_tfidf(data)
@@ -106,7 +195,7 @@ def random_forest(data):
     y_pred = clf.predict(X_test)
 
     print("Results:")
-    model_evaluation_overview("random_forest.json", y_test, y_pred)
+    model_evaluation_overview(model_name, y_test, y_pred)
 
     report = classification_report(y_test, y_pred)
 
@@ -251,7 +340,7 @@ def mean_folding_report(metrics_data, filename, print_results=True):
             for k, v in value.items():
                 mean_metrics["labels"][key][k] = round(sum(v) / len(v), 2)
 
-    with open(f"/Volumes/Data/steam/results/{filename}", "w") as file_out:
+    with open(f"/Volumes/Data/steam/results/{filename}_full_report.json", "w") as file_out:
         json.dump(mean_metrics, file_out)
 
     if print_results:
@@ -269,10 +358,13 @@ def mean_folding_report(metrics_data, filename, print_results=True):
 with open("/Volumes/Data/steam/finished_corpus/corpus.json", "r") as file_in:
     token_data = json.load(file_in)
 
+# calculate most prominent tokens
+#calculate_prominent_tokens(token_data)
+evaluate_most_prominent_tokens_for_stopword_removal()
 # train models
 # support_vector_machine(token_data)
 # random_forest(token_data)
-logistic_regression(token_data)
+# logistic_regression(token_data)
 # naive_bayes(token_data)
 # recurrent_neural_network(token_data)
 
