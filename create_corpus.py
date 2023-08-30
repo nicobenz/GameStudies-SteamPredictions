@@ -94,7 +94,7 @@ def select_random_review_from_random_game_by_tag_list(
     """
     for idx, tag_list in enumerate(tag_lists, start=1):
         # open dict of all tags with the respective games that have this tag under their most common tags
-        with open(f'{path}/steam/stats/tags_by_appid.json', 'r') as f:
+        with open(f'{path}/Volumes/Data/steam/stats/tags_by_appid.json', 'r') as f:
             app_ids_by_tag = json.load(f)
 
         # prepare dict for selecting fitting reviews
@@ -126,7 +126,7 @@ def select_random_review_from_random_game_by_tag_list(
         for tag, tok in zip(tags_to_process, results):
             tokens_dict[tag] = tok
 
-        with open(f"{path}/steam/finished_corpus/corpora/corpus-{idx}-{''.join(tag_list)}.json", "w") as tokens_out:
+        with open(f"{path}/Volumes/Data/steam/finished_corpus/corpora/corpus-{idx}-{''.join(tag_list)}.json", "w") as tokens_out:
             json.dump(tokens_dict, tokens_out)
 
         end_time = time.time()
@@ -166,7 +166,7 @@ def process_tag(parameters: list):
         if tag_exclusive and tag_only_once or not tag_exclusive:
             try:  # try-catch block for file not found errors
                 # open game to get review file
-                with open(f'{path}/steam/reviews/{random_game}', 'r') as f:
+                with open(f'{path}/Volumes/Data/steam/reviews/{random_game}', 'r') as f:
                     games_reviews = json.load(f)
                 if len(games_reviews["reviews"]) > 0:
                     random_review = random.choice(games_reviews["reviews"])
@@ -525,11 +525,13 @@ def process_db(tag_num, max_games, min_reviews_per_game, min_token, max_token):
 
 if __name__ == '__main__':
     # set main working directory here (to use code on nas with mirrored data in different dir)
-    volume_path = "/Volumes/Data"
+    # set to empty string when working with external drive mounted to local machine
+    # set to "/volume1/Cloud/code/steam_corpus" when working on synology nas
+    volume_path = "/volume1/Cloud/code/steam_corpus"
 
     # error logger
     logging.basicConfig(
-        filename=f'{volume_path}/steam/logs/corpus_creation_errors.log',
+        filename=f'{volume_path}/Volumes/Data/steam/logs/corpus_creation_errors.log',
         level=logging.ERROR,
         format='%(asctime)s, %(levelname)s: %(message)s')
 
