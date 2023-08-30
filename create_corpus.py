@@ -97,26 +97,28 @@ def select_random_review_from_random_game_by_tag_list(
             app_ids_by_tag = json.load(f)
 
         # prepare dict for selecting fitting reviews
-
         pool = multiprocessing.Pool(processes=len(tag_list))
 
         # List of tags to process
         tags_to_process = tag_list.copy()
 
-        # params needed: tag, max_reviews, filtered_app_ids, all_tags, all_games, min_token, max_token, max_revs_per_game
+        # params: tag, max_reviews, filtered_app_ids, all_tags, all_games, min_token, max_token, max_revs_per_game
         params = [(tag, num_of_reviews_per_tag, app_ids_by_tag[tag], tag_list, app_ids_by_tag, min_token, max_token,
                   max_reviews_per_game) for tag in tags_to_process]
 
         print("Starting collection.")
 
         params = [list(param) for param in params]
-        # Map the process function to the list of tags
+
         start_time = time.time()
+
+        # hand function to threads
         results = pool.map(process_tag, params)
 
-        # Close the pool to stop accepting new tasks
+        # pool needs to be closed for threads to start
         pool.close()
-        # Wait for all processes to finish
+
+        # wait for every thread to finish
         pool.join()
 
         tokens_dict = {}
@@ -125,13 +127,7 @@ def select_random_review_from_random_game_by_tag_list(
 
         with open(f"/Volumes/Data/steam/finished_corpus/corpus-{''.join(tag_list)}.json", "w") as tokens_out:
             json.dump(tokens_dict, tokens_out)
-        #with open("/Volumes/Data/steam/finished_corpus/game_count.json", "w") as games_out:
-        #    json.dump(game_count, games_out),
-        #with h5py.File("/Volumes/Data/steam/finished_corpus/corpus.h5", "w") as file:
-        #    # Store embeddings
-        ##    embeddings_group = file.create_group("embeddings")
-         #   for label, embeddings in embeddings_dict.items():
-        #        embeddings_group.create_dataset(label, data=embeddings, compression="gzip")
+
         end_time = time.time()
         time_taken = end_time - start_time
         time_taken = format_time(time_taken)
