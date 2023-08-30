@@ -133,7 +133,7 @@ def select_random_review_from_random_game_by_tag_list(
         time_taken = end_time - start_time
         time_taken = format_time(time_taken)
         now = datetime.now().strftime('%H:%M')
-        msg = f"Saved corpus {idx} of {len(tag_list)} '{''.join(tag_list)}' after {time_taken} at {now}."
+        msg = f"Saved corpus {idx} of {len(tag_lists)} '{''.join(tag_list)}' after {time_taken} at {now}."
         send_mail("nico-benz@gmx.net", msg)
 
 
@@ -553,8 +553,8 @@ if __name__ == '__main__':
 
     # create a corpus with given parameters
     select_random_review_from_random_game_by_tag_list(
-        selected_tags,
-        50,
+        selected_tags[0:1],
+        50000,
         20,
         1000,
         1000,
