@@ -122,13 +122,34 @@ def select_random_review_from_random_game_by_tag_list(
         # wait for every thread to finish
         pool.join()
 
+        # split thread results into both categories (tokens and game count)
+        tokens = []
+        game_count = []
+        for res in results:
+            for num, r in enumerate(res):
+                if num == 0:
+                    tokens.append(r)
+                else:
+                    game_count.append(r)
+
+        # flatten both (from nested tags to flat tags)
         tokens_dict = {}
-        for tag, tok in zip(tags_to_process, results):
+        for tag, tok in zip(tags_to_process, tokens):
             tokens_dict[tag] = tok
+        game_count_dict = {}
+        for count in game_count:
+            for k, v in count.items():
+                game_count_dict[k] = v
 
-        with open(f"{path}/Volumes/Data/steam/finished_corpus/corpora/corpus-{idx}-{''.join(tag_list)}.json", "w") as tokens_out:
+        # save for later
+        with (open(f"{path}/Volumes/Data/steam/finished_corpus/corpora/corpus-{idx}-{''.join(tag_list)}.json", "w")
+              as tokens_out):
             json.dump(tokens_dict, tokens_out)
+        with (open(f"{path}/Volumes/Data/steam/finished_corpus/game_counts/corpus-{idx}-{''.join(tag_list)}.json", "w")
+              as tokens_out):
+            json.dump(game_count_dict, tokens_out)
 
+        # calculate and format run time for notification service
         end_time = time.time()
         time_taken = end_time - start_time
         time_taken = format_time(time_taken)
@@ -142,6 +163,19 @@ def select_random_review_from_random_game_by_tag_list(
         send_mail("nico-benz@gmx.net", msg)
 
 
+def select_game_path(game, ids):
+    game = game.split("_")[0]
+
+    if game in ids:
+        items = len(ids[game])
+        if items == 1:
+            return ids[game][0]
+        elif items > 1:
+            return random.choice(ids[game])
+    else:
+        return False
+
+
 def process_tag(parameters: list):
     tag, max_reviews, filtered_app_ids, all_tags, all_games, min_token, max_token, max_reviews_per_game, path = parameters
     tag_exclusive = True
@@ -149,69 +183,83 @@ def process_tag(parameters: list):
     selected_reviews = []
     game_count = {}
     nlp = spacy.load("en_core_web_md")
-    current_step = 0
+
+    if max_reviews >= 500:
+        percentage_steps = 1
+        progress_list = [x for x in range(int(max_reviews / (100 / percentage_steps)),
+                                          max_reviews + 1, int(max_reviews / (100 / percentage_steps)))]
+    else:
+        progress_list = []
+    all_appids = [file for file in listdir(f"{path}/Volumes/Data/steam/reviews") if ".DS_Store" not in file]
+    app_id_mapping = {}
+    for file in all_appids:
+        app_id = file.split("_")[0]
+        if app_id in app_id_mapping:
+            app_id_mapping[app_id].append(file)
+        else:
+            app_id_mapping[app_id] = [file]
+
     while len(review_tokens) < max_reviews:
-        progress_steps = [20, 40, 60, 80]
-        progress = (len(review_tokens) / max_reviews) * 100
-
-        if current_step < len(progress_steps) and progress >= progress_steps[current_step]:
-            print(f"{progress_steps[current_step]}% reached: {tag}")
-            current_step += 1
         random_game = random.choice(filtered_app_ids)  # select random game for a tag
-
+        random_game = select_game_path(random_game, app_id_mapping)
         # check if the selected game only has the selected tag and none of the other tags
-        tag_only_once = True
-        if tag_exclusive:
-            for t in all_tags:
-                if t != tag:
-                    if random_game in all_games[t]:
-                        tag_only_once = False
+        if random_game:
+            tag_only_once = True
+            if tag_exclusive:
+                for t in all_tags:
+                    if t != tag:
+                        if random_game in all_games[t]:
+                            tag_only_once = False
 
-        # only process further if the check above is true or if exclusivity is disabled
-        if tag_exclusive and tag_only_once or not tag_exclusive:
-            try:  # try-catch block for file not found errors
-                # open game to get review file
-                with open(f'{path}/Volumes/Data/steam/reviews/{random_game}', 'r') as f:
-                    games_reviews = json.load(f)
-                if len(games_reviews["reviews"]) > 0:
-                    random_review = random.choice(games_reviews["reviews"])
-                    if random_review["language"] == "english":
-                        # select random review and count tokens
-                        random_review_text = random_review["review"]
-                        if min_token <= len(random_review_text) <= max_token:
-                            cleaned_text = clean_text(random_review_text, nlp)
-                            token_count = len(cleaned_text)
-                            # only process further if token count of review is within desired range
-                            if min_token <= token_count <= max_token:
-                                if random_review["recommendationid"] not in selected_reviews:
-                                    # increment counter for selected game and add to processing list or pass if full
-                                    selected_reviews.append(random_review["recommendationid"])
-                                    review_tokens.append(cleaned_text)
+            # only process further if the check above is true or if exclusivity is disabled
+            if tag_exclusive and tag_only_once or not tag_exclusive:
+                try:  # try-catch block for file not found errors
+                    # open game to get review file
+                    with open(f'{path}/Volumes/Data/steam/reviews/{random_game}', 'r') as f:
+                        games_reviews = json.load(f)
+                    if len(games_reviews["reviews"]) > 0:
+                        random_review = random.choice(games_reviews["reviews"])
+                        if random_review["language"] == "english":
+                            # select random review and count tokens
+                            random_review_text = random_review["review"]
+                            if min_token <= len(random_review_text) <= max_token:
+                                cleaned_text = clean_text(random_review_text, nlp)
+                                token_count = len(cleaned_text)
+                                # only process further if token count of review is within desired range
+                                if min_token <= token_count <= max_token:
+                                    if random_review["recommendationid"] not in selected_reviews:
+                                        # increment counter for selected game and add to processing list or pass if full
+                                        selected_reviews.append(random_review["recommendationid"])
+                                        review_tokens.append(cleaned_text)
 
-                                    if random_game in game_count.keys():
-                                        game_count[random_game] += 1
-                                    else:
-                                        game_count[random_game] = 1
+                                        if random_game in game_count.keys():
+                                            game_count[random_game] += 1
+                                        else:
+                                            game_count[random_game] = 1
 
-                                    if game_count[random_game] >= max_reviews_per_game:
-                                        filtered_app_ids.remove(random_game)
-            except Exception as e:
-                logging.error(e)
+                                        if game_count[random_game] >= max_reviews_per_game:
+                                            filtered_app_ids.remove(random_game)
 
-    print(f"Finished:    {tag}")
-    return review_tokens
+                                        # progress information
+                                        if progress_list:
+                                            current_progress = len(review_tokens)
+                                            if current_progress in progress_list:
+                                                print(f"{int((current_progress / max_reviews) * 100):8}%: {tag}")
+                except Exception as e:
+                    print(e)
+    print(f"Finished: {tag}")
+    return [review_tokens, game_count]
 
 
 def clean_text(text, nlp):
-    # Tokenize, lowercase, remove stopwords, and lemmatize
+    # tokenize, lowercase, remove stopwords, and lemmatize
     custom_stops = remove_custom_stopwords()  # based on tf-idf values from earlier corpora where these ranked high
     doc = nlp(remove_ascii_art(text))
     cleaned_tokens = [
-        token.lemma_.lower() for token in doc
-        if token.is_alpha and not token.is_stop and token.text.lower() not in custom_stops
+        token.text.lower() for token in doc
+        if token.is_alpha and not token.is_stop and token.lemma_ not in custom_stops
     ]
-    cleaned_text = " ".join(cleaned_tokens)
-    return cleaned_text
+    return cleaned_tokens
 
 
 def remove_ascii_art(text):
@@ -538,11 +586,11 @@ if __name__ == '__main__':
 
     # tags i want to create a corpus with
     selected_tags = [
-        ["Strategy", "Simulation", "RPG", "Puzzle"],
-        ["Indie", "Action", "Casual", "Adventure"],
-        random.sample(most_common_tags, 4),
-        random.sample(most_common_tags, 4),
-        random.sample(most_common_tags, 4)
+        ["Strategy", "Simulation", "RPG", "Puzzle", "Sports"],
+        ["Indie", "Action", "Casual", "Adventure", "Strategy"],
+        random.sample(most_common_tags, 5),
+        random.sample(most_common_tags, 5),
+        random.sample(most_common_tags, 5)
     ]
 
     # create a corpus with given parameters
