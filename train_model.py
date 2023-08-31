@@ -25,7 +25,7 @@ def calculate_prominent_tokens(data, num_of_tokens=50):
             token_list.append(toks)
             label_list.append(label)
 
-    tfidf_vectorizer = TfidfVectorizer()
+    tfidf_vectorizer = TfidfVectorizer(stop_words=None)
     tfidf_vectorizer.fit(token_list)
 
     # calculate most prominent tokens for each label using streaming-like approach
@@ -46,7 +46,7 @@ def calculate_prominent_tokens(data, num_of_tokens=50):
         json.dump(label_prominent_tokens, json_file)
 
 
-def evaluate_most_prominent_tokens_for_stopword_removal():
+def evaluate_most_prominent_tokens_for_stopword_removal(print_result=True):
     with open(f"/Volumes/Data/steam/results/tf-idf_frequency.json", 'r') as json_file:
         tfidf_data = json.loads(json_file.read())
 
@@ -61,9 +61,15 @@ def evaluate_most_prominent_tokens_for_stopword_removal():
     token_counts = sorted(token_counts.items(), key=lambda item: item[1], reverse=True)
 
     # show only tokens that are very prominent for more than one genre
+    most_prominent_tokens = {}
     for t, c in token_counts:
         if c > 2:
-            print(t, c)
+            most_prominent_tokens[t] = c
+            if print_result:
+                print(t, c)
+
+    with open(f"/Volumes/Data/steam/results/most_common_tokens.json", 'w') as json_file:
+        json.dump(most_prominent_tokens, json_file)
 
 
 def prepare_tfidf(data, folds=5):
@@ -84,7 +90,7 @@ def prepare_tfidf(data, folds=5):
         y_train, y_val = [label_list[i] for i in train_index], [label_list[i] for i in val_index]
 
         # initialize vectorizer and fit fold
-        tfidf_vectorizer = TfidfVectorizer()
+        tfidf_vectorizer = TfidfVectorizer(stop_words=None)
         tfidf_vectorizer.fit(X_train)
 
         # transform to tf-idf vectors
@@ -262,7 +268,7 @@ def mean_folding_report(metrics_data, filename, print_results=True):
 
 
 # load token
-with open("/Volumes/Data/steam/finished_corpus/corpus.json", "r") as file_in:
+with open("/Volumes/Data/steam/finished_corpus/corpora/corpus-1-StrategySimulationRPGPuzzleSports.json", "r") as file_in:
     token_data = json.load(file_in)
 
 # calculate most prominent tokens
@@ -273,4 +279,4 @@ evaluate_most_prominent_tokens_for_stopword_removal()
 train_model(token_data, "Naive Bayes")
 train_model(token_data, "Logistic Regression")
 train_model(token_data, "Support Vector Machine")
-train_model(token_data, "Random Forest")
+#train_model(token_data, "Random Forest")
