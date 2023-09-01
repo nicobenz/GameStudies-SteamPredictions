@@ -268,7 +268,7 @@ def mean_folding_report(metrics_data, filename, print_results=True):
 
 
 # load token
-with open("/Volumes/Data/steam/finished_corpus/corpora/corpus-1-StrategySimulationRPGPuzzleSports.json", "r") as file_in:
+with open("/Volumes/Data/steam/finished_corpus/corpora/corpus-1-AdventureStrategySimulationRPGPuzzle.json", "r") as file_in:
     token_data = json.load(file_in)
 
 # calculate most prominent tokens
@@ -276,7 +276,7 @@ calculate_prominent_tokens(token_data)
 evaluate_most_prominent_tokens_for_stopword_removal()
 
 # train models
-train_model(token_data, "Naive Bayes")
-train_model(token_data, "Logistic Regression")
+#train_model(token_data, "Naive Bayes")
+#train_model(token_data, "Logistic Regression")
 train_model(token_data, "Support Vector Machine")
 #train_model(token_data, "Random Forest")

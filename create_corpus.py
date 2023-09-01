@@ -178,10 +178,12 @@ def select_game_path(game, ids):
 
 def process_tag(parameters: list):
     tag, max_reviews, filtered_app_ids, all_tags, all_games, min_token, max_token, max_reviews_per_game, path = parameters
+    sleep_time = 10  # 10 sec sleep if file not found (to handle random disconnects of the external drive)
     tag_exclusive = True
     review_tokens = []
     selected_reviews = []
     game_count = {}
+    connection_lost = False
     nlp = spacy.load("en_core_web_md")
 
     if max_reviews >= 500:
@@ -213,40 +215,48 @@ def process_tag(parameters: list):
 
             # only process further if the check above is true or if exclusivity is disabled
             if tag_exclusive and tag_only_once or not tag_exclusive:
-                try:  # try-catch block for file not found errors
-                    # open game to get review file
-                    with open(f'{path}/Volumes/Data/steam/reviews/{random_game}', 'r') as f:
-                        games_reviews = json.load(f)
-                    if len(games_reviews["reviews"]) > 0:
-                        random_review = random.choice(games_reviews["reviews"])
-                        if random_review["language"] == "english":
-                            # select random review and count tokens
-                            random_review_text = random_review["review"]
-                            if min_token <= len(random_review_text) <= max_token:
-                                cleaned_text = clean_text(random_review_text, nlp)
-                                token_count = len(cleaned_text)
-                                # only process further if token count of review is within desired range
-                                if min_token <= token_count <= max_token:
-                                    if random_review["recommendationid"] not in selected_reviews:
-                                        # increment counter for selected game and add to processing list or pass if full
-                                        selected_reviews.append(random_review["recommendationid"])
-                                        review_tokens.append(cleaned_text)
+                while True:
+                    try:  # try-catch block for file not found errors
+                        # open game to get review file
+                        with open(f'{path}/Volumes/Data/steam/reviews/{random_game}', 'r') as f:
+                            games_reviews = json.load(f)
+                        if connection_lost:
+                            print("Resuming collection...")
+                            connection_lost = False
+                        break  # break if file read successfully
+                    except Exception as e:
+                        print(e)
+                        print(f"Connection to external drive lost. Trying again in {sleep_time}")
+                        connection_lost = True
+                        time.sleep(sleep_time)
+                if len(games_reviews["reviews"]) > 0:
+                    random_review = random.choice(games_reviews["reviews"])
+                    if random_review["language"] == "english":
+                        # select random review and count tokens
+                        random_review_text = random_review["review"]
+                        if min_token <= len(random_review_text) <= max_token:
+                            cleaned_text = clean_text(random_review_text, nlp)
+                            token_count = len(cleaned_text)
+                            # only process further if token count of review is within desired range
+                            if min_token <= token_count <= max_token:
+                                if random_review["recommendationid"] not in selected_reviews:
+                                    # increment counter for selected game and add to processing list or pass if full
+                                    selected_reviews.append(random_review["recommendationid"])
+                                    review_tokens.append(cleaned_text)
 
-                                        if random_game in game_count.keys():
-                                            game_count[random_game] += 1
-                                        else:
-                                            game_count[random_game] = 1
+                                    if random_game in game_count.keys():
+                                        game_count[random_game] += 1
+                                    else:
+                                        game_count[random_game] = 1
 
-                                        if game_count[random_game] >= max_reviews_per_game:
-                                            filtered_app_ids.remove(random_game)
+                                    if game_count[random_game] >= max_reviews_per_game:
+                                        filtered_app_ids.remove(random_game)
 
-                                        # progress information
-                                        if progress_list:
-                                            current_progress = len(review_tokens)
-                                            if current_progress in progress_list:
-                                                print(f"{int((current_progress / max_reviews) * 100):8}%: {tag}")
-                except Exception as e:
-                    print(e)
+                                    # progress information
+                                    if progress_list:
+                                        current_progress = len(review_tokens)
+                                        if current_progress in progress_list:
+                                            print(f"{int((current_progress / max_reviews) * 100):8}%: {tag}")
     print(f"Finished: {tag}")
     return [review_tokens, game_count]
 
@@ -304,7 +314,13 @@ def remove_custom_stopwords():
         "dlc",
         "use",
         "hours",
-        "people"
+        "people",
+        "nt",
+        "adventure",
+        "strategy",
+        "simulation",
+        "rpg",
+        "puzzle"
     ]
     return custom_stop_words
 
@@ -586,7 +602,7 @@ if __name__ == '__main__':
 
     # tags i want to create a corpus with
     selected_tags = [
-        ["Strategy", "Simulation", "RPG", "Puzzle", "Sports"],
+        ["Adventure", "Strategy", "Simulation", "RPG", "Puzzle"],
         ["Indie", "Action", "Casual", "Adventure", "Strategy"],
         random.sample(most_common_tags, 5),
         random.sample(most_common_tags, 5),
@@ -595,7 +611,7 @@ if __name__ == '__main__':
 
     # create a corpus with given parameters
     select_random_review_from_random_game_by_tag_list(
-        selected_tags,
+        selected_tags[0:1],
         50000,
         20,
         1000,
