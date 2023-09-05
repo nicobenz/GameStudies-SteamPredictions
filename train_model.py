@@ -283,6 +283,6 @@ evaluate_most_prominent_tokens_for_stopword_removal(path)
 
 # train models
 train_model(token_data, "Naive Bayes", path)
-train_model(token_data, "Logistic Regression")
+train_model(token_data, "Logistic Regression", path)
 train_model(token_data, "Support Vector Machine", path)
-train_model(token_data, "Random Forest")
+train_model(token_data, "Random Forest", path)
