@@ -1,0 +1,1105 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{apa/global//global/global}
+    \entry{Aarseth1997}{book}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=8efb253691fe0e9d6bcb882ad5f98173}{%
+           family={Aarseth},
+           familyi={A\bibinitperiod},
+           given={Espen},
+           giveni={E\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {JHU Press}%
+      }
+      \strng{namehash}{8efb253691fe0e9d6bcb882ad5f98173}
+      \strng{fullhash}{8efb253691fe0e9d6bcb882ad5f98173}
+      \strng{bibnamehash}{8efb253691fe0e9d6bcb882ad5f98173}
+      \strng{authorbibnamehash}{8efb253691fe0e9d6bcb882ad5f98173}
+      \strng{authornamehash}{8efb253691fe0e9d6bcb882ad5f98173}
+      \strng{authorfullhash}{8efb253691fe0e9d6bcb882ad5f98173}
+      \field{extraname}{1}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Cybertext: Perspectives on ergodic literature}
+      \field{year}{1997}
+      \true{nocite}
+    \endentry
+    \entry{Aarseth2001}{article}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=8efb253691fe0e9d6bcb882ad5f98173}{%
+           family={Aarseth},
+           familyi={A\bibinitperiod},
+           given={Espen},
+           giveni={E\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Available at}%
+      }
+      \strng{namehash}{8efb253691fe0e9d6bcb882ad5f98173}
+      \strng{fullhash}{8efb253691fe0e9d6bcb882ad5f98173}
+      \strng{bibnamehash}{8efb253691fe0e9d6bcb882ad5f98173}
+      \strng{authorbibnamehash}{8efb253691fe0e9d6bcb882ad5f98173}
+      \strng{authornamehash}{8efb253691fe0e9d6bcb882ad5f98173}
+      \strng{authorfullhash}{8efb253691fe0e9d6bcb882ad5f98173}
+      \field{extraname}{2}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Game studies}
+      \field{number}{1}
+      \field{title}{Computer game studies, year one}
+      \field{volume}{1}
+      \field{year}{2001}
+      \true{nocite}
+      \field{pages}{1\bibrangedash 15}
+      \range{pages}{15}
+    \endentry
+    \entry{9633422}{article}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=b5f8d896b55d1ac9a59a844f1ecbd3ac}{%
+           family={Agarwal},
+           familyi={A\bibinitperiod},
+           given={Anjali},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=2378563e535331daa6b6e17d09f9d47d}{%
+           family={Das},
+           familyi={D\bibinitperiod},
+           given={Roshni\bibnamedelima Rupali},
+           giveni={R\bibinitperiod\bibinitdelim R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=99b99e5615885dcdd58f5b5fcf3d10e2}{%
+           family={Das},
+           familyi={D\bibinitperiod},
+           given={Ajanta},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{11cd4a749f8bf874b79016f924d78705}
+      \strng{fullhash}{5a19a0d264778d52a42ba87c362dbc80}
+      \strng{bibnamehash}{5a19a0d264778d52a42ba87c362dbc80}
+      \strng{authorbibnamehash}{5a19a0d264778d52a42ba87c362dbc80}
+      \strng{authornamehash}{11cd4a749f8bf874b79016f924d78705}
+      \strng{authorfullhash}{5a19a0d264778d52a42ba87c362dbc80}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{2021 4th International Conference on Recent Developments in Control, Automation \& Power Engineering (RDCAPE)}
+      \field{title}{Machine Learning Techniques for Automated Movie Genre Classification Tool}
+      \field{year}{2021}
+      \true{nocite}
+      \field{pages}{189\bibrangedash 194}
+      \range{pages}{6}
+      \verb{doi}
+      \verb 10.1109/RDCAPE52977.2021.9633422
+      \endverb
+    \endentry
+    \entry{Apperley2006}{article}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=cbf4a9933fa82dbeb5f46ccaba1fe8ab}{%
+           family={Apperley},
+           familyi={A\bibinitperiod},
+           given={Thomas\bibnamedelima H.},
+           giveni={T\bibinitperiod\bibinitdelim H\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {{SAGE} Publications}%
+      }
+      \strng{namehash}{cbf4a9933fa82dbeb5f46ccaba1fe8ab}
+      \strng{fullhash}{cbf4a9933fa82dbeb5f46ccaba1fe8ab}
+      \strng{bibnamehash}{cbf4a9933fa82dbeb5f46ccaba1fe8ab}
+      \strng{authorbibnamehash}{cbf4a9933fa82dbeb5f46ccaba1fe8ab}
+      \strng{authornamehash}{cbf4a9933fa82dbeb5f46ccaba1fe8ab}
+      \strng{authorfullhash}{cbf4a9933fa82dbeb5f46ccaba1fe8ab}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Simulation \& Gaming}
+      \field{month}{3}
+      \field{number}{1}
+      \field{title}{Genre and game studies: Toward a critical approach to video game genres}
+      \field{volume}{37}
+      \field{year}{2006}
+      \true{nocite}
+      \field{pages}{6\bibrangedash 23}
+      \range{pages}{18}
+      \verb{doi}
+      \verb 10.1177/1046878105282278
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1177/1046878105282278
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1177/1046878105282278
+      \endverb
+    \endentry
+    \entry{Atdag2013}{article}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=05599b744c0d49baae5fe52f6d52d1f0}{%
+           family={Atdag},
+           familyi={A\bibinitperiod},
+           given={Samet},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=5da03fa781c5f6fce132b96f573a11af}{%
+           family={Labatut},
+           familyi={L\bibinitperiod},
+           given={Vincent},
+           giveni={V\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {IEEE}%
+      }
+      \strng{namehash}{7d2c8d46cc5740d78101a9cbad10f439}
+      \strng{fullhash}{7d2c8d46cc5740d78101a9cbad10f439}
+      \strng{bibnamehash}{7d2c8d46cc5740d78101a9cbad10f439}
+      \strng{authorbibnamehash}{7d2c8d46cc5740d78101a9cbad10f439}
+      \strng{authornamehash}{7d2c8d46cc5740d78101a9cbad10f439}
+      \strng{authorfullhash}{7d2c8d46cc5740d78101a9cbad10f439}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{2nd International Conference on Systems and Computer Science}
+      \field{month}{8}
+      \field{title}{A comparison of named entity recognition tools applied to biographical texts}
+      \field{year}{2013}
+      \true{nocite}
+      \verb{doi}
+      \verb 10.1109/icconscs.2013.6632052
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1109/icconscs.2013.6632052
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1109/icconscs.2013.6632052
+      \endverb
+    \endentry
+    \entry{Atkins2003}{book}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=79f6893af393ae506788f2ab1418aad8}{%
+           family={Atkins},
+           familyi={A\bibinitperiod},
+           given={Barry},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Manchester University Press}%
+      }
+      \strng{namehash}{79f6893af393ae506788f2ab1418aad8}
+      \strng{fullhash}{79f6893af393ae506788f2ab1418aad8}
+      \strng{bibnamehash}{79f6893af393ae506788f2ab1418aad8}
+      \strng{authorbibnamehash}{79f6893af393ae506788f2ab1418aad8}
+      \strng{authornamehash}{79f6893af393ae506788f2ab1418aad8}
+      \strng{authorfullhash}{79f6893af393ae506788f2ab1418aad8}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{5}
+      \field{title}{More than a Game}
+      \field{year}{2003}
+      \true{nocite}
+      \verb{doi}
+      \verb 10.7228/manchester/9780719063640.001.0001
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.7228/manchester/9780719063640.001.0001
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.7228/manchester/9780719063640.001.0001
+      \endverb
+    \endentry
+    \entry{https://doi.org/10.48550/arxiv.1804.01149}{misc}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=74e07ed6e6161e7cbae68f8ad2b58343}{%
+           family={Bahuleyan},
+           familyi={B\bibinitperiod},
+           given={Hareesh},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {arXiv}%
+      }
+      \strng{namehash}{74e07ed6e6161e7cbae68f8ad2b58343}
+      \strng{fullhash}{74e07ed6e6161e7cbae68f8ad2b58343}
+      \strng{bibnamehash}{74e07ed6e6161e7cbae68f8ad2b58343}
+      \strng{authorbibnamehash}{74e07ed6e6161e7cbae68f8ad2b58343}
+      \strng{authornamehash}{74e07ed6e6161e7cbae68f8ad2b58343}
+      \strng{authorfullhash}{74e07ed6e6161e7cbae68f8ad2b58343}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Music Genre Classification using Machine Learning Techniques}
+      \field{year}{2018}
+      \true{nocite}
+      \verb{doi}
+      \verb 10.48550/ARXIV.1804.01149
+      \endverb
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/1804.01149
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/1804.01149
+      \endverb
+      \keyw{Sound (cs.SD),Audio and Speech Processing (eess.AS),FOS: Computer and information sciences,FOS: Computer and information sciences,FOS: Electrical engineering,electronic engineering,information engineering,FOS: Electrical engineering,electronic engineering,information engineering}
+    \endentry
+    \entry{https://doi.org/10.48550/arxiv.2106.01760}{article}{}
+      \name{author}{5}{}{%
+        {{un=0,uniquepart=base,hash=c2c3b6a1a23499549f41aadc7c9c292c}{%
+           family={Cui},
+           familyi={C\bibinitperiod},
+           given={Leyang},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=497a9e1774032d32e4123020bfd16b7a}{%
+           family={Wu},
+           familyi={W\bibinitperiod},
+           given={Yu},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=fd903bc507de58459375d974764ab4ea}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Jian},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=21c61ad4ba652136307b6e8989535644}{%
+           family={Yang},
+           familyi={Y\bibinitperiod},
+           given={Sen},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=b8238061b3c805be2a30dd55bb11fb21}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Yue},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {arXiv}%
+      }
+      \strng{namehash}{f2fcf472456d96c291eea5e3df16a6c1}
+      \strng{fullhash}{d577f118a16d2700b5d187d7687273fa}
+      \strng{bibnamehash}{d577f118a16d2700b5d187d7687273fa}
+      \strng{authorbibnamehash}{d577f118a16d2700b5d187d7687273fa}
+      \strng{authornamehash}{f2fcf472456d96c291eea5e3df16a6c1}
+      \strng{authorfullhash}{d577f118a16d2700b5d187d7687273fa}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Template-Based Named Entity Recognition Using BART}
+      \field{year}{2021}
+      \true{nocite}
+      \verb{doi}
+      \verb 10.48550/ARXIV.2106.01760
+      \endverb
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2106.01760
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2106.01760
+      \endverb
+      \keyw{Computation and Language (cs.CL),FOS: Computer and information sciences,FOS: Computer and information sciences}
+    \endentry
+    \entry{Finn2006}{article}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=e4e655dbacde71fd71f528a8d7efc4ad}{%
+           family={Finn},
+           familyi={F\bibinitperiod},
+           given={Aidan},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=406bf8ad1c1b992c83440d50dfd03297}{%
+           family={Kushmerick},
+           familyi={K\bibinitperiod},
+           given={Nicholas},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Wiley}%
+      }
+      \strng{namehash}{ed4f85841363453eddb36186fd1c5443}
+      \strng{fullhash}{ed4f85841363453eddb36186fd1c5443}
+      \strng{bibnamehash}{ed4f85841363453eddb36186fd1c5443}
+      \strng{authorbibnamehash}{ed4f85841363453eddb36186fd1c5443}
+      \strng{authornamehash}{ed4f85841363453eddb36186fd1c5443}
+      \strng{authorfullhash}{ed4f85841363453eddb36186fd1c5443}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of the American Society for Information Science and Technology}
+      \field{number}{11}
+      \field{title}{Learning to classify documents according to genre}
+      \field{volume}{57}
+      \field{year}{2006}
+      \true{nocite}
+      \field{pages}{1506\bibrangedash 1518}
+      \range{pages}{13}
+      \verb{doi}
+      \verb 10.1002/asi.20427
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1002/asi.20427
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1002/asi.20427
+      \endverb
+    \endentry
+    \entry{Goring2020}{article}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=c994ef596a43600786ffee14090da8a9}{%
+           family={Goring},
+           familyi={G\bibinitperiod},
+           given={Steve},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=b9605ba00bc821d9b3c905ec97a2f216}{%
+           family={Steger},
+           familyi={S\bibinitperiod},
+           given={Robert},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=5493d5b0ad49f4395ca96a7b45e27870}{%
+           family={Rao},
+           familyi={R\bibinitperiod},
+           given={Rakesh\bibnamedelimb Rao\bibnamedelima Ramachandra},
+           giveni={R\bibinitperiod\bibinitdelim R\bibinitperiod\bibinitdelim R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=2ce4c604978ac9c6ebe8ba1ccfbc5115}{%
+           family={Raake},
+           familyi={R\bibinitperiod},
+           given={Alexander},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {IEEE}%
+      }
+      \strng{namehash}{4b42be41482f9aea9e6c8e3a0e71ee56}
+      \strng{fullhash}{cf921212719f82ec6e9838a9ca13da82}
+      \strng{bibnamehash}{cf921212719f82ec6e9838a9ca13da82}
+      \strng{authorbibnamehash}{cf921212719f82ec6e9838a9ca13da82}
+      \strng{authornamehash}{4b42be41482f9aea9e6c8e3a0e71ee56}
+      \strng{authorfullhash}{cf921212719f82ec6e9838a9ca13da82}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{2020 {IEEE} 22nd International Workshop on Multimedia Signal Processing ({MMSP})}
+      \field{month}{9}
+      \field{title}{Automated Genre Classification for Gaming Videos}
+      \field{year}{2020}
+      \true{nocite}
+      \verb{doi}
+      \verb 10.1109/mmsp48831.2020.9287122
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1109/mmsp48831.2020.9287122
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1109/mmsp48831.2020.9287122
+      \endverb
+    \endentry
+    \entry{9287122}{article}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=34fc4e7604c1543f026616dc5253b58b}{%
+           family={Göring},
+           familyi={G\bibinitperiod},
+           given={Steve},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=b9605ba00bc821d9b3c905ec97a2f216}{%
+           family={Steger},
+           familyi={S\bibinitperiod},
+           given={Robert},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8f57c60eb779666959baa17bd241b4b2}{%
+           family={Rao\bibnamedelimb Ramachandra\bibnamedelima Rao},
+           familyi={R\bibinitperiod\bibinitdelim R\bibinitperiod\bibinitdelim R\bibinitperiod},
+           given={Rakesh},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=2ce4c604978ac9c6ebe8ba1ccfbc5115}{%
+           family={Raake},
+           familyi={R\bibinitperiod},
+           given={Alexander},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{70f4aa3bbad96812acdc3c3034ffa397}
+      \strng{fullhash}{996c6b45304a79b0ff0083fc4d9181d5}
+      \strng{bibnamehash}{996c6b45304a79b0ff0083fc4d9181d5}
+      \strng{authorbibnamehash}{996c6b45304a79b0ff0083fc4d9181d5}
+      \strng{authornamehash}{70f4aa3bbad96812acdc3c3034ffa397}
+      \strng{authorfullhash}{996c6b45304a79b0ff0083fc4d9181d5}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{2020 IEEE 22nd International Workshop on Multimedia Signal Processing (MMSP)}
+      \field{title}{Automated Genre Classification for Gaming Videos}
+      \field{year}{2020}
+      \true{nocite}
+      \field{pages}{1\bibrangedash 6}
+      \range{pages}{6}
+      \verb{doi}
+      \verb 10.1109/MMSP48831.2020.9287122
+      \endverb
+    \endentry
+    \entry{Goyal2018}{article}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=88951b7cd8ac39d6f55329c4e62bda28}{%
+           family={Goyal},
+           familyi={G\bibinitperiod},
+           given={Archana},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=91e105fa60887e252869bd6fd2cdd66c}{%
+           family={Gupta},
+           familyi={G\bibinitperiod},
+           given={Vishal},
+           giveni={V\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=6f429abbdf00e2829bc3db724739047b}{%
+           family={Kumar},
+           familyi={K\bibinitperiod},
+           given={Manish},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Elsevier {BV}}%
+      }
+      \strng{namehash}{d5db9cbf9fca5d5519b9986f32d7257c}
+      \strng{fullhash}{3d02ea8134e61724d98aaa6abf513eb3}
+      \strng{bibnamehash}{3d02ea8134e61724d98aaa6abf513eb3}
+      \strng{authorbibnamehash}{3d02ea8134e61724d98aaa6abf513eb3}
+      \strng{authornamehash}{d5db9cbf9fca5d5519b9986f32d7257c}
+      \strng{authorfullhash}{3d02ea8134e61724d98aaa6abf513eb3}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Computer Science Review}
+      \field{month}{8}
+      \field{title}{Recent Named Entity Recognition and Classification techniques: A systematic review}
+      \field{volume}{29}
+      \field{year}{2018}
+      \true{nocite}
+      \field{pages}{21\bibrangedash 43}
+      \range{pages}{23}
+      \verb{doi}
+      \verb 10.1016/j.cosrev.2018.06.001
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1016/j.cosrev.2018.06.001
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1016/j.cosrev.2018.06.001
+      \endverb
+    \endentry
+    \entry{Gupta2019}{article}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=d7593b962ec0a24d36c132f0fd739957}{%
+           family={Gupta},
+           familyi={G\bibinitperiod},
+           given={Shikha},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=f15efc0b2f591166dcb4d0810431e63a}{%
+           family={Agarwal},
+           familyi={A\bibinitperiod},
+           given={Mohit},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=cf0300fc7d29f8ef3f8c5659406cf2f2}{%
+           family={Jain},
+           familyi={J\bibinitperiod},
+           given={Satbir},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {IEEE}%
+      }
+      \strng{namehash}{b85e404b785df028cdef84c305d1ef82}
+      \strng{fullhash}{07ed39bf6e0eb1e40656f5d027f42831}
+      \strng{bibnamehash}{07ed39bf6e0eb1e40656f5d027f42831}
+      \strng{authorbibnamehash}{07ed39bf6e0eb1e40656f5d027f42831}
+      \strng{authornamehash}{b85e404b785df028cdef84c305d1ef82}
+      \strng{authorfullhash}{07ed39bf6e0eb1e40656f5d027f42831}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{2019 9th International Conference on Cloud Computing, Data Science \& Engineering (Confluence)}
+      \field{month}{1}
+      \field{title}{Automated Genre Classification of Books Using Machine Learning and Natural Language Processing}
+      \field{year}{2019}
+      \true{nocite}
+      \verb{doi}
+      \verb 10.1109/confluence.2019.8776935
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1109/confluence.2019.8776935
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1109/confluence.2019.8776935
+      \endverb
+    \endentry
+    \entry{10.1145/2793107.2793123}{article}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=d81bf984e9fbda43e7c6e01442aafd31}{%
+           family={Heintz},
+           familyi={H\bibinitperiod},
+           given={Stephanie},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=7e687458110db964b1821c91d613ff6c}{%
+           family={Law},
+           familyi={L\bibinitperiod},
+           given={Effie\bibnamedelima Lai-Chong},
+           giveni={E\bibinitperiod\bibinitdelim L\bibinithyphendelim C\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {London, United Kingdom}%
+      }
+      \list{publisher}{1}{%
+        {Association for Computing Machinery}%
+      }
+      \strng{namehash}{16d29e888e39f2a41c925b30d8627d32}
+      \strng{fullhash}{16d29e888e39f2a41c925b30d8627d32}
+      \strng{bibnamehash}{16d29e888e39f2a41c925b30d8627d32}
+      \strng{authorbibnamehash}{16d29e888e39f2a41c925b30d8627d32}
+      \strng{authornamehash}{16d29e888e39f2a41c925b30d8627d32}
+      \strng{authorfullhash}{16d29e888e39f2a41c925b30d8627d32}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{9781450334662}
+      \field{journaltitle}{Proceedings of the 2015 Annual Symposium on Computer-Human Interaction in Play}
+      \field{series}{CHI PLAY '15}
+      \field{title}{The Game Genre Map: A Revised Game Classification}
+      \field{year}{2015}
+      \true{nocite}
+      \field{pages}{175\bibrangedash 184}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1145/2793107.2793123
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1145/2793107.2793123
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1145/2793107.2793123
+      \endverb
+    \endentry
+    \entry{Jiang2023}{article}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=c191d548d74049ff55130fefe21854b9}{%
+           family={Jiang},
+           familyi={J\bibinitperiod},
+           given={Yuhang},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=6801697e85a4a37ecaa362619fd3cd5c}{%
+           family={Zheng},
+           familyi={Z\bibinitperiod},
+           given={Lukun},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{2}{%
+        {Springer Science}%
+        {Business Media {LLC}}%
+      }
+      \strng{namehash}{c01e1ab27c8200a78c34deb9860aa704}
+      \strng{fullhash}{c01e1ab27c8200a78c34deb9860aa704}
+      \strng{bibnamehash}{c01e1ab27c8200a78c34deb9860aa704}
+      \strng{authorbibnamehash}{c01e1ab27c8200a78c34deb9860aa704}
+      \strng{authornamehash}{c01e1ab27c8200a78c34deb9860aa704}
+      \strng{authorfullhash}{c01e1ab27c8200a78c34deb9860aa704}
+      \field{sortinit}{J}
+      \field{sortinithash}{b2f54a9081ace9966a7cb9413811edb4}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Multimedia Tools and Applications}
+      \field{month}{2}
+      \field{number}{14}
+      \field{title}{Deep learning for video game genre classification}
+      \field{volume}{82}
+      \field{year}{2023}
+      \true{nocite}
+      \field{pages}{21085\bibrangedash 21099}
+      \range{pages}{15}
+      \verb{doi}
+      \verb 10.1007/s11042-023-14560-5
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1007/s11042-023-14560-5
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1007/s11042-023-14560-5
+      \endverb
+    \endentry
+    \entry{Siencnik2015}{article}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=c276e0b859a97c844537f76503a58710}{%
+           family={Katharina\bibnamedelima Sienčnik},
+           familyi={K\bibinitperiod\bibinitdelim S\bibinitperiod},
+           given={Scharolta},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {Vilnius, Lithuania}%
+      }
+      \list{publisher}{1}{%
+        {Linköping University Electronic Press, Sweden}%
+      }
+      \strng{namehash}{c276e0b859a97c844537f76503a58710}
+      \strng{fullhash}{c276e0b859a97c844537f76503a58710}
+      \strng{bibnamehash}{c276e0b859a97c844537f76503a58710}
+      \strng{authorbibnamehash}{c276e0b859a97c844537f76503a58710}
+      \strng{authornamehash}{c276e0b859a97c844537f76503a58710}
+      \strng{authorfullhash}{c276e0b859a97c844537f76503a58710}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Proceedings of the 20th Nordic Conference of Computational Linguistics ({NODALIDA} 2015)}
+      \field{month}{5}
+      \field{title}{Adapting word2vec to Named Entity Recognition}
+      \field{year}{2015}
+      \true{nocite}
+      \field{pages}{239\bibrangedash 243}
+      \range{pages}{5}
+      \verb{urlraw}
+      \verb https://aclanthology.org/W15-1830
+      \endverb
+      \verb{url}
+      \verb https://aclanthology.org/W15-1830
+      \endverb
+    \endentry
+    \entry{Kumar2022}{article}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=42bfba992cc41fac7579730168fa6433}{%
+           family={Kumar},
+           familyi={K\bibinitperiod},
+           given={Sanjay},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1ce58784b8f129a5398dccc213f64e90}{%
+           family={Kumar},
+           familyi={K\bibinitperiod},
+           given={Nikhil},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9caebfe819d7907df5f01b179da2c828}{%
+           family={Dev},
+           familyi={D\bibinitperiod},
+           given={Aditya},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8e5927f0274bc6064c7bd21c8e65274d}{%
+           family={Naorem},
+           familyi={N\bibinitperiod},
+           given={Siraz},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{2}{%
+        {Springer Science}%
+        {Business Media {LLC}}%
+      }
+      \strng{namehash}{6d50807d3d742b3cc15c7f2e13d2f5fe}
+      \strng{fullhash}{97393c53ab2979e2e4ecf718d10daaa0}
+      \strng{bibnamehash}{97393c53ab2979e2e4ecf718d10daaa0}
+      \strng{authorbibnamehash}{97393c53ab2979e2e4ecf718d10daaa0}
+      \strng{authornamehash}{6d50807d3d742b3cc15c7f2e13d2f5fe}
+      \strng{authorfullhash}{97393c53ab2979e2e4ecf718d10daaa0}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Multimedia Tools and Applications}
+      \field{month}{6}
+      \field{number}{1}
+      \field{title}{Movie genre classification using binary relevance, label powerset, and machine learning classifiers}
+      \field{volume}{82}
+      \field{year}{2022}
+      \true{nocite}
+      \field{pages}{945\bibrangedash 968}
+      \range{pages}{24}
+      \verb{doi}
+      \verb 10.1007/s11042-022-13211-5
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1007/s11042-022-13211-5
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1007/s11042-022-13211-5
+      \endverb
+    \endentry
+    \entry{mansouri2008named}{article}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=50b918befcb1f4fad004fbe96da1dca5}{%
+           family={Mansouri},
+           familyi={M\bibinitperiod},
+           given={Alireza},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=66594866500152ae865fdd6382bbdabc}{%
+           family={Affendey},
+           familyi={A\bibinitperiod},
+           given={Lilly\bibnamedelima Suriani},
+           giveni={L\bibinitperiod\bibinitdelim S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=e430e52307e5dc4a0e18cda199e185f9}{%
+           family={Mamat},
+           familyi={M\bibinitperiod},
+           given={Ali},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Citeseer}%
+      }
+      \strng{namehash}{87c9d753ba5b34b2c4a8fe377d72c09f}
+      \strng{fullhash}{0f39c66afb00d255bd1f93c8428ee556}
+      \strng{bibnamehash}{0f39c66afb00d255bd1f93c8428ee556}
+      \strng{authorbibnamehash}{0f39c66afb00d255bd1f93c8428ee556}
+      \strng{authornamehash}{87c9d753ba5b34b2c4a8fe377d72c09f}
+      \strng{authorfullhash}{0f39c66afb00d255bd1f93c8428ee556}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{International Journal of Computer Science and Network Security}
+      \field{number}{2}
+      \field{title}{Named entity recognition approaches}
+      \field{volume}{8}
+      \field{year}{2008}
+      \true{nocite}
+      \field{pages}{339\bibrangedash 344}
+      \range{pages}{6}
+    \endentry
+    \entry{Tamla2020}{article}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=84f9adc9c0ca208b2599f35b212761a2}{%
+           family={Tamla},
+           familyi={T\bibinitperiod},
+           given={Philippe},
+           giveni={P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=61f58a6a4cc3398e39f3cd72857f9357}{%
+           family={Freund},
+           familyi={F\bibinitperiod},
+           given={Florian},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=5069f4ac8b03a0e5e0043b6f4fa5a9ff}{%
+           family={Hemmje},
+           familyi={H\bibinitperiod},
+           given={Matthias},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{2}{%
+        {{SCITEPRESS} - Science}%
+        {Technology Publications}%
+      }
+      \strng{namehash}{356d19dcdf04f08a50cc4289aa50d591}
+      \strng{fullhash}{a76968cddca277ec9e42e11fb14ba0b0}
+      \strng{bibnamehash}{a76968cddca277ec9e42e11fb14ba0b0}
+      \strng{authorbibnamehash}{a76968cddca277ec9e42e11fb14ba0b0}
+      \strng{authornamehash}{356d19dcdf04f08a50cc4289aa50d591}
+      \strng{authorfullhash}{a76968cddca277ec9e42e11fb14ba0b0}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Proceedings of the 12th International Joint Conference on Knowledge Discovery, Knowledge Engineering and Knowledge Management}
+      \field{title}{Supporting Named Entity Recognition and Document Classification in a Knowledge Management System for Applied Gaming}
+      \field{year}{2020}
+      \true{nocite}
+      \verb{doi}
+      \verb 10.5220/0010145001080121
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.5220/0010145001080121
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.5220/0010145001080121
+      \endverb
+    \endentry
+    \entry{9400710}{article}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=c46510314df9ba32aef479030ef50cf1}{%
+           family={Viggiato},
+           familyi={V\bibinitperiod},
+           given={Markos},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=bbc40826a00dedc83726e92d88df5397}{%
+           family={Lin},
+           familyi={L\bibinitperiod},
+           given={Dayi},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a1c3b1c7ade656b4f3b8d9faf9e8608e}{%
+           family={Hindle},
+           familyi={H\bibinitperiod},
+           given={Abram},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=5dcdabf8c600f81f6596c230a2a138a5}{%
+           family={Bezemer},
+           familyi={B\bibinitperiod},
+           given={Cor-Paul},
+           giveni={C\bibinithyphendelim P\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{62222ddb7e998289a5d0d34e0a91d608}
+      \strng{fullhash}{8bc6f858fe13c4557e1d45394d58db6d}
+      \strng{bibnamehash}{8bc6f858fe13c4557e1d45394d58db6d}
+      \strng{authorbibnamehash}{8bc6f858fe13c4557e1d45394d58db6d}
+      \strng{authornamehash}{62222ddb7e998289a5d0d34e0a91d608}
+      \strng{authorfullhash}{8bc6f858fe13c4557e1d45394d58db6d}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Transactions on Games}
+      \field{number}{3}
+      \field{title}{What Causes Wrong Sentiment Classifications of Game Reviews?}
+      \field{volume}{14}
+      \field{year}{2022}
+      \true{nocite}
+      \field{pages}{350\bibrangedash 363}
+      \range{pages}{14}
+      \verb{doi}
+      \verb 10.1109/TG.2021.3072545
+      \endverb
+    \endentry
+    \entry{Windleharth2016}{article}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=382a7defa6d218d7d300398e9d33bc50}{%
+           family={Windleharth},
+           familyi={W\bibinitperiod},
+           given={Travis\bibnamedelima W.},
+           giveni={T\bibinitperiod\bibinitdelim W\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=5cdf4c535c66bd53d3d8a698471b3e84}{%
+           family={Jett},
+           familyi={J\bibinitperiod},
+           given={Jacob},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=24a19737b27f57f704d17a7424281b70}{%
+           family={Schmalz},
+           familyi={S\bibinitperiod},
+           given={Marc},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=7d69d2615763844397b7d2ee81ca0781}{%
+           family={Lee},
+           familyi={L\bibinitperiod},
+           given={Jin\bibnamedelima Ha},
+           giveni={J\bibinitperiod\bibinitdelim H\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Informa {UK} Limited}%
+      }
+      \strng{namehash}{1b91911d3075553c3b9a5e2fb303f059}
+      \strng{fullhash}{a5e01825a63c57561529a7f6c1fd05df}
+      \strng{bibnamehash}{a5e01825a63c57561529a7f6c1fd05df}
+      \strng{authorbibnamehash}{a5e01825a63c57561529a7f6c1fd05df}
+      \strng{authornamehash}{1b91911d3075553c3b9a5e2fb303f059}
+      \strng{authorfullhash}{a5e01825a63c57561529a7f6c1fd05df}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Cataloging \& Classification Quarterly}
+      \field{month}{7}
+      \field{number}{7}
+      \field{title}{Full Steam Ahead: A Conceptual Analysis of User-Supplied Tags on Steam}
+      \field{volume}{54}
+      \field{year}{2016}
+      \true{nocite}
+      \field{pages}{418\bibrangedash 441}
+      \range{pages}{24}
+      \verb{doi}
+      \verb 10.1080/01639374.2016.1190951
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1080/01639374.2016.1190951
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1080/01639374.2016.1190951
+      \endverb
+    \endentry
+    \entry{Zagal2011}{article}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=4e30e680021e8a5cc3386a4e76898191}{%
+           family={Zagal},
+           familyi={Z\bibinitperiod},
+           given={José\bibnamedelima P.},
+           giveni={J\bibinitperiod\bibinitdelim P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=f176a894f16c4557ae02f2284296ed84}{%
+           family={Tomuro},
+           familyi={T\bibinitperiod},
+           given={Noriko},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d87f3fe662ebd58c8f87236c7f09a054}{%
+           family={Shepitsen},
+           familyi={S\bibinitperiod},
+           given={Andriy},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {{SAGE} Publications}%
+      }
+      \strng{namehash}{803049d5248f954301d6eea5d8c1ad58}
+      \strng{fullhash}{81b8328b03442b114b1aff34324f1707}
+      \strng{bibnamehash}{81b8328b03442b114b1aff34324f1707}
+      \strng{authorbibnamehash}{81b8328b03442b114b1aff34324f1707}
+      \strng{authornamehash}{803049d5248f954301d6eea5d8c1ad58}
+      \strng{authorfullhash}{81b8328b03442b114b1aff34324f1707}
+      \field{sortinit}{Z}
+      \field{sortinithash}{96892c0b0a36bb8557c40c49813d48b3}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Simulation \& Gaming}
+      \field{month}{10}
+      \field{number}{3}
+      \field{title}{Natural Language Processing in Game Studies Research}
+      \field{volume}{43}
+      \field{year}{2011}
+      \true{nocite}
+      \field{pages}{356\bibrangedash 373}
+      \range{pages}{18}
+      \verb{doi}
+      \verb 10.1177/1046878111422560
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1177/1046878111422560
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1177/1046878111422560
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
