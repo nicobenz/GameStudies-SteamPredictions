@@ -16,7 +16,7 @@ from collections import Counter
 from imblearn.over_sampling import SMOTE
 
 
-def calculate_prominent_tokens(data, num_of_tokens=50):
+def calculate_prominent_tokens(data, source_path, num_of_tokens=50):
     token_list = []
     label_list = []
     for label, tokens in data.items():
@@ -42,12 +42,12 @@ def calculate_prominent_tokens(data, num_of_tokens=50):
             top_prominent_tokens.append((token, round(tfidf_score, 2)))
         label_prominent_tokens[label] = top_prominent_tokens
 
-    with open(f"/Volumes/Data/steam/results/tf-idf_frequency.json", 'w') as json_file:
+    with open(f"{source_path}/results/tf-idf_frequency.json", 'w') as json_file:
         json.dump(label_prominent_tokens, json_file)
 
 
-def evaluate_most_prominent_tokens_for_stopword_removal(print_result=True):
-    with open(f"/Volumes/Data/steam/results/tf-idf_frequency.json", 'r') as json_file:
+def evaluate_most_prominent_tokens_for_stopword_removal(source_path, print_result=True):
+    with open(f"{source_path}/results/tf-idf_frequency.json", 'r') as json_file:
         tfidf_data = json.loads(json_file.read())
 
     # gather all tokens throughout all genres
@@ -68,7 +68,7 @@ def evaluate_most_prominent_tokens_for_stopword_removal(print_result=True):
             if print_result:
                 print(t, c)
 
-    with open(f"/Volumes/Data/steam/results/most_common_tokens.json", 'w') as json_file:
+    with open(f"{source_path}/results/most_common_tokens.json", 'w') as json_file:
         json.dump(most_prominent_tokens, json_file)
 
 
@@ -100,9 +100,9 @@ def prepare_tfidf(data, folds=5):
         # apply smote for balance (only on training set though)
         #smote = SMOTE(sampling_strategy='auto', random_state=42)
         #X_train_smote, y_train_smote = smote.fit_resample(X_train_tfidf, y_train)
+        # smote not possible because of computational constraints
 
         yield X_train_tfidf, X_val_tfidf, y_train, y_val
-        #yield X_train_smote, X_val_tfidf, y_train_smote, y_val
 
 
 def data_generator(data):
@@ -110,7 +110,7 @@ def data_generator(data):
         yield label, [' '.join(tok) for tok in tokens]
 
 
-def train_model(data, model_name, folds=5):
+def train_model(data, model_name, source_path, folds=5):
     print(model_name)
     # create string for saving results later
     save_string = model_name.split(" ")
@@ -137,10 +137,10 @@ def train_model(data, model_name, folds=5):
         report = classification_report(y_test, y_pred, output_dict=True)
         collected_metrics.append(report)
 
-    mean_folding_report(collected_metrics, save_string)
+    mean_folding_report(collected_metrics, save_string, source_path)
 
 
-def recurrent_neural_network(data):
+def recurrent_neural_network(data):  # not used for final paper because of computational constraints
     # parse data in batches for memory efficiency
     def batch_generator(features, labels, batch_size):
         num_samples = features.shape[0]
@@ -221,7 +221,7 @@ def model_evaluation_overview(file_name, test, pred, print_results=True):
         json.dump(eval_dict, file_out)
 
 
-def mean_folding_report(metrics_data, filename, print_results=True):
+def mean_folding_report(metrics_data, filename, source_path, print_results=True):
     metrics = {}
     for item in metrics_data:
         for key, value in item.items():
@@ -253,7 +253,7 @@ def mean_folding_report(metrics_data, filename, print_results=True):
             for k, v in value.items():
                 mean_metrics["labels"][key][k] = round(sum(v) / len(v), 2)
 
-    with open(f"/Volumes/Data/steam/results/{filename}_full_report.json", "w") as file_out:
+    with open(f"{source_path}/results/model_metrics/{filename}_full_report.json", "w") as file_out:
         json.dump(mean_metrics, file_out)
 
     if print_results:
@@ -267,16 +267,22 @@ def mean_folding_report(metrics_data, filename, print_results=True):
                     print(f"-- {k}: {v}")
 
 
+load_locally = True
+if load_locally:
+    path = "data"
+else:
+    path = "/Volumes/Data/steam"
+
 # load token
-with open("/Volumes/Data/steam/finished_corpus/corpora/corpus-1-AdventureStrategySimulationRPGPuzzle.json", "r") as file_in:
+with open(f"{path}/finished_corpus/corpora/corpus-1-AdventureStrategySimulationRPGPuzzle.json", "r") as file_in:
     token_data = json.load(file_in)
 
 # calculate most prominent tokens
-calculate_prominent_tokens(token_data)
-evaluate_most_prominent_tokens_for_stopword_removal()
+calculate_prominent_tokens(token_data, path)
+evaluate_most_prominent_tokens_for_stopword_removal(path)
 
 # train models
-#train_model(token_data, "Naive Bayes")
-#train_model(token_data, "Logistic Regression")
-train_model(token_data, "Support Vector Machine")
-#train_model(token_data, "Random Forest")
+train_model(token_data, "Naive Bayes", path)
+train_model(token_data, "Logistic Regression")
+train_model(token_data, "Support Vector Machine", path)
+train_model(token_data, "Random Forest")
