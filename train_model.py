@@ -1,5 +1,6 @@
 import json
 import numpy as np
+from matplotlib import pyplot as plt
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -13,7 +14,7 @@ from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.model_selection import KFold
 import tensorflow as tf
 from collections import Counter
-from imblearn.over_sampling import SMOTE
+from imblearn.over_sampling import SMOTE  # currently disabled
 
 
 def calculate_prominent_tokens(data, source_path, num_of_tokens=50):
@@ -110,7 +111,7 @@ def data_generator(data):
         yield label, [' '.join(tok) for tok in tokens]
 
 
-def train_model(data, model_name, source_path, folds=5):
+def train_model(data, model_name, source_path, save_order, folds=5):
     print(model_name)
     # create string for saving results later
     save_string = model_name.split(" ")
@@ -118,6 +119,7 @@ def train_model(data, model_name, source_path, folds=5):
     save_string = '_'.join(save_string)
 
     collected_metrics = []
+    collected_predictions = {"predicted": [], "probability": [], "actual": []}
     # iterate over folds
     for fold, (X_train, X_test, y_train, y_test) in enumerate(prepare_tfidf(data, folds), start=1):
         if save_string == "naive_bayes":
@@ -133,11 +135,24 @@ def train_model(data, model_name, source_path, folds=5):
         print(f"Fitting fold {fold}...")
         classifier.fit(X_train, y_train)
         y_pred = classifier.predict(X_test)
+        y_probs = classifier.predict_proba(X_test)
 
         report = classification_report(y_test, y_pred, output_dict=True)
         collected_metrics.append(report)
+        collected_predictions["predicted"].append(y_pred)
+        collected_predictions["probability"].append(y_probs)
+        collected_predictions["actual"].append(y_test)
 
-    mean_folding_report(collected_metrics, save_string, source_path)
+    mean_folding_report(collected_metrics, save_string, source_path, save_order)
+
+    convert = list(collected_predictions.keys())
+
+    for key in convert:
+        for i, item in enumerate(collected_predictions[key]):
+            if isinstance(item, np.ndarray):
+                collected_predictions[key][i] = item.tolist()
+    with open(f"{source_path}/results/model_predictions/{save_string}_predictions.json", "w", encoding="utf-8") as pred_out:
+        json.dump(collected_predictions, pred_out)
 
 
 def recurrent_neural_network(data):  # not used for final paper because of computational constraints
@@ -221,7 +236,7 @@ def model_evaluation_overview(file_name, test, pred, print_results=True):
         json.dump(eval_dict, file_out)
 
 
-def mean_folding_report(metrics_data, filename, source_path, print_results=True):
+def mean_folding_report(metrics_data, filename, source_path, save_order, print_results=True):
     metrics = {}
     for item in metrics_data:
         for key, value in item.items():
@@ -253,7 +268,7 @@ def mean_folding_report(metrics_data, filename, source_path, print_results=True)
             for k, v in value.items():
                 mean_metrics["labels"][key][k] = round(sum(v) / len(v), 2)
 
-    with open(f"{source_path}/results/model_metrics/{filename}_full_report.json", "w") as file_out:
+    with open(f"{source_path}/results/model_metrics/{save_order}_{filename}_full_report.json", "w") as file_out:
         json.dump(mean_metrics, file_out)
 
     if print_results:
@@ -282,7 +297,7 @@ calculate_prominent_tokens(token_data, path)
 evaluate_most_prominent_tokens_for_stopword_removal(path)
 
 # train models
-train_model(token_data, "Naive Bayes", path)
-train_model(token_data, "Logistic Regression", path)
-train_model(token_data, "Support Vector Machine", path)
-train_model(token_data, "Random Forest", path)
+train_model(token_data, "Naive Bayes", path, 1)
+train_model(token_data, "Logistic Regression", path, 2)
+train_model(token_data, "Random Forest", path, 3)
+train_model(token_data, "Support Vector Machine", path, 4)
