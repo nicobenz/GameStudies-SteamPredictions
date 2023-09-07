@@ -84,7 +84,7 @@
       \field{pages}{1\bibrangedash 15}
       \range{pages}{15}
     \endentry
-    \entry{9633422}{article}{}
+    \entry{Agarwal2021}{article}{}
       \name{author}{3}{}{%
         {{un=0,uniquepart=base,hash=b5f8d896b55d1ac9a59a844f1ecbd3ac}{%
            family={Agarwal},
@@ -257,7 +257,7 @@
       \verb https://doi.org/10.7228/manchester/9780719063640.001.0001
       \endverb
     \endentry
-    \entry{https://doi.org/10.48550/arxiv.1804.01149}{misc}{}
+    \entry{Bahuleyan2018}{misc}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=74e07ed6e6161e7cbae68f8ad2b58343}{%
            family={Bahuleyan},
@@ -296,7 +296,7 @@
       \endverb
       \keyw{Sound (cs.SD),Audio and Speech Processing (eess.AS),FOS: Computer and information sciences,FOS: Computer and information sciences,FOS: Electrical engineering,electronic engineering,information engineering,FOS: Electrical engineering,electronic engineering,information engineering}
     \endentry
-    \entry{https://doi.org/10.48550/arxiv.2106.01760}{article}{}
+    \entry{Cui2021}{article}{}
       \name{author}{5}{}{%
         {{un=0,uniquepart=base,hash=c2c3b6a1a23499549f41aadc7c9c292c}{%
            family={Cui},
@@ -408,65 +408,7 @@
       \verb https://doi.org/10.1002/asi.20427
       \endverb
     \endentry
-    \entry{Goring2020}{article}{}
-      \name{author}{4}{}{%
-        {{un=0,uniquepart=base,hash=c994ef596a43600786ffee14090da8a9}{%
-           family={Goring},
-           familyi={G\bibinitperiod},
-           given={Steve},
-           giveni={S\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=b9605ba00bc821d9b3c905ec97a2f216}{%
-           family={Steger},
-           familyi={S\bibinitperiod},
-           given={Robert},
-           giveni={R\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=5493d5b0ad49f4395ca96a7b45e27870}{%
-           family={Rao},
-           familyi={R\bibinitperiod},
-           given={Rakesh\bibnamedelimb Rao\bibnamedelima Ramachandra},
-           giveni={R\bibinitperiod\bibinitdelim R\bibinitperiod\bibinitdelim R\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=2ce4c604978ac9c6ebe8ba1ccfbc5115}{%
-           family={Raake},
-           familyi={R\bibinitperiod},
-           given={Alexander},
-           giveni={A\bibinitperiod},
-           givenun=0}}%
-      }
-      \list{publisher}{1}{%
-        {IEEE}%
-      }
-      \strng{namehash}{4b42be41482f9aea9e6c8e3a0e71ee56}
-      \strng{fullhash}{cf921212719f82ec6e9838a9ca13da82}
-      \strng{bibnamehash}{cf921212719f82ec6e9838a9ca13da82}
-      \strng{authorbibnamehash}{cf921212719f82ec6e9838a9ca13da82}
-      \strng{authornamehash}{4b42be41482f9aea9e6c8e3a0e71ee56}
-      \strng{authorfullhash}{cf921212719f82ec6e9838a9ca13da82}
-      \field{sortinit}{G}
-      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{2020 {IEEE} 22nd International Workshop on Multimedia Signal Processing ({MMSP})}
-      \field{month}{9}
-      \field{title}{Automated Genre Classification for Gaming Videos}
-      \field{year}{2020}
-      \true{nocite}
-      \verb{doi}
-      \verb 10.1109/mmsp48831.2020.9287122
-      \endverb
-      \verb{urlraw}
-      \verb https://doi.org/10.1109/mmsp48831.2020.9287122
-      \endverb
-      \verb{url}
-      \verb https://doi.org/10.1109/mmsp48831.2020.9287122
-      \endverb
-    \endentry
-    \entry{9287122}{article}{}
+    \entry{Goering2020}{article}{}
       \name{author}{4}{}{%
         {{un=0,uniquepart=base,hash=34fc4e7604c1543f026616dc5253b58b}{%
            family={Göring},
@@ -623,7 +565,7 @@
       \verb https://doi.org/10.1109/confluence.2019.8776935
       \endverb
     \endentry
-    \entry{10.1145/2793107.2793123}{article}{}
+    \entry{Heintz2015}{article}{}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=d81bf984e9fbda43e7c6e01442aafd31}{%
            family={Heintz},
@@ -831,7 +773,7 @@
       \verb https://doi.org/10.1007/s11042-022-13211-5
       \endverb
     \endentry
-    \entry{mansouri2008named}{article}{}
+    \entry{Mansouri2008}{article}{}
       \name{author}{3}{}{%
         {{un=0,uniquepart=base,hash=50b918befcb1f4fad004fbe96da1dca5}{%
            family={Mansouri},
@@ -929,7 +871,7 @@
       \verb https://doi.org/10.5220/0010145001080121
       \endverb
     \endentry
-    \entry{9400710}{article}{}
+    \entry{Viggiato2022}{article}{}
       \name{author}{4}{}{%
         {{un=0,uniquepart=base,hash=c46510314df9ba32aef479030ef50cf1}{%
            family={Viggiato},

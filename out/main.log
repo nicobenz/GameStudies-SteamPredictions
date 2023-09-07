@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.15)  5 SEP 2023 15:20
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.15)  7 SEP 2023 18:28
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -705,7 +705,11 @@ Package: xspace 2014/10/28 v1.13 Space after command names (DPC,MH)
 \@quotelevel=\count425
 \@quotereset=\count426
 
-(/Users/nico/code/GameStudies-SteamPredictions/out/main.aux)
+(/Users/nico/code/GameStudies-SteamPredictions/out/main.aux
+
+LaTeX Warning: Label `tab:top_tokens_by_genre' multiply defined.
+
+)
 \openout1 = `main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 41.
@@ -899,39 +903,98 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-) (./tex/review_metrics.tex
+)
+<data/results/plots/review_plot.png, id=141, 578.16pt x 433.62pt>
+File: data/results/plots/review_plot.png Graphic file (type png)
+<use data/results/plots/review_plot.png>
+Package pdftex.def Info: data/results/plots/review_plot.png  used on input line
+ 164.
+(pdftex.def)             Requested size: 483.69687pt x 362.76945pt.
+ (./tex/review_metrics.tex
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 ) [5
 
 
-] (./tex/genre_metrics.tex
+] [6 <./data/results/plots/review_plot.png>]
+<data/results/plots/tags_plot.png, id=155, 505.89pt x 289.08pt>
+File: data/results/plots/tags_plot.png Graphic file (type png)
+<use data/results/plots/tags_plot.png>
+Package pdftex.def Info: data/results/plots/tags_plot.png  used on input line 2
+01.
+(pdftex.def)             Requested size: 483.69687pt x 276.40207pt.
+ (./tex/genre_metrics.tex
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 )
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <9> on input line 206.
+(Font)              <9> on input line 219.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 206.
- [6] (./tex/model_metrics_table.tex
+(Font)              <5> on input line 219.
+ [7] (./tex/model_metrics_table_naive_bayes.tex
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-) [7] [8]
-Overfull \hbox (2.937pt too wide) in paragraph at lines 294--294
+) (./tex/model_metrics_table_logistic_regression.tex
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+) (./tex/model_metrics_table_support_vector_machine.tex
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+) (./tex/model_metrics_table_random_forest.tex
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+) (./tex/model_aggregation_metrics_table.tex
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+) (./tex/tfidf_by_genre.tex
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+) (./tex/prominent_tokens.tex
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+)
+<data/results/plots/naive_bayes_roc.png, id=169, 578.16pt x 433.62pt>
+File: data/results/plots/naive_bayes_roc.png Graphic file (type png)
+<use data/results/plots/naive_bayes_roc.png>
+Package pdftex.def Info: data/results/plots/naive_bayes_roc.png  used on input 
+line 272.
+(pdftex.def)             Requested size: 483.69687pt x 362.76945pt.
+<data/results/plots/logistic_regression_roc.png, id=170, 578.16pt x 433.62pt>
+File: data/results/plots/logistic_regression_roc.png Graphic file (type png)
+<use data/results/plots/logistic_regression_roc.png>
+Package pdftex.def Info: data/results/plots/logistic_regression_roc.png  used o
+n input line 280.
+(pdftex.def)             Requested size: 483.69687pt x 362.76945pt.
+<data/results/plots/random_forest_roc.png, id=171, 578.16pt x 433.62pt>
+File: data/results/plots/random_forest_roc.png Graphic file (type png)
+<use data/results/plots/random_forest_roc.png>
+Package pdftex.def Info: data/results/plots/random_forest_roc.png  used on inpu
+t line 288.
+(pdftex.def)             Requested size: 483.69687pt x 362.76945pt.
+ [8 <./data/results/plots/tags_plot.png>] [9 <./data/results/plots/naive_bayes_
+roc.png>] [10 <./data/results/plots/logistic_regression_roc.png>] [11 <./data/r
+esults/plots/random_forest_roc.png>] [12] [13] [14]
+Overfull \hbox (2.937pt too wide) in paragraph at lines 303--303
 \OT1/cmr/m/it/10.95 toma-tion & Power En-gi-neer-ing (RD-CAPE)\OT1/cmr/m/n/10.9
 5 , 189{194. []$https : / / doi . org / 10 . 1109 / RDCAPE52977 .
  []
 
-[9
+[15
 
-] [10] [11
+] [16] [17
 
 ] (/Users/nico/code/GameStudies-SteamPredictions/out/main.aux)
 
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 866E0185C272A2F08441B961D5F5EAA2;1583.
@@ -940,13 +1003,13 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 24267 strings out of 478268
- 458522 string characters out of 5846347
- 1245338 words of memory out of 5000000
- 42055 multiletter control sequences out of 15000+600000
+ 24377 strings out of 478268
+ 461965 string characters out of 5846347
+ 1264024 words of memory out of 5000000
+ 42127 multiletter control sequences out of 15000+600000
  476821 words of font info for 53 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 94i,9n,102p,1053b,5160s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 94i,11n,102p,1053b,5160s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/fontawesome5/fa5brands0.e
 nc}</usr/local/texlive/2022/texmf-dist/fonts/type1/public/fontawesome5/FontAwes
 ome5Brands-Regular.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/a
@@ -964,10 +1027,10 @@ fb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb
 ></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
 
 Output written on /Users/nico/code/GameStudies-SteamPredictions/out/main.pdf (1
-2 pages, 206190 bytes).
+8 pages, 2262132 bytes).
 PDF statistics:
- 288 PDF objects out of 1000 (max. 8388607)
- 243 compressed objects within 3 object streams
- 59 named destinations out of 1000 (max. 500000)
- 125 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 348 PDF objects out of 1000 (max. 8388607)
+ 287 compressed objects within 3 object streams
+ 75 named destinations out of 1000 (max. 500000)
+ 150 words of extra memory for PDF output out of 10000 (max. 10000000)
 

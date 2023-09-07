@@ -4,11 +4,11 @@
 \contentsline {section}{\numberline {4}Data overview}{5}{section.4}%
 \contentsline {subsection}{\numberline {4.1}Games}{5}{subsection.4.1}%
 \contentsline {subsection}{\numberline {4.2}Reviews}{5}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}Genres}{6}{subsection.4.3}%
-\contentsline {section}{\numberline {5}Experimental design}{6}{section.5}%
-\contentsline {subsection}{\numberline {5.1}Corpus generation}{6}{subsection.5.1}%
-\contentsline {subsection}{\numberline {5.2}Model training}{7}{subsection.5.2}%
-\contentsline {section}{\numberline {6}Results and discussion}{8}{section.6}%
-\contentsline {section}{\numberline {7}Conclusion}{8}{section.7}%
-\contentsline {section}{Appendices}{11}{section*.6}%
-\contentsline {section}{\numberline {A}Custom stop words}{11}{appendix.1.A}%
+\contentsline {subsection}{\numberline {4.3}Genres}{7}{subsection.4.3}%
+\contentsline {section}{\numberline {5}Experimental design}{7}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Corpus generation}{7}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Model training}{8}{subsection.5.2}%
+\contentsline {section}{\numberline {6}Results and discussion}{12}{section.6}%
+\contentsline {section}{\numberline {7}Conclusion}{12}{section.7}%
+\contentsline {section}{Appendices}{17}{section*.6}%
+\contentsline {section}{\numberline {A}Custom stop words}{17}{appendix.1.A}%

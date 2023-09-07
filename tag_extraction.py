@@ -8,7 +8,12 @@ from os.path import isfile, join
 from tqdm import tqdm
 import seaborn as sns
 import matplotlib.pyplot as plt
-from matplotlib import rc
+from matplotlib.ticker import FuncFormatter
+import locale
+
+
+def format_separator(x, pos):
+    return locale.format_string("%d", x, grouping=True)
 
 
 def exstract_tags(source_files):
@@ -82,7 +87,7 @@ def count_all_reviews(files):
     sns.set(style="whitegrid")
     plt.figure(figsize=(8, 4))
 
-    ax = sns.barplot(x=x_labels, y=review_bars, palette="pastel")
+    ax = sns.barplot(x=x_labels, y=review_bars, palette="Spectrum")
 
     for i, (v, p) in enumerate(zip(review_bars, y_perc)):
         if v > 1500:
@@ -107,33 +112,39 @@ def review_plot():
     y_perc = []
     for bar in review_bars:
         if bar > 0:
-            percentage = f"{round((bar / sum(review_bars)) * 100, 1)}\%"  # escape char because of latex rendering
+            percentage = f"{round((bar / sum(review_bars)) * 100, 1)}%"  # escape char because of latex rendering
             y_perc.append(percentage)
         else:
             y_perc.append("0%")
 
-    x_labels = ["0", "$<10$", "$<100$", "$<1,000$", "$<10,000$", "$<100,000$",
-                "$<500,000$", "$<1,000,000$", "$>1,000,000$"]
+    x_labels = ["0", "<10", "<100", "<1,000", "<10,000", "<100,000",
+                "<500,000", "<1,000,000", ">1,000,000"]
 
-    sns.set(style="whitegrid")
-    plt.figure(figsize=(7, 4))
+    sns.set_theme()
+    sns.set_context("paper")
+    plt.figure(figsize=(8, 6))
 
-    ax = sns.barplot(x=x_labels, y=review_bars, palette="muted")
+    review_bars_labels = [locale.format_string("%d", number, grouping=True) for number in review_bars]
 
-    for i, (v, p) in enumerate(zip(review_bars, y_perc)):
+    ax = sns.barplot(x=x_labels, y=review_bars, palette="Spectral")
+
+    for i, (v, p, label) in enumerate(zip(review_bars, y_perc, review_bars_labels)):
         if v > 1500:
-            ax.text(i, v + (0.002*sum(review_bars)), str(v), color='black', ha='center')
-            ax.text(i, v - (0.02*sum(review_bars)), p, color='white', ha='center')
+            ax.text(i, v + (0.002*sum(review_bars)), label, color='black', ha='center')
+            ax.text(i, v - (0.01*sum(review_bars)), p, color='black', ha='center')
         elif v > 0:
-            ax.text(i, v + (0.002 * sum(review_bars)), str(v), color='black', ha='center')
+            ax.text(i, v + (0.002 * sum(review_bars)), label, color='black', ha='center')
         else:
             ax.text(i, v + 0.05, "", color='black', ha='center')
 
+    formatter = FuncFormatter(format_separator)
+    ax.yaxis.set_major_formatter(formatter)
+
     plt.xticks(rotation=-30, ha="left")
-    plt.xlabel("Anzahl Reviews")
-    plt.ylabel("Anzahl Spiele")
+    plt.xlabel("Number of Reviews")
+    plt.ylabel("Number of Games")
     plt.tight_layout()
-    plt.savefig("/Volumes/Data/steam/stats/review_plot.png", dpi=600)
+    plt.savefig("data/results/plots/review_plot.png", dpi=600)
 
 
 def count_tags(files):
@@ -194,21 +205,27 @@ def plot_tag_distribution(maximum):
         y = y[:maximum]
         x = x[:maximum]
         y_p = y_p[:maximum]
-        y_perc = [f"{p}\%" for p in y_p]
+        y_perc = [f"{p}%" for p in y_p]
 
-        sns.set(style="whitegrid")
+        sns.set_theme()
+        sns.set_context("paper")
         plt.figure(figsize=(7, 4))
 
-        ax = sns.barplot(x=x, y=y, palette="muted")
+        y_labels = [locale.format_string("%d", number, grouping=True) for number in y]
 
-        for i, (v, p) in enumerate(zip(y, y_perc)):
-            ax.text(i, v + (0.002 * sum(y)), str(v), color='black', ha='center')
-            ax.text(i, v - (0.01 * sum(y)), p, color='white', ha='center')
+        ax = sns.barplot(x=x, y=y, palette="Spectral")
+
+        for i, (v, p, label) in enumerate(zip(y, y_perc, y_labels)):
+            ax.text(i, v + (0.002 * sum(y)), label, color='black', ha='center')
+            ax.text(i, v - (0.01 * sum(y)), p, color='black', ha='center')
+
+        formatter = FuncFormatter(format_separator)
+        ax.yaxis.set_major_formatter(formatter)
 
         plt.xticks(rotation=-30, ha="left")
-        plt.ylabel("Anzahl Spiele")
+        plt.ylabel("Number of Games")
         plt.tight_layout()
-        plt.savefig("/Volumes/Data/steam/stats/tags_plot.png", dpi=600)
+        plt.savefig("data/results/plots/tags_plot.png", dpi=600)
 
 
 source_path = "/Volumes/Data/steam/source"
@@ -216,11 +233,7 @@ source_path = "/Volumes/Data/steam/source"
 review_path = "/Volumes/Data/steam/reviews"
 review_files = [f for f in listdir(review_path) if isfile(join(review_path, f)) and f != ".DS_Store"]
 
-# Enable LaTeX rendering
-rc('text', usetex=True)
+locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 
-# Specify the fonts
-rc('font', family='serif')
-rc('font', serif='Computer Modern')
-
-plot_tag_distribution(10)
+plot_tag_distribution(12)
+review_plot()

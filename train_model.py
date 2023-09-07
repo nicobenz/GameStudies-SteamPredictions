@@ -111,12 +111,17 @@ def data_generator(data):
         yield label, [' '.join(tok) for tok in tokens]
 
 
-def train_model(data, model_name, source_path, save_order, folds=5):
+def train_model(data, model_name, source_path, save_order, verbose=True, learning_curve=False, folds=5):
     print(model_name)
     # create string for saving results later
     save_string = model_name.split(" ")
     save_string = [x.lower() for x in save_string]
     save_string = '_'.join(save_string)
+
+    # lists for learning curve data
+    learning_curve_train_sizes = []
+    learning_curve_train_scores = []
+    learning_curve_test_scores = []
 
     collected_metrics = []
     collected_predictions = {"predicted": [], "probability": [], "actual": []}
@@ -125,17 +130,23 @@ def train_model(data, model_name, source_path, save_order, folds=5):
         if save_string == "naive_bayes":
             classifier = MultinomialNB()
         elif save_string == "logistic_regression":
-            classifier = LogisticRegression(max_iter=1000)
+            classifier = LogisticRegression(max_iter=1000, verbose=verbose)
         elif save_string == "random_forest":
-            classifier = RandomForestClassifier(n_estimators=100, random_state=42)
+            classifier = RandomForestClassifier(n_estimators=100, random_state=42, verbose=verbose)
         elif save_string == "support_vector_machine":
-            classifier = SVC(kernel='linear')
+            classifier = SVC(kernel='linear', probability=True, verbose=verbose)
         else:
             classifier = MultinomialNB()
         print(f"Fitting fold {fold}...")
         classifier.fit(X_train, y_train)
         y_pred = classifier.predict(X_test)
         y_probs = classifier.predict_proba(X_test)
+
+        if learning_curve:
+            train_sizes, train_scores, test_scores = generate_learning_curve(classifier, X_train, y_train, X_test, y_test)
+            learning_curve_train_sizes.append(train_sizes)
+            learning_curve_train_scores.append(train_scores)
+            learning_curve_test_scores.append(test_scores)
 
         report = classification_report(y_test, y_pred, output_dict=True)
         collected_metrics.append(report)
@@ -151,8 +162,46 @@ def train_model(data, model_name, source_path, save_order, folds=5):
         for i, item in enumerate(collected_predictions[key]):
             if isinstance(item, np.ndarray):
                 collected_predictions[key][i] = item.tolist()
+
     with open(f"{source_path}/results/model_predictions/{save_string}_predictions.json", "w", encoding="utf-8") as pred_out:
         json.dump(collected_predictions, pred_out)
+
+    if learning_curve:
+        learning_curve_data = {
+            'train_sizes': learning_curve_train_sizes,
+            'train_scores': learning_curve_train_scores,
+            'test_scores': learning_curve_test_scores,
+        }
+        with open(f"{source_path}/results/learning_curves/{save_string}_learning_curve.json", "w",
+                  encoding="utf-8") as lc_out:
+            json.dump(learning_curve_data, lc_out)
+
+
+def generate_learning_curve(classifier, X_train, y_train, X_test, y_test, step_size=100):
+    # currently not used because of large increase in computational demands
+    train_sizes = []
+    train_scores = []
+    test_scores = []
+
+    num_samples, _ = X_train.shape
+
+    for step in range(step_size, num_samples, step_size):
+        X_subset = X_train[:step]
+        y_subset = y_train[:step]
+
+        classifier.fit(X_subset, y_subset)
+
+        train_pred = classifier.predict(X_subset)
+        test_pred = classifier.predict(X_test)
+
+        train_accuracy = accuracy_score(y_subset, train_pred)
+        test_accuracy = accuracy_score(y_test, test_pred)
+
+        train_sizes.append(step)
+        train_scores.append(train_accuracy)
+        test_scores.append(test_accuracy)
+
+    return train_sizes, train_scores, test_scores
 
 
 def recurrent_neural_network(data):  # not used for final paper because of computational constraints
