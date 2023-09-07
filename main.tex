@@ -159,6 +159,12 @@ More on sampling in a later section.
 See table~\ref{tab:game_metrics} for an overview of the distribution of games and review numbers.
 
 \input{tex/game_metrics}
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{data/results/plots/review_plot}
+    \caption{Distribution of Reviews Across Games}
+    \label{fig:review_fig}
+\end{figure}
 
 
 \subsection{Reviews}\label{subsec:reviews}
@@ -189,6 +195,13 @@ Further sampling and clustering of these tags into more traditional genres is al
 later date.
 See table~\ref{tab:genre_metrics} for an overview of genres that are found within the 5 most common genres of all games
 in the corpus.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{data/results/plots/tags_plot}
+    \caption{Number of Games for the Ten Most Common Genres}
+    \label{fig:tags_fig}
+\end{figure}
 
 \input{tex/genre_metrics}
 
@@ -251,6 +264,30 @@ After training, relevant metrics like accuracy, recall, precision and F1 score w
 \input{tex/model_metrics_table_support_vector_machine}
 \input{tex/model_metrics_table_random_forest}
 \input{tex/model_aggregation_metrics_table}
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{data/results/plots/naive_bayes_roc}
+    \caption{ROC Curve OvR for Naive Bayes}
+    \label{fig:nb_roc_fig}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{data/results/plots/logistic_regression_roc}
+    \caption{ROC Curve OvR for Logistic Regression}
+    \label{fig:lr_roc_fig}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{data/results/plots/random_forest_roc}
+    \caption{ROC Curve OvR for Random Forest}
+    \label{fig:rf_roc_fig}
+\end{figure}
 
 
 

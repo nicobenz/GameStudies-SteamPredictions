@@ -1,3 +1,0 @@
-"""
-to-do: select data
-"""

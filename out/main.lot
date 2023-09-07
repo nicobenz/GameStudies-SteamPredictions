@@ -1,4 +1,8 @@
-\contentsline {table}{\numberline {1}{\ignorespaces Count of games by review count}}{6}{table.1}%
-\contentsline {table}{\numberline {2}{\ignorespaces Review metrics}}{6}{table.2}%
-\contentsline {table}{\numberline {3}{\ignorespaces Distribution of the 20 most common genres across all games}}{7}{table.3}%
-\contentsline {table}{\numberline {4}{\ignorespaces Classifier Model Metrics for Support Vector Machine}}{8}{table.4}%
+\contentsline {table}{\numberline {1}{\ignorespaces Number of Games by Number of Reviews}}{7}{table.1}%
+\contentsline {table}{\numberline {2}{\ignorespaces Review Metrics}}{7}{table.2}%
+\contentsline {table}{\numberline {3}{\ignorespaces Distribution of the 20 Most Common Genres Across All Games}}{12}{table.3}%
+\contentsline {table}{\numberline {4}{\ignorespaces Classifier Model Metrics for Naive Bayes}}{12}{table.4}%
+\contentsline {table}{\numberline {5}{\ignorespaces Classifier Model Metrics for Logistic Regression}}{13}{table.5}%
+\contentsline {table}{\numberline {6}{\ignorespaces Classifier Model Metrics for Support Vector Machine}}{13}{table.6}%
+\contentsline {table}{\numberline {7}{\ignorespaces Classifier Model Metrics for Random Forest}}{13}{table.7}%
+\contentsline {table}{\numberline {8}{\ignorespaces Aggregated Classifier Model Metrics}}{13}{table.8}%
