@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.15)  8 SEP 2023 11:53
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.15)  8 SEP 2023 22:48
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -399,76 +399,112 @@ Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
 \@vwid@loff=\dimen177
 \@vwid@roff=\dimen178
 ))
+(/usr/local/texlive/2022/texmf-dist/tex/latex/pdfpages/pdfpages.sty
+Package: pdfpages 2022/01/29 v0.5u Insert pages of external PDF documents (AM)
+
+(/usr/local/texlive/2022/texmf-dist/tex/latex/tools/calc.sty
+Package: calc 2017/05/25 v4.3 Infix arithmetic (KKT,FJ)
+\calc@Acount=\count288
+\calc@Bcount=\count289
+\calc@Adimen=\dimen179
+\calc@Bdimen=\dimen180
+\calc@Askip=\skip52
+\calc@Bskip=\skip53
+LaTeX Info: Redefining \setlength on input line 80.
+LaTeX Info: Redefining \addtolength on input line 81.
+\calc@Ccount=\count290
+\calc@Cskip=\skip54
+)
+(/usr/local/texlive/2022/texmf-dist/tex/latex/eso-pic/eso-pic.sty
+Package: eso-pic 2020/10/14 v3.0a eso-pic (RN)
+\ESO@tempdima=\dimen181
+\ESO@tempdimb=\dimen182
+)
+\AM@pagewidth=\dimen183
+\AM@pageheight=\dimen184
+\AM@fboxrule=\dimen185
+
+(/usr/local/texlive/2022/texmf-dist/tex/latex/pdfpages/pppdftex.def
+File: pppdftex.def 2022/01/29 v0.5u Pdfpages driver for pdfTeX (AM)
+)
+\pdfpages@includegraphics@status=\count291
+\AM@pagebox=\box57
+\AM@global@opts=\toks29
+\AM@pagecnt=\count292
+\AM@toc@title=\toks30
+\c@AM@survey=\count293
+\AM@templatesizebox=\box58
+)
 (/usr/local/texlive/2022/texmf-dist/tex/latex/biblatex/biblatex.sty
 Package: biblatex 2022/02/02 v3.17 programmable bibliographies (PK/MW)
 
 (/usr/local/texlive/2022/texmf-dist/tex/latex/etoolbox/etoolbox.sty
 Package: etoolbox 2020/10/05 v2.5k e-TeX tools for LaTeX (JAW)
-\etb@tempcnta=\count288
+\etb@tempcnta=\count294
 )
 (/usr/local/texlive/2022/texmf-dist/tex/latex/logreq/logreq.sty
 Package: logreq 2010/08/04 v1.0 xml request logger
-\lrq@indent=\count289
+\lrq@indent=\count295
 
 (/usr/local/texlive/2022/texmf-dist/tex/latex/logreq/logreq.def
 File: logreq.def 2010/08/04 v1.0 logreq spec v1.0
 ))
-\c@tabx@nest=\count290
-\c@listtotal=\count291
-\c@listcount=\count292
-\c@liststart=\count293
-\c@liststop=\count294
-\c@citecount=\count295
-\c@citetotal=\count296
-\c@multicitecount=\count297
-\c@multicitetotal=\count298
-\c@instcount=\count299
-\c@maxnames=\count300
-\c@minnames=\count301
-\c@maxitems=\count302
-\c@minitems=\count303
-\c@citecounter=\count304
-\c@maxcitecounter=\count305
-\c@savedcitecounter=\count306
-\c@uniquelist=\count307
-\c@uniquename=\count308
-\c@refsection=\count309
-\c@refsegment=\count310
-\c@maxextratitle=\count311
-\c@maxextratitleyear=\count312
-\c@maxextraname=\count313
-\c@maxextradate=\count314
-\c@maxextraalpha=\count315
-\c@abbrvpenalty=\count316
-\c@highnamepenalty=\count317
-\c@lownamepenalty=\count318
-\c@maxparens=\count319
-\c@parenlevel=\count320
-\blx@tempcnta=\count321
-\blx@tempcntb=\count322
-\blx@tempcntc=\count323
-\c@blx@maxsection=\count324
-\c@blx@maxsegment@0=\count325
-\blx@notetype=\count326
-\blx@parenlevel@text=\count327
-\blx@parenlevel@foot=\count328
-\c@blx@sectionciteorder@0=\count329
-\blx@entrysetcounter=\count330
-\blx@biblioinstance=\count331
-\labelnumberwidth=\skip52
-\labelalphawidth=\skip53
-\biblabelsep=\skip54
-\bibitemsep=\skip55
-\bibnamesep=\skip56
-\bibinitsep=\skip57
-\bibparsep=\skip58
-\bibhang=\skip59
+\c@tabx@nest=\count296
+\c@listtotal=\count297
+\c@listcount=\count298
+\c@liststart=\count299
+\c@liststop=\count300
+\c@citecount=\count301
+\c@citetotal=\count302
+\c@multicitecount=\count303
+\c@multicitetotal=\count304
+\c@instcount=\count305
+\c@maxnames=\count306
+\c@minnames=\count307
+\c@maxitems=\count308
+\c@minitems=\count309
+\c@citecounter=\count310
+\c@maxcitecounter=\count311
+\c@savedcitecounter=\count312
+\c@uniquelist=\count313
+\c@uniquename=\count314
+\c@refsection=\count315
+\c@refsegment=\count316
+\c@maxextratitle=\count317
+\c@maxextratitleyear=\count318
+\c@maxextraname=\count319
+\c@maxextradate=\count320
+\c@maxextraalpha=\count321
+\c@abbrvpenalty=\count322
+\c@highnamepenalty=\count323
+\c@lownamepenalty=\count324
+\c@maxparens=\count325
+\c@parenlevel=\count326
+\blx@tempcnta=\count327
+\blx@tempcntb=\count328
+\blx@tempcntc=\count329
+\c@blx@maxsection=\count330
+\c@blx@maxsegment@0=\count331
+\blx@notetype=\count332
+\blx@parenlevel@text=\count333
+\blx@parenlevel@foot=\count334
+\c@blx@sectionciteorder@0=\count335
+\blx@entrysetcounter=\count336
+\blx@biblioinstance=\count337
+\labelnumberwidth=\skip55
+\labelalphawidth=\skip56
+\biblabelsep=\skip57
+\bibitemsep=\skip58
+\bibnamesep=\skip59
+\bibinitsep=\skip60
+\bibparsep=\skip61
+\bibhang=\skip62
 \blx@bcfin=\read3
 \blx@bcfout=\write4
 \blx@langwohyphens=\language87
-\c@mincomprange=\count332
-\c@maxcomprange=\count333
-\c@mincompwidth=\count334
+\c@mincomprange=\count338
+\c@maxcomprange=\count339
+\c@mincompwidth=\count340
 Package biblatex Info: Trying to load biblatex default data model...
 Package biblatex Info: ... file 'blx-dm.def' found.
 
@@ -483,98 +519,98 @@ File: apa.dbx 2021/12/24 v9.15 APA biblatex style data model
 )
 Package biblatex Info: Trying to load biblatex custom data model...
 Package biblatex Info: ... file 'biblatex-dm.cfg' not found.
-\c@afterword=\count335
-\c@savedafterword=\count336
-\c@annotator=\count337
-\c@savedannotator=\count338
-\c@author=\count339
-\c@savedauthor=\count340
-\c@bookauthor=\count341
-\c@savedbookauthor=\count342
-\c@commentator=\count343
-\c@savedcommentator=\count344
-\c@editor=\count345
-\c@savededitor=\count346
-\c@editora=\count347
-\c@savededitora=\count348
-\c@editorb=\count349
-\c@savededitorb=\count350
-\c@editorc=\count351
-\c@savededitorc=\count352
-\c@foreword=\count353
-\c@savedforeword=\count354
-\c@holder=\count355
-\c@savedholder=\count356
-\c@introduction=\count357
-\c@savedintroduction=\count358
-\c@namea=\count359
-\c@savednamea=\count360
-\c@nameb=\count361
-\c@savednameb=\count362
-\c@namec=\count363
-\c@savednamec=\count364
-\c@translator=\count365
-\c@savedtranslator=\count366
-\c@shortauthor=\count367
-\c@savedshortauthor=\count368
-\c@shorteditor=\count369
-\c@savedshorteditor=\count370
-\c@narrator=\count371
-\c@savednarrator=\count372
-\c@execproducer=\count373
-\c@savedexecproducer=\count374
-\c@execdirector=\count375
-\c@savedexecdirector=\count376
-\c@with=\count377
-\c@savedwith=\count378
-\c@labelname=\count379
-\c@savedlabelname=\count380
-\c@institution=\count381
-\c@savedinstitution=\count382
-\c@lista=\count383
-\c@savedlista=\count384
-\c@listb=\count385
-\c@savedlistb=\count386
-\c@listc=\count387
-\c@savedlistc=\count388
-\c@listd=\count389
-\c@savedlistd=\count390
-\c@liste=\count391
-\c@savedliste=\count392
-\c@listf=\count393
-\c@savedlistf=\count394
-\c@location=\count395
-\c@savedlocation=\count396
-\c@organization=\count397
-\c@savedorganization=\count398
-\c@origlocation=\count399
-\c@savedoriglocation=\count400
-\c@origpublisher=\count401
-\c@savedorigpublisher=\count402
-\c@publisher=\count403
-\c@savedpublisher=\count404
-\c@language=\count405
-\c@savedlanguage=\count406
-\c@origlanguage=\count407
-\c@savedoriglanguage=\count408
-\c@citation=\count409
-\c@savedcitation=\count410
-\c@pageref=\count411
-\c@savedpageref=\count412
-\shorthandwidth=\skip60
-\shortjournalwidth=\skip61
-\shortserieswidth=\skip62
-\shorttitlewidth=\skip63
-\shortauthorwidth=\skip64
-\shorteditorwidth=\skip65
-\locallabelnumberwidth=\skip66
-\locallabelalphawidth=\skip67
-\localshorthandwidth=\skip68
-\localshortjournalwidth=\skip69
-\localshortserieswidth=\skip70
-\localshorttitlewidth=\skip71
-\localshortauthorwidth=\skip72
-\localshorteditorwidth=\skip73
+\c@afterword=\count341
+\c@savedafterword=\count342
+\c@annotator=\count343
+\c@savedannotator=\count344
+\c@author=\count345
+\c@savedauthor=\count346
+\c@bookauthor=\count347
+\c@savedbookauthor=\count348
+\c@commentator=\count349
+\c@savedcommentator=\count350
+\c@editor=\count351
+\c@savededitor=\count352
+\c@editora=\count353
+\c@savededitora=\count354
+\c@editorb=\count355
+\c@savededitorb=\count356
+\c@editorc=\count357
+\c@savededitorc=\count358
+\c@foreword=\count359
+\c@savedforeword=\count360
+\c@holder=\count361
+\c@savedholder=\count362
+\c@introduction=\count363
+\c@savedintroduction=\count364
+\c@namea=\count365
+\c@savednamea=\count366
+\c@nameb=\count367
+\c@savednameb=\count368
+\c@namec=\count369
+\c@savednamec=\count370
+\c@translator=\count371
+\c@savedtranslator=\count372
+\c@shortauthor=\count373
+\c@savedshortauthor=\count374
+\c@shorteditor=\count375
+\c@savedshorteditor=\count376
+\c@narrator=\count377
+\c@savednarrator=\count378
+\c@execproducer=\count379
+\c@savedexecproducer=\count380
+\c@execdirector=\count381
+\c@savedexecdirector=\count382
+\c@with=\count383
+\c@savedwith=\count384
+\c@labelname=\count385
+\c@savedlabelname=\count386
+\c@institution=\count387
+\c@savedinstitution=\count388
+\c@lista=\count389
+\c@savedlista=\count390
+\c@listb=\count391
+\c@savedlistb=\count392
+\c@listc=\count393
+\c@savedlistc=\count394
+\c@listd=\count395
+\c@savedlistd=\count396
+\c@liste=\count397
+\c@savedliste=\count398
+\c@listf=\count399
+\c@savedlistf=\count400
+\c@location=\count401
+\c@savedlocation=\count402
+\c@organization=\count403
+\c@savedorganization=\count404
+\c@origlocation=\count405
+\c@savedoriglocation=\count406
+\c@origpublisher=\count407
+\c@savedorigpublisher=\count408
+\c@publisher=\count409
+\c@savedpublisher=\count410
+\c@language=\count411
+\c@savedlanguage=\count412
+\c@origlanguage=\count413
+\c@savedoriglanguage=\count414
+\c@citation=\count415
+\c@savedcitation=\count416
+\c@pageref=\count417
+\c@savedpageref=\count418
+\shorthandwidth=\skip63
+\shortjournalwidth=\skip64
+\shortserieswidth=\skip65
+\shorttitlewidth=\skip66
+\shortauthorwidth=\skip67
+\shorteditorwidth=\skip68
+\locallabelnumberwidth=\skip69
+\locallabelalphawidth=\skip70
+\localshorthandwidth=\skip71
+\localshortjournalwidth=\skip72
+\localshortserieswidth=\skip73
+\localshorttitlewidth=\skip74
+\localshortauthorwidth=\skip75
+\localshorteditorwidth=\skip76
 Package biblatex Info: Trying to load compatibility code...
 Package biblatex Info: ... file 'blx-compat.def' found.
 
@@ -586,19 +622,19 @@ Package biblatex Info: ... file 'biblatex.def' found.
 
 (/usr/local/texlive/2022/texmf-dist/tex/latex/biblatex/biblatex.def
 File: biblatex.def 2022/02/02 v3.17 biblatex compatibility (PK/MW)
-\c@textcitecount=\count413
-\c@textcitetotal=\count414
-\c@textcitemaxnames=\count415
-\c@biburlbigbreakpenalty=\count416
-\c@biburlbreakpenalty=\count417
-\c@biburlnumpenalty=\count418
-\c@biburlucpenalty=\count419
-\c@biburllcpenalty=\count420
+\c@textcitecount=\count419
+\c@textcitetotal=\count420
+\c@textcitemaxnames=\count421
+\c@biburlbigbreakpenalty=\count422
+\c@biburlbreakpenalty=\count423
+\c@biburlnumpenalty=\count424
+\c@biburlucpenalty=\count425
+\c@biburllcpenalty=\count426
 \biburlbigskip=\muskip17
 \biburlnumskip=\muskip18
 \biburlucskip=\muskip19
 \biburllcskip=\muskip20
-\c@smartand=\count421
+\c@smartand=\count427
 )
 Package biblatex Info: Trying to load bibliography style 'apa'...
 Package biblatex Info: ... file 'apa.bbx' found.
@@ -610,8 +646,8 @@ Package biblatex Info: ... file 'standard.bbx' found.
 
 (/usr/local/texlive/2022/texmf-dist/tex/latex/biblatex/bbx/standard.bbx
 File: standard.bbx 2022/02/02 v3.17 biblatex bibliography style (PK/MW)
-\c@bbx:relatedcount=\count422
-\c@bbx:relatedtotal=\count423
+\c@bbx:relatedcount=\count428
+\c@bbx:relatedtotal=\count429
 )
 Package biblatex Info: Delimiter 'nameyeardelim' in context 'bib' already defin
 ed, overwriting.
@@ -667,8 +703,8 @@ Package: expl3 2022-02-24 L3 programming layer (loader)
 
 (/usr/local/texlive/2022/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2022-02-07 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count424
-\l__pdf_internal_box=\box57
+\l__color_backend_stack_int=\count430
+\l__pdf_internal_box=\box59
 ))
 Package biblatex Info: ... and expl3
 (biblatex)             2022-02-24 L3 programming layer (loader) 
@@ -682,7 +718,7 @@ Package: xparse 2022-01-12 L3 Experimental document command parser
 Package: blx-case-expl3 2022/02/02 v3.17 expl3 case changing code for biblatex
 ))
 (/usr/local/texlive/2022/texmf-dist/tex/latex/phonetic/phonetic.sty
-\temp=\dimen179
+\temp=\dimen186
 )
 (/usr/local/texlive/2022/texmf-dist/tex/latex/fontawesome5/fontawesome5.sty
 Package: fontawesome5 2021/06/04 v5.15.3 Font Awesome 5
@@ -702,34 +738,30 @@ Package: textcomp 2020/02/02 v2.0n Standard LaTeX package
 (/usr/local/texlive/2022/texmf-dist/tex/latex/tools/xspace.sty
 Package: xspace 2014/10/28 v1.13 Space after command names (DPC,MH)
 )
-\@quotelevel=\count425
-\@quotereset=\count426
+\@quotelevel=\count431
+\@quotereset=\count432
 
-(/Users/nico/code/GameStudies-SteamPredictions/out/main.aux
-
-LaTeX Warning: Label `tab:top_tokens_by_genre' multiply defined.
-
-)
+(/Users/nico/code/GameStudies-SteamPredictions/out/main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -767,17 +799,17 @@ LaTeX Font Info:    ... okay on input line 41.
 
 (/usr/local/texlive/2022/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count427
-\scratchdimen=\dimen180
-\scratchbox=\box58
-\nofMPsegments=\count428
-\nofMParguments=\count429
-\everyMPshowfont=\toks29
-\MPscratchCnt=\count430
-\MPscratchDim=\dimen181
-\MPnumerator=\count431
-\makeMPintoPDFobject=\count432
-\everyMPtoPDFconversion=\toks30
+\scratchcounter=\count433
+\scratchdimen=\dimen187
+\scratchbox=\box60
+\nofMPsegments=\count434
+\nofMParguments=\count435
+\everyMPshowfont=\toks31
+\MPscratchCnt=\count436
+\MPscratchDim=\dimen188
+\MPnumerator=\count437
+\makeMPintoPDFobject=\count438
+\everyMPtoPDFconversion=\toks32
 ) (/usr/local/texlive/2022/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
@@ -787,7 +819,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-Package hyperref Info: Link coloring OFF on input line 41.
+Package hyperref Info: Link coloring OFF on input line 42.
 
 (/usr/local/texlive/2022/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
@@ -799,16 +831,25 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 ty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count433
+\c@section@level=\count439
 )
-LaTeX Info: Redefining \ref on input line 41.
-LaTeX Info: Redefining \pageref on input line 41.
-LaTeX Info: Redefining \nameref on input line 41.
+LaTeX Info: Redefining \ref on input line 42.
+LaTeX Info: Redefining \pageref on input line 42.
+LaTeX Info: Redefining \nameref on input line 42.
  (/Users/nico/code/GameStudies-SteamPredictions/out/main.out)
 (/Users/nico/code/GameStudies-SteamPredictions/out/main.out)
 \@outlinefile=\write5
 \openout5 = `main.out'.
 
+
+(/usr/local/texlive/2022/texmf-dist/tex/latex/pdflscape/pdflscape.sty
+Package: pdflscape 2019/12/05 v0.12 Display of landscape pages in PDF (HO)
+
+(/usr/local/texlive/2022/texmf-dist/tex/latex/graphics/lscape.sty
+Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
+)
+Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
+)
 Package biblatex Info: Trying to load language 'english' -> 'english-apa'...
 Package biblatex Info: ... file 'english-apa.lbx' found.
 
@@ -845,21 +886,21 @@ Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'main.bbl' found.
 
 (/Users/nico/code/GameStudies-SteamPredictions/out/main.bbl)
-Package biblatex Info: Reference section=0 on input line 41.
-Package biblatex Info: Reference segment=0 on input line 41.
+Package biblatex Info: Reference section=0 on input line 42.
+Package biblatex Info: Reference segment=0 on input line 42.
 LaTeX Font Info:    Trying to load font information for U+fontawesomebrands0 on
- input line 73.
+ input line 74.
 
 (/usr/local/texlive/2022/texmf-dist/tex/latex/fontawesome5/ufontawesomebrands0.
 fd)
 LaTeX Font Info:    Font shape `U/fontawesomebrands0/solid/n' in size <17.28> n
 ot available
 (Font)              Font shape `U/fontawesomebrands0/regular/n' tried instead o
-n input line 73.
+n input line 74.
  [1
 
 {/usr/local/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 95--96
+Underfull \hbox (badness 10000) in paragraph at lines 96--97
 
  []
 
@@ -868,7 +909,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.98 \clearpage
+l.99 \clearpage
                 [1
 
 ] (/Users/nico/code/GameStudies-SteamPredictions/out/main.toc
@@ -899,60 +940,64 @@ LaTeX Font Info:    External font `cmex10' loaded for size
  [4
 
 ]
-(./tex/game_metrics.tex
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-)
-<data/results/plots/review_plot.png, id=143, 578.16pt x 433.62pt>
-File: data/results/plots/review_plot.png Graphic file (type png)
-<use data/results/plots/review_plot.png>
-Package pdftex.def Info: data/results/plots/review_plot.png  used on input line
- 164.
+(./tex/review_plot.tex
+<data/results/plots/review_plot.pdf, id=133, 578.16pt x 433.62pt>
+File: data/results/plots/review_plot.pdf Graphic file (type pdf)
+<use data/results/plots/review_plot.pdf>
+Package pdftex.def Info: data/results/plots/review_plot.pdf  used on input line
+ 3.
 (pdftex.def)             Requested size: 483.69687pt x 362.76945pt.
- (./tex/review_metrics.tex
+) (./tex/review_metrics.tex
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
+) (./tex/genre_plot.tex
+<data/results/plots/tags_plot.pdf, id=136, 505.89pt x 289.08pt>
+File: data/results/plots/tags_plot.pdf Graphic file (type pdf)
+<use data/results/plots/tags_plot.pdf>
+Package pdftex.def Info: data/results/plots/tags_plot.pdf  used on input line 3
+.
+(pdftex.def)             Requested size: 483.69687pt x 276.40207pt.
 ) [5
 
 
-] [6 <./data/results/plots/review_plot.png>]
-<data/results/plots/tags_plot.png, id=157, 505.89pt x 289.08pt>
-File: data/results/plots/tags_plot.png Graphic file (type png)
-<use data/results/plots/tags_plot.png>
-Package pdftex.def Info: data/results/plots/tags_plot.png  used on input line 2
-01.
-(pdftex.def)             Requested size: 483.69687pt x 276.40207pt.
- (./tex/genre_metrics.tex
+] [6 <./data/results/plots/review_plot.pdf>]
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <9> on input line 207.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 207.
+
+[7 <./data/results/plots/tags_plot.pdf>]
+(./tex/model_aggregation_metrics_table.tex) (./tex/combined_fold_metrics.tex
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
+) (./tex/combined_model_metrics.tex
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+) (./tex/naive_bayes_roc.tex
+<data/results/plots/naive_bayes_roc.pdf, id=237, 578.16pt x 433.62pt>
+File: data/results/plots/naive_bayes_roc.pdf Graphic file (type pdf)
+<use data/results/plots/naive_bayes_roc.pdf>
+Package pdftex.def Info: data/results/plots/naive_bayes_roc.pdf  used on input 
+line 3.
+(pdftex.def)             Requested size: 483.69687pt x 362.76945pt.
+) (./tex/log_reg_roc.tex
+<data/results/plots/logistic_regression_roc.pdf, id=238, 578.16pt x 433.62pt>
+File: data/results/plots/logistic_regression_roc.pdf Graphic file (type pdf)
+<use data/results/plots/logistic_regression_roc.pdf>
+Package pdftex.def Info: data/results/plots/logistic_regression_roc.pdf  used o
+n input line 3.
+(pdftex.def)             Requested size: 483.69687pt x 362.76945pt.
 )
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <9> on input line 219.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 219.
- [7] (./tex/model_metrics_table_naive_bayes.tex
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-) (./tex/model_metrics_table_logistic_regression.tex
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-) (./tex/model_metrics_table_support_vector_machine.tex
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-) (./tex/model_metrics_table_random_forest.tex
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-) (./tex/model_aggregation_metrics_table.tex
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
+(./tex/random_forest_roc.tex
+<data/results/plots/random_forest_roc.pdf, id=239, 578.16pt x 433.62pt>
+File: data/results/plots/random_forest_roc.pdf Graphic file (type pdf)
+<use data/results/plots/random_forest_roc.pdf>
+Package pdftex.def Info: data/results/plots/random_forest_roc.pdf  used on inpu
+t line 3.
+(pdftex.def)             Requested size: 483.69687pt x 362.76945pt.
 ) (./tex/tfidf_by_genre.tex
 
 LaTeX Warning: `h' float specifier changed to `ht'.
@@ -961,80 +1006,59 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-)
-<data/results/plots/naive_bayes_roc.png, id=171, 578.16pt x 433.62pt>
-File: data/results/plots/naive_bayes_roc.png Graphic file (type png)
-<use data/results/plots/naive_bayes_roc.png>
-Package pdftex.def Info: data/results/plots/naive_bayes_roc.png  used on input 
-line 272.
-(pdftex.def)             Requested size: 483.69687pt x 362.76945pt.
-<data/results/plots/logistic_regression_roc.png, id=172, 578.16pt x 433.62pt>
-File: data/results/plots/logistic_regression_roc.png Graphic file (type png)
-<use data/results/plots/logistic_regression_roc.png>
-Package pdftex.def Info: data/results/plots/logistic_regression_roc.png  used o
-n input line 280.
-(pdftex.def)             Requested size: 483.69687pt x 362.76945pt.
-<data/results/plots/random_forest_roc.png, id=173, 578.16pt x 433.62pt>
-File: data/results/plots/random_forest_roc.png Graphic file (type png)
-<use data/results/plots/random_forest_roc.png>
-Package pdftex.def Info: data/results/plots/random_forest_roc.png  used on inpu
-t line 288.
-(pdftex.def)             Requested size: 483.69687pt x 362.76945pt.
- (./tex/test_table.tex [8 <./data/results/plots/tags_plot.png>] [9 <./data/resu
-lts/plots/naive_bayes_roc.png>] [10 <./data/results/plots/logistic_regression_r
-oc.png>] [11 <./data/results/plots/random_forest_roc.png>]
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-) [12] [13] [14]
-Overfull \hbox (2.937pt too wide) in paragraph at lines 303--303
+) [8] [9 <./data/results/plots/naive_bayes_roc.pdf>] [10 <./data/results/plots/
+logistic_regression_roc.pdf>] [11 <./data/results/plots/random_forest_roc.pdf>]
+[12] [13]
+Overfull \hbox (2.937pt too wide) in paragraph at lines 264--264
 \OT1/cmr/m/it/10.95 toma-tion & Power En-gi-neer-ing (RD-CAPE)\OT1/cmr/m/n/10.9
 5 , 189{194. []$https : / / doi . org / 10 . 1109 / RDCAPE52977 .
  []
 
-[15
+[14
 
-] [16] [17
+] [15] [16
 
 ] (/Users/nico/code/GameStudies-SteamPredictions/out/main.aux)
 
-LaTeX Warning: There were multiply-defined labels.
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 866E0185C272A2F08441B961D5F5EAA2;1583.
+
+Package biblatex Warning: Please rerun LaTeX.
+(biblatex)                Page breaks have changed.
+
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 24385 strings out of 478268
- 462123 string characters out of 5846347
- 1271081 words of memory out of 5000000
- 42131 multiletter control sequences out of 15000+600000
+ 25162 strings out of 478268
+ 475246 string characters out of 5846347
+ 1279601 words of memory out of 5000000
+ 42896 multiletter control sequences out of 15000+600000
  476821 words of font info for 53 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 94i,11n,102p,1053b,5160s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 94i,11n,102p,1053b,5162s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/fontawesome5/fa5brands0.e
 nc}</usr/local/texlive/2022/texmf-dist/fonts/type1/public/fontawesome5/FontAwes
 ome5Brands-Regular.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/a
 msfonts/cm/cmbx10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/am
 sfonts/cm/cmbx12.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/ams
-fonts/cm/cmmi10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsf
-onts/cm/cmr10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfon
-ts/cm/cmr12.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmr17.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/c
-m/cmr6.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/c
-mr8.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9
-.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.
-pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.p
-fb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb
-></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-
+fonts/cm/cmr10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmr12.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmr17.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmr6.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/
+cmr8.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
+9.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10
+.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.p
+fb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pf
+b>
 Output written on /Users/nico/code/GameStudies-SteamPredictions/out/main.pdf (1
-8 pages, 2263285 bytes).
+7 pages, 1181310 bytes).
 PDF statistics:
- 350 PDF objects out of 1000 (max. 8388607)
- 289 compressed objects within 3 object streams
- 76 named destinations out of 1000 (max. 500000)
+ 542 PDF objects out of 1000 (max. 8388607)
+ 292 compressed objects within 3 object streams
+ 70 named destinations out of 1000 (max. 500000)
  150 words of extra memory for PDF output out of 10000 (max. 10000000)
 

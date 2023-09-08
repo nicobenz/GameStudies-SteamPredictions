@@ -132,7 +132,7 @@ def train_model(data, model_name, source_path, save_order, verbose=True, learnin
         elif save_string == "logistic_regression":
             classifier = LogisticRegression(max_iter=1000, verbose=verbose)
         elif save_string == "random_forest":
-            classifier = RandomForestClassifier(n_estimators=75, random_state=42, verbose=verbose)
+            classifier = RandomForestClassifier(n_estimators=100, random_state=42, verbose=verbose)
         elif save_string == "support_vector_machine":
             classifier = SVC(kernel='linear', probability=True, verbose=verbose)
         else:

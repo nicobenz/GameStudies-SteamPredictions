@@ -100,7 +100,7 @@ def count_all_reviews(files):
 
     plt.xlabel("Number of reviews")
     plt.ylabel("Number of games")
-    plt.savefig("/Volumes/Data/steam/stats/review_plot.png", dpi=600)
+    plt.savefig("/Volumes/Data/steam/stats/review_plot.pdf")
 
 
 def review_plot():
@@ -112,7 +112,7 @@ def review_plot():
     y_perc = []
     for bar in review_bars:
         if bar > 0:
-            percentage = f"{round((bar / sum(review_bars)) * 100, 1)}%"  # escape char because of latex rendering
+            percentage = f"{round((bar / sum(review_bars)) * 100, 1)}%"
             y_perc.append(percentage)
         else:
             y_perc.append("0%")
@@ -144,7 +144,7 @@ def review_plot():
     plt.xlabel("Number of Reviews")
     plt.ylabel("Number of Games")
     plt.tight_layout()
-    plt.savefig("data/results/plots/review_plot.png", dpi=600)
+    plt.savefig("data/results/plots/review_plot.pdf")
 
 
 def count_tags(files):
@@ -225,7 +225,7 @@ def plot_tag_distribution(maximum):
         plt.xticks(rotation=-30, ha="left")
         plt.ylabel("Number of Games")
         plt.tight_layout()
-        plt.savefig("data/results/plots/tags_plot.png", dpi=600)
+        plt.savefig("data/results/plots/tags_plot.pdf")
 
 
 source_path = "/Volumes/Data/steam/source"

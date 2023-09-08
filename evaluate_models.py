@@ -29,7 +29,40 @@ def format_numbers_for_readability(number_list):
     return number_list
 
 
-def fill_stacked_latex_model_table(stacked_list):
+def create_combined_table(directory, output_name):
+    path = f"data/results/model_metrics"
+    files = [file for file in os.listdir(f"{path}/{directory}") if ".DS_Store" not in file]
+    files.sort()
+    collected_values = []
+    for model in files:
+        collected_model = []
+        with open(f"{path}/{directory}/{model}", "r") as f:
+            content = json.loads(f.read())
+        if directory == "full":
+            collected_model.append(list(content["combined"]["macro avg"].values()))
+            for key in list(content["labels"].keys()):
+                collected_model.append(list(content["labels"][key].values()))
+            collected_values.append(collected_model)
+        else:
+            model_full = model.split("_")
+            model_full[3] = "full"
+            model_full = "_".join(model_full)
+            with open(f"{path}/full/{model_full}", "r") as f:
+                content = json.loads(f.read())
+            collected_model.append(list(content["combined"]["macro avg"].values()))
+            with open(f"{path}/{directory}/{model}", "r") as f:
+                content = json.loads(f.read())
+            for genre_dict in content:
+                for key in list(genre_dict.keys()):
+                    if key != "accuracy" and "avg" not in key:
+                        values = list(genre_dict[key].values())
+                        values = [round(val, 2) for val in values]
+                        collected_model.append(values)
+            collected_values.append(collected_model)
+    fill_stacked_latex_model_table(collected_values, output_name)
+
+
+def fill_stacked_latex_model_table(stacked_list, file_name):
     """
     stacked_list = [
         [
@@ -58,140 +91,13 @@ def fill_stacked_latex_model_table(stacked_list):
         ]
     ]
     """
-    template = load_tex("template_combined_fold_metrics.tex")
+    template = load_tex(f"template_{file_name}")
     for i, sub in enumerate(stacked_list):
         for j, subsub in enumerate(sub):
             for k, subsubsub in enumerate(subsub):
                 template = template.replace(f"<{i}{j}{k}>", str(subsubsub))
 
-    save_tex("combined_fold_metrics.tex", template)
-
-
-def plot_roc_and_precision_recall(source_path):
-    # set seaborn stuff
-    sns.set_theme()
-    sns.set_context("paper")
-    custom_palette = sns.color_palette("Spectral")
-    sns.set_palette(custom_palette)
-
-    # prepare file loading
-    file_path = f"{source_path}/results/model_predictions"
-    pred_files = [file for file in os.listdir(file_path) if ".DS_Store" not in file]
-    pred_files = [f"{file_path}/{file}" for file in pred_files]
-
-    # loop over all prediction files
-    for file in pred_files:
-        with open(file, "r") as pred_in:
-            predictions = json.load(pred_in)
-        save_name = file.split("/")[-1].replace("_predictions.json", "")
-        model_name = save_name.split("_")
-        model_name = [x.capitalize() for x in model_name]
-        model_name = " ".join(model_name)
-
-        # prepare data for roc
-        all_labels = set(label for fold in predictions["actual"] for label in fold)
-        classes = sorted(list(all_labels))  # Sort for consistency
-
-        roc_curves_per_class = []
-        roc_auc_per_class = []
-
-        # loop for all labels
-        for class_name in classes:
-            roc_curves_class = []
-            roc_auc_class = []
-            precision_recall_curves_class = []  # Store Precision-Recall curves
-
-            # loop for each fold
-            for fold_index in range(len(predictions["actual"])):
-                test = predictions["actual"][fold_index]
-                pred_probs = predictions["probability"][fold_index]
-
-                # get probabilities
-                class_index = classes.index(class_name)
-                actual_probs = [prob[class_index] for prob in pred_probs]
-                actual_labels = [1 if class_name in test_labels else 0 for test_labels in test]
-
-                # ROC curve calculations
-                fpr, tpr, _ = roc_curve(actual_labels, actual_probs)
-                roc_auc = auc(fpr, tpr)
-
-                roc_curves_class.append((fpr, tpr))
-                roc_auc_class.append(roc_auc)
-
-                # Precision-Recall curve calculations
-                thresholds = np.linspace(0, 1, 100)
-                precision_values = []
-                recall_values = []
-
-                for threshold in thresholds:
-                    predicted_labels = [1 if prob >= threshold else 0 for prob in actual_probs]
-                    precision = precision_score(actual_labels, predicted_labels)
-                    recall = recall_score(actual_labels, predicted_labels)
-                    precision_values.append(precision)
-                    recall_values.append(recall)
-
-                precision_recall_curves_class.append((precision_values, recall_values))
-
-                #precision, recall, _ = precision_recall_curve(actual_labels, actual_probs)
-                #precision_recall_curves_class.append((precision, recall))
-
-            # Plot ROC and Precision-Recall curves for each class
-            plt.figure(figsize=(12, 4))
-            plt.subplot(1, 2, 1)  # Subplot for ROC curve
-            for fpr, tpr in roc_curves_class:
-                mean_fpr = np.linspace(0, 1, 100)
-                mean_tpr = np.zeros_like(mean_fpr)
-
-                # Initialize a count of valid curves
-                valid_curve_count = 0
-
-                # Define the length of mean_fpr as the expected length
-                expected_length = len(mean_fpr)
-
-                # Loop through each fold
-                for fold_fpr, fold_tpr in zip(fpr, tpr):
-                    # Convert fold_fpr and fold_tpr to NumPy arrays
-                    fold_fpr = np.array(fold_fpr)
-                    fold_tpr = np.array(fold_tpr)
-
-                    # Check if both arrays have the same shape as expected_length
-                    if fold_fpr.shape == fold_tpr.shape == (expected_length,):
-                        # Interpolate the fold's ROC curve to match the mean_fpr
-                        mean_tpr += np.interp(mean_fpr, fold_fpr, fold_tpr)
-                        valid_curve_count += 1
-
-                # Calculate the mean by dividing by the number of valid curves
-                if valid_curve_count > 0:
-                    mean_tpr /= valid_curve_count
-
-                label = f'{class_name} (AUC = {np.mean(roc_auc_class):.2f})'
-                sns.lineplot(x=mean_fpr, y=mean_tpr, lw=2, label=label)
-
-            plt.axline([0, 0], [1, 1], color="gray", lw=2, linestyle='--')
-            plt.xlim([0.0, 1.0])
-            plt.ylim([0.0, 1.05])
-            plt.xlabel('False Positive Rate')
-            plt.ylabel('True Positive Rate')
-            plt.title(f'ROC Curve for {class_name}')
-
-            plt.subplot(1, 2, 2)  # Subplot for Precision-Recall curve
-            for precision, recall in precision_recall_curves_class:
-                # Update the label to show the class name
-                label = f'{class_name} (AP = {average_precision_score(precision, recall):.2f})'
-                sns.lineplot(x=recall, y=precision, lw=2, label=label)
-
-            plt.xlim([0.0, 1.0])
-            plt.ylim([0.0, 1.05])
-            plt.xlabel('Recall')
-            plt.ylabel('Precision')
-            plt.title(f'Precision-Recall Curve for {class_name}')
-
-            plt.tight_layout()
-            plt.legend(loc='lower right')
-
-            # Save or display the plot as needed
-            save_name = f"{source_path}/results/plots/{save_name}_{class_name}"
-            plt.savefig(f"{save_name}.png", dpi=600)
+    save_tex(file_name, template)
 
 
 def roc(source_path):
@@ -257,8 +163,6 @@ def roc(source_path):
 
                 # Calculate the area under the precision-recall curve (optional)
                 precision, recall, _ = precision_recall_curve(actual_labels, actual_probs)
-                #print(fold_index, precision)
-                #precision_recall_curves_class.append((precision, recall))
                 precision_values.append(precision)
                 recall_values.append(recall)
                 # Append the roc_curves_class and roc_auc_class for this fold
@@ -266,7 +170,6 @@ def roc(source_path):
                 roc_auc_per_class.append(roc_auc_class)
 
                 # Append the precision-recall values for this class to the list
-            #all_precision_recall_curves_class.append(precision_recall_curves_class)
             all_precision_values.append(precision_values)
             all_recall_values.append(recall_values)
             all_roc_curves.append(roc_curves_per_class)
@@ -308,7 +211,7 @@ def roc(source_path):
         # plt.title(f'Receiver Operating Characteristic (ROC), One-vs-Rest (OvR) for {model_name}')
         plt.title("")
         plt.legend(loc='lower right')
-        plt.savefig(f"{source_path}/results/plots/{save_name}_roc.png", dpi=600)
+        plt.savefig(f"{source_path}/results/plots/{save_name}_roc.pdf")
 
 
 def plot_aggregated_learning_curve(source_path, save_string):
@@ -330,7 +233,7 @@ def plot_aggregated_learning_curve(source_path, save_string):
     plt.title('Aggregated Learning Curve')
     plt.legend()
     plt.grid(True)
-    plt.savefig(f"{source_path}/results/plots/{save_string}_learning_curve.png", dpi=600)
+    plt.savefig(f"{source_path}/results/plots/{save_string}_learning_curve.pdf")
 
 
 def put_fold_metrics_into_latex_tables():
@@ -405,8 +308,8 @@ def put_model_metrics_into_latex_tables():
         file_label = [label.lower() for label in file_label]
         file_label = "_".join(file_label)
 
-        with open(f"tex/model_metrics_table_{file_label}.tex", "w", encoding="utf-8") as latex_out:
-            latex_out.write(template)
+        #with open(f"tex/model_metrics_table_{file_label}.tex", "w", encoding="utf-8") as latex_out:
+        #    latex_out.write(template)
 
     # table for mean values across models
     with open("tex_templates/template_model_aggregation_metrics_table.tex", "rb") as template_in:
@@ -418,6 +321,8 @@ def put_model_metrics_into_latex_tables():
     means = [sum(model_mean[i][j] for i in range(num_sublists)) / num_sublists for j in range(num_elements)]
     means = [round(mean, 2) for mean in means]
     model_mean.append(means)
+    # move the last element to the front
+    model_mean = [model_mean[-1]] + model_mean[:-1]
 
     for i, model in enumerate(model_mean):
         for j, vals in enumerate(model):
@@ -455,7 +360,6 @@ def put_tf_idf_values_into_latex_table(length):
     for genre in list(tf_idf_values.keys()):
         selected_tokens = tf_idf_values[genre][:length]
         values_list.append(selected_tokens)
-
     template = load_tex("template_tfidf_by_genre.tex")
     for i, val in enumerate(values_list):
         for j, v in enumerate(val):
@@ -500,7 +404,6 @@ def most_prominent_token_across_genres(length):
         for sublist in table_list:
             select.append(sublist[i])
         table_turned.append(select)
-
     template = load_tex("template_prominent_tokens.tex")
     for i, sublist in enumerate(table_turned):
         for j, val in enumerate(sublist):
@@ -511,11 +414,11 @@ def most_prominent_token_across_genres(length):
 
 locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 
-# put_model_metrics_into_latex_tables()
+put_model_metrics_into_latex_tables()
 roc("data")
-# put_review_metrics_into_latex_table()
-# put_tf_idf_values_into_latex_table(15)
-# most_prominent_token_across_genres(10)
-#put_fold_metrics_into_latex_tables()
-#fill_stacked_latex_model_table()
-#plot_roc_and_precision_recall("data")
+put_review_metrics_into_latex_table()
+put_tf_idf_values_into_latex_table(15)
+most_prominent_token_across_genres(10)
+put_fold_metrics_into_latex_tables()
+create_combined_table("full", "combined_model_metrics.tex")
+create_combined_table("folds", "combined_fold_metrics.tex")

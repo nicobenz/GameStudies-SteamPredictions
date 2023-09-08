@@ -8,6 +8,7 @@
 \usepackage{rotating}
 \usepackage{afterpage}
 \usepackage{adjustbox}
+\usepackage{pdfpages}
 
 
 \usepackage[
@@ -130,7 +131,8 @@ classification in various situations and for various types of texts.
 
 
 \section{Data overview}\label{sec:data-overview}
-% information on the raw corpus: total size, number of games, number of documents, min/max/mean/median length of documents, tag distribution
+% information on the raw corpus: total size, number of games, number of documents, min/max/mean/median length of
+% documents, tag distribution
 % information on the filtered corpus: explain selection algorithm and explain restrictions in selection
 On the Steam platform users have the ability to write a public text review for any game.
 These reviews can be retrieved using the official Steam API.
@@ -156,15 +158,10 @@ been downloaded of that game.
 Because such great amounts of reviews for a single game would not be used for training to avoid strong bias or
 imbalance of the dataset anyway, this will not pose a challenge.
 More on sampling in a later section.
-See table~\ref{tab:game_metrics} for an overview of the distribution of games and review numbers.
+See figure~\ref{fig:review_plot} for an overview of the distribution of games and review numbers.
 
-\input{tex/game_metrics}
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth]{data/results/plots/review_plot}
-    \caption{Distribution of Reviews Across Games}
-    \label{fig:review_fig}
-\end{figure}
+%\input{tex/game_metrics}
+\input{tex/review_plot}
 
 
 \subsection{Reviews}\label{subsec:reviews}
@@ -193,18 +190,9 @@ of emerging new genres and subgenres.
 To avoid biased selection this paper will call all user generated tags genres.
 Further sampling and clustering of these tags into more traditional genres is always possible for future research at a
 later date.
-See table~\ref{tab:genre_metrics} for an overview of genres that are found within the 5 most common genres of all games
+See figure~\ref{fig:genre_plot} for an overview of genres that are found within the 5 most common genres of all games
 in the corpus.
-
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth]{data/results/plots/tags_plot}
-    \caption{Number of Games for the Ten Most Common Genres}
-    \label{fig:tags_fig}
-\end{figure}
-
-\input{tex/genre_metrics}
-
+\input{tex/genre_plot}
 
 
 \section{Experimental design}\label{sec:experimental-design}
@@ -251,50 +239,23 @@ Multiple classifier models were trained, including Naive Bayes, Logistic Regress
 Machine.
 After training, relevant metrics like accuracy, recall, precision and F1 score were collected.
 
-
-
-
 \section{Results and discussion}\label{sec:results-and-discussion}
 % discuss results
 % interprete ml metrics and how they relate to the research question
 % interprete relation of metrics to linguistic features
 % give some outline on future research
-\input{tex/model_metrics_table_naive_bayes}
-\input{tex/model_metrics_table_logistic_regression}
-\input{tex/model_metrics_table_support_vector_machine}
-\input{tex/model_metrics_table_random_forest}
 \input{tex/model_aggregation_metrics_table}
+\input{tex/combined_fold_metrics}
+\input{tex/combined_model_metrics}
+\input{tex/naive_bayes_roc}
+\input{tex/log_reg_roc}
+\input{tex/random_forest_roc}
 \input{tex/tfidf_by_genre}
 \input{tex/prominent_tokens}
 
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth]{data/results/plots/naive_bayes_roc}
-    \caption{ROC Curve OvR for Naive Bayes}
-    \label{fig:nb_roc_fig}
-\end{figure}
-
-
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth]{data/results/plots/logistic_regression_roc}
-    \caption{ROC Curve OvR for Logistic Regression}
-    \label{fig:lr_roc_fig}
-\end{figure}
-
-
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth]{data/results/plots/random_forest_roc}
-    \caption{ROC Curve OvR for Random Forest}
-    \label{fig:rf_roc_fig}
-\end{figure}
-
-
-
 \section{Conclusion}\label{sec:conclusion}
 % sum stuff up
-\input{tex/combined_fold_metrics}
+
 
 \clearpage
 

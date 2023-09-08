@@ -386,6 +386,7 @@ def plot_distribution(data: dict):
     :param data: dictionary containing pairs of tags with dicts containing each selected game with the number of
     reviews in the corpus, e.g. {'RPG': {123_Game_title: 5}, ... }
     """
+
     # filter data to only include games with more than one review
     filtered_data = {tag: [value for value in vals.values() if value > 1] for tag, vals in data.items()}
 
@@ -415,7 +416,7 @@ def plot_distribution(data: dict):
     plt.xlim(left=2)  # put graphs directly on left spine
 
     plt.tight_layout()
-    plt.savefig("/Volumes/Data/steam/finished_corpus/tag_distribution.png", dpi=600)
+    plt.savefig("data/results/plots/tag_distribution.png", dpi=600)
     plt.close()
 
 
@@ -588,10 +589,10 @@ if __name__ == '__main__':
     volume_path = ""
 
     # error logger
-    logging.basicConfig(
-        filename=f'{volume_path}/Volumes/Data/steam/logs/corpus_creation_errors.log',
-        level=logging.INFO,
-        format='%(asctime)s, %(levelname)s: %(message)s')
+    #logging.basicConfig(
+    #    filename=f'{volume_path}/Volumes/Data/steam/logs/corpus_creation_errors.log',
+    #    level=logging.INFO,
+    #    format='%(asctime)s, %(levelname)s: %(message)s')
 
     # most common tags in raw corpus
     most_common_tags = [
@@ -610,16 +611,16 @@ if __name__ == '__main__':
     ]
 
     # create a corpus with given parameters
-    select_random_review_from_random_game_by_tag_list(
-        selected_tags[0:1],
-        50000,
-        20,
-        1000,
-        1000,
-        volume_path
-    )
+    #select_random_review_from_random_game_by_tag_list(
+    #    selected_tags[0:1],
+    #    50000,
+    #    20,
+    #    1000,
+    #    1000,
+    #    volume_path
+    #)
 
-    #with open("/Volumes/Data/steam/finished_corpus/game_count.json", "r") as file_in:
+    #with open("/Users/nico/code/GameStudies-SteamPredictions/data/finished_corpus/game_counts/corpus-1-AdventureStrategySimulationRPGPuzzle.json", "r") as file_in:
     #    games = json.load(file_in)
 
     #plot_distribution(games)
