@@ -220,14 +220,14 @@ def roc(source_path):
         classes = sorted(list(all_labels))  # Sort for consistency
         all_roc_curves = []
         all_roc_auc = []
-        precision_recall_curves_class = []
-          # Store Precision-Recall curves
+        all_precision_values = []
+        all_recall_values = []
 
         # loop for all labels
         for class_name in classes:
             roc_curves_per_class = []
             roc_auc_per_class = []
-            precision_recall_curves_class = []  # Store Precision-Recall curves
+            #precision_recall_curves_class = []  # Store Precision-Recall curves
 
             # Initialize arrays to store precision and recall values
             precision_values = []
@@ -255,23 +255,20 @@ def roc(source_path):
                 roc_curves_class.append((fpr, tpr))
                 roc_auc_class.append(roc_auc)
 
-                # Precision-Recall curve calculations
-                precision = precision_score(actual_labels, pred_labels)
-                recall = recall_score(actual_labels, pred_labels)
-
+                # Calculate the area under the precision-recall curve (optional)
+                precision, recall, _ = precision_recall_curve(actual_labels, actual_probs)
+                #print(fold_index, precision)
+                #precision_recall_curves_class.append((precision, recall))
                 precision_values.append(precision)
                 recall_values.append(recall)
-
-                # Calculate the area under the precision-recall curve (optional)
-                average_precision = average_precision_score(actual_labels, actual_probs)
-                precision_recall_curves_class.append((precision, recall))
-
                 # Append the roc_curves_class and roc_auc_class for this fold
                 roc_curves_per_class.append(roc_curves_class)
                 roc_auc_per_class.append(roc_auc_class)
 
                 # Append the precision-recall values for this class to the list
-            precision_recall_curves_class.append((precision_values, recall_values))
+            #all_precision_recall_curves_class.append(precision_recall_curves_class)
+            all_precision_values.append(precision_values)
+            all_recall_values.append(recall_values)
             all_roc_curves.append(roc_curves_per_class)
             all_roc_auc.append(roc_auc_per_class)
 
@@ -294,28 +291,20 @@ def roc(source_path):
         plt.xlabel('False Positive Rate')
         plt.ylabel('True Positive Rate')
         plt.legend(loc='lower right')
-        for curve_index, curve in enumerate(precision_recall_curves_class):
+        for curve_index, (precision_vals, recall_vals) in enumerate(zip(all_precision_values, all_recall_values)):
             plt.subplot(1, 2, 2)  # Subplot for Precision-Recall curve
 
-            # Access precision and recall for the current class
-            #precision_recall_curves = precision_recall_curves_class[class_index]
-            precision_recall_curves = curve
-            #print(len(precision_recall_curves), flush=True)
-            #print(type(precision_recall_curves), flush=True)
-
-            precision_values, recall_values = precision_recall_curves
-
-            sorted_recall_values, sorted_precision_values = zip(*sorted(zip(recall_values, precision_values)))
-            average_precision = auc(sorted_recall_values, sorted_precision_values)
+            average_precision = auc(recall_vals[curve_index], precision_vals[curve_index])
 
             label = f'{classes[curve_index]} (AP = {average_precision:.2f})'
-            sns.lineplot(x=recall_values, y=precision_values, lw=2, label=label)
+
+            sns.lineplot(x=recall_vals[curve_index], y=precision_vals[curve_index], lw=2, label=label)
 
         #plt.axline([0, 0], [1, 1], color="gray", lw=2, linestyle='--')
         plt.xlim([0.0, 1.0])
         plt.ylim([0.0, 1.05])
-        plt.xlabel('False Positive Rate')
-        plt.ylabel('True Positive Rate')
+        plt.xlabel('Recall')
+        plt.ylabel('Precision')
         # plt.title(f'Receiver Operating Characteristic (ROC), One-vs-Rest (OvR) for {model_name}')
         plt.title("")
         plt.legend(loc='lower right')
