@@ -132,7 +132,7 @@ def train_model(data, model_name, source_path, save_order, verbose=True, learnin
         elif save_string == "logistic_regression":
             classifier = LogisticRegression(max_iter=1000, verbose=verbose)
         elif save_string == "random_forest":
-            classifier = RandomForestClassifier(n_estimators=100, random_state=42, verbose=verbose)
+            classifier = RandomForestClassifier(n_estimators=75, random_state=42, verbose=verbose)
         elif save_string == "support_vector_machine":
             classifier = SVC(kernel='linear', probability=True, verbose=verbose)
         else:
@@ -165,6 +165,9 @@ def train_model(data, model_name, source_path, save_order, verbose=True, learnin
 
     with open(f"{source_path}/results/model_predictions/{save_string}_predictions.json", "w", encoding="utf-8") as pred_out:
         json.dump(collected_predictions, pred_out)
+
+    with open(f"{source_path}/results/model_metrics/folds/{save_order}_{save_string}_fold_report.json", "w", encoding="utf-8") as pred_out:
+        json.dump(collected_metrics, pred_out)
 
     if learning_curve:
         learning_curve_data = {
@@ -303,7 +306,6 @@ def mean_folding_report(metrics_data, filename, source_path, save_order, print_r
                     metrics[key] = {}
                     for k, v in value.items():
                         metrics[key][k] = [v]
-        # print("---")
     mean_metrics = {"labels": {}, "combined": {}}
     for key, value in metrics.items():
         if key == "accuracy":
@@ -317,7 +319,7 @@ def mean_folding_report(metrics_data, filename, source_path, save_order, print_r
             for k, v in value.items():
                 mean_metrics["labels"][key][k] = round(sum(v) / len(v), 2)
 
-    with open(f"{source_path}/results/model_metrics/{save_order}_{filename}_full_report.json", "w") as file_out:
+    with open(f"{source_path}/results/model_metrics/full/{save_order}_{filename}_full_report.json", "w") as file_out:
         json.dump(mean_metrics, file_out)
 
     if print_results:
@@ -338,15 +340,15 @@ else:
     path = "/Volumes/Data/steam"
 
 # load token
-with open(f"{path}/finished_corpus/corpora/corpus-1-AdventureStrategySimulationRPGPuzzle.json", "r") as file_in:
+with open(f"{path}/finished_corpus/corpora/corpus-1-AdventureStrategySimulationRPGPuzzle_cleaned.json", "r") as file_in:
     token_data = json.load(file_in)
 
 # calculate most prominent tokens
-calculate_prominent_tokens(token_data, path)
-evaluate_most_prominent_tokens_for_stopword_removal(path)
+#calculate_prominent_tokens(token_data, path)
+#evaluate_most_prominent_tokens_for_stopword_removal(path)
 
 # train models
-train_model(token_data, "Naive Bayes", path, 1)
-train_model(token_data, "Logistic Regression", path, 2)
-train_model(token_data, "Random Forest", path, 3)
-train_model(token_data, "Support Vector Machine", path, 4)
+train_model(token_data, "Naive Bayes", path, 1, verbose=False)
+train_model(token_data, "Logistic Regression", path, 2, verbose=False)
+train_model(token_data, "Random Forest", path, 3, verbose=False)
+#train_model(token_data, "Support Vector Machine", path, 4)  # not used because of computational demands

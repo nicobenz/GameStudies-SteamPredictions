@@ -1,0 +1,23 @@
+\begin{table}[h]
+    \centering
+    \begin{tabular}{r|r|r|r|r|r|r}
+        & Average & Fold 1 & Fold 2 & Fold 3 & Fold 4 & Fold 5 \\\hline
+        \multicolumn{7}{c}{Naive Bayes} \\\hline
+        Recall      & 1a & 5 & 9 & 13 & 17 & 21 \\
+        Precision   & 2 & 6 & 10 & 14 & 18 & 22 \\
+        F1 Score    & 3 & 7 & 11 & 15 & 19 & 23 \\
+        Support     & 4 & 8 & 12 & 16 & 20 & 24 \\\hline
+        \multicolumn{7}{c}{Logistic Regression} \\\hline
+        Recall      & 1b & 5 & 9 & 13 & 17 & 21 \\
+        Precision   & 2 & 6 & 10 & 14 & 18 & 22 \\
+        F1 Score    & 3 & 7 & 11 & 15 & 19 & 23 \\
+        Support     & 4 & 8 & 12 & 16 & 20 & 24 \\\hline
+        \multicolumn{7}{c}{Random Forest} \\\hline
+        Recall      & 1c & 5 & 9 & 13 & 17 & 21 \\
+        Precision   & 2 & 6 & 10 & 14 & 18 & 22 \\
+        F1 Score    & 3 & 7 & 11 & 15 & 19 & 23 \\
+        Support     & 4 & 8 & 12 & 16 & 20 & 24 \\\hline
+    \end{tabular}
+    \caption{Classifier Model Metrics Across All Folds}
+    \label{tab:combined_model_metrics_folds}
+\end{table}

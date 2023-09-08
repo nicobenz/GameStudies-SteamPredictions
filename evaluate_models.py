@@ -1,8 +1,11 @@
 import os
 import json
+import time
+
 import numpy as np
 from matplotlib import pyplot as plt
-from sklearn.metrics import roc_curve, auc
+from sklearn.metrics import roc_curve, auc, precision_recall_curve, average_precision_score, precision_score, \
+    recall_score
 import seaborn as sns
 import locale
 
@@ -20,13 +23,51 @@ def load_tex(file_name):
 
 def format_numbers_for_readability(number_list):
     number_list = [
-            locale.format_string("%.2f", number, grouping=True) if isinstance(number, float) else
-            locale.format_string("%d", number, grouping=True) for number in number_list
-        ]
+        locale.format_string("%.2f", number, grouping=True) if isinstance(number, float) else
+        locale.format_string("%d", number, grouping=True) for number in number_list
+    ]
     return number_list
 
 
-def roc(source_path):
+def fill_stacked_latex_model_table(stacked_list):
+    """
+    stacked_list = [
+        [
+            ["1a", 2, 3, 4],
+            [5, 6, 7, 8],
+            [9, 10, 11, 12],
+            [13, 14, 15, 16],
+            [17, 18, 19, 20],
+            [21, 22, 23, 24],
+        ],
+        [
+            ["1b", 2, 3, 4],
+            [5, 6, 7, 8],
+            [9, 10, 11, 12],
+            [13, 14, 15, 16],
+            [17, 18, 19, 20],
+            [21, 22, 23, 24],
+        ],
+        [
+            ["1c", 2, 3, 4],
+            [5, 6, 7, 8],
+            [9, 10, 11, 12],
+            [13, 14, 15, 16],
+            [17, 18, 19, 20],
+            [21, 22, 23, 24],
+        ]
+    ]
+    """
+    template = load_tex("template_combined_fold_metrics.tex")
+    for i, sub in enumerate(stacked_list):
+        for j, subsub in enumerate(sub):
+            for k, subsubsub in enumerate(subsub):
+                template = template.replace(f"<{i}{j}{k}>", str(subsubsub))
+
+    save_tex("combined_fold_metrics.tex", template)
+
+
+def plot_roc_and_precision_recall(source_path):
     # set seaborn stuff
     sns.set_theme()
     sns.set_context("paper")
@@ -58,6 +99,7 @@ def roc(source_path):
         for class_name in classes:
             roc_curves_class = []
             roc_auc_class = []
+            precision_recall_curves_class = []  # Store Precision-Recall curves
 
             # loop for each fold
             for fold_index in range(len(predictions["actual"])):
@@ -69,42 +111,220 @@ def roc(source_path):
                 actual_probs = [prob[class_index] for prob in pred_probs]
                 actual_labels = [1 if class_name in test_labels else 0 for test_labels in test]
 
-                # get fale positive rate and true positive rate
+                # ROC curve calculations
                 fpr, tpr, _ = roc_curve(actual_labels, actual_probs)
                 roc_auc = auc(fpr, tpr)
 
                 roc_curves_class.append((fpr, tpr))
                 roc_auc_class.append(roc_auc)
-            roc_curves_per_class.append(roc_curves_class)
-            roc_auc_per_class.append(roc_auc_class)
+
+                # Precision-Recall curve calculations
+                thresholds = np.linspace(0, 1, 100)
+                precision_values = []
+                recall_values = []
+
+                for threshold in thresholds:
+                    predicted_labels = [1 if prob >= threshold else 0 for prob in actual_probs]
+                    precision = precision_score(actual_labels, predicted_labels)
+                    recall = recall_score(actual_labels, predicted_labels)
+                    precision_values.append(precision)
+                    recall_values.append(recall)
+
+                precision_recall_curves_class.append((precision_values, recall_values))
+
+                #precision, recall, _ = precision_recall_curve(actual_labels, actual_probs)
+                #precision_recall_curves_class.append((precision, recall))
+
+            # Plot ROC and Precision-Recall curves for each class
+            plt.figure(figsize=(12, 4))
+            plt.subplot(1, 2, 1)  # Subplot for ROC curve
+            for fpr, tpr in roc_curves_class:
+                mean_fpr = np.linspace(0, 1, 100)
+                mean_tpr = np.zeros_like(mean_fpr)
+
+                # Initialize a count of valid curves
+                valid_curve_count = 0
+
+                # Define the length of mean_fpr as the expected length
+                expected_length = len(mean_fpr)
+
+                # Loop through each fold
+                for fold_fpr, fold_tpr in zip(fpr, tpr):
+                    # Convert fold_fpr and fold_tpr to NumPy arrays
+                    fold_fpr = np.array(fold_fpr)
+                    fold_tpr = np.array(fold_tpr)
+
+                    # Check if both arrays have the same shape as expected_length
+                    if fold_fpr.shape == fold_tpr.shape == (expected_length,):
+                        # Interpolate the fold's ROC curve to match the mean_fpr
+                        mean_tpr += np.interp(mean_fpr, fold_fpr, fold_tpr)
+                        valid_curve_count += 1
+
+                # Calculate the mean by dividing by the number of valid curves
+                if valid_curve_count > 0:
+                    mean_tpr /= valid_curve_count
+
+                label = f'{class_name} (AUC = {np.mean(roc_auc_class):.2f})'
+                sns.lineplot(x=mean_fpr, y=mean_tpr, lw=2, label=label)
+
+            plt.axline([0, 0], [1, 1], color="gray", lw=2, linestyle='--')
+            plt.xlim([0.0, 1.0])
+            plt.ylim([0.0, 1.05])
+            plt.xlabel('False Positive Rate')
+            plt.ylabel('True Positive Rate')
+            plt.title(f'ROC Curve for {class_name}')
+
+            plt.subplot(1, 2, 2)  # Subplot for Precision-Recall curve
+            for precision, recall in precision_recall_curves_class:
+                # Update the label to show the class name
+                label = f'{class_name} (AP = {average_precision_score(precision, recall):.2f})'
+                sns.lineplot(x=recall, y=precision, lw=2, label=label)
+
+            plt.xlim([0.0, 1.0])
+            plt.ylim([0.0, 1.05])
+            plt.xlabel('Recall')
+            plt.ylabel('Precision')
+            plt.title(f'Precision-Recall Curve for {class_name}')
+
+            plt.tight_layout()
+            plt.legend(loc='lower right')
+
+            # Save or display the plot as needed
+            save_name = f"{source_path}/results/plots/{save_name}_{class_name}"
+            plt.savefig(f"{save_name}.png", dpi=600)
+
+
+def roc(source_path):
+    # set seaborn stuff
+    sns.set_theme()
+    sns.set_context("paper")
+    custom_palette = sns.color_palette("Spectral")
+    sns.set_palette(custom_palette)
+
+    # prepare file loading
+    file_path = f"{source_path}/results/model_predictions"
+    pred_files = [file for file in os.listdir(file_path) if ".DS_Store" not in file]
+    pred_files = [f"{file_path}/{file}" for file in pred_files]
+
+    # loop over all prediction files
+    for file in pred_files:
+        with open(file, "r") as pred_in:
+            predictions = json.load(pred_in)
+        save_name = file.split("/")[-1].replace("_predictions.json", "")
+        model_name = save_name.split("_")
+        model_name = [x.capitalize() for x in model_name]
+        model_name = " ".join(model_name)
+
+        # prepare data for roc
+        all_labels = set(label for fold in predictions["actual"] for label in fold)
+        classes = sorted(list(all_labels))  # Sort for consistency
+        all_roc_curves = []
+        all_roc_auc = []
+        precision_recall_curves_class = []
+          # Store Precision-Recall curves
+
+        # loop for all labels
+        for class_name in classes:
+            roc_curves_per_class = []
+            roc_auc_per_class = []
+            precision_recall_curves_class = []  # Store Precision-Recall curves
+
+            # Initialize arrays to store precision and recall values
+            precision_values = []
+            recall_values = []
+
+            # loop for each fold
+            for fold_index in range(len(predictions["actual"])):
+                test = predictions["actual"][fold_index]
+                pred_probs = predictions["probability"][fold_index]
+                pred_labels = predictions["predicted"][fold_index]
+
+                # get probabilities
+                class_index = classes.index(class_name)
+                actual_probs = [prob[class_index] for prob in pred_probs]
+                pred_labels = [1 if class_name in test_labels else 0 for test_labels in pred_labels]
+                actual_labels = [1 if class_name in test_labels else 0 for test_labels in test]
+
+                roc_curves_class = []  # Initialize roc_curves_class here
+                roc_auc_class = []  # Initialize roc_auc_class here
+
+                # ROC curve calculations
+                fpr, tpr, _ = roc_curve(actual_labels, actual_probs)
+                roc_auc = auc(fpr, tpr)
+
+                roc_curves_class.append((fpr, tpr))
+                roc_auc_class.append(roc_auc)
+
+                # Precision-Recall curve calculations
+                precision = precision_score(actual_labels, pred_labels)
+                recall = recall_score(actual_labels, pred_labels)
+
+                precision_values.append(precision)
+                recall_values.append(recall)
+
+                # Calculate the area under the precision-recall curve (optional)
+                average_precision = average_precision_score(actual_labels, actual_probs)
+                precision_recall_curves_class.append((precision, recall))
+
+                # Append the roc_curves_class and roc_auc_class for this fold
+                roc_curves_per_class.append(roc_curves_class)
+                roc_auc_per_class.append(roc_auc_class)
+
+                # Append the precision-recall values for this class to the list
+            precision_recall_curves_class.append((precision_values, recall_values))
+            all_roc_curves.append(roc_curves_per_class)
+            all_roc_auc.append(roc_auc_per_class)
 
         # plot
         plt.figure(figsize=(8, 6))
-        for class_index, roc_curves_class in enumerate(roc_curves_per_class):
+        plt.subplot(1, 2, 1)  # Subplot for ROC curve
+        for class_index, (roc_curves_class, auc_curves) in enumerate(zip(all_roc_curves, all_roc_auc)):
             mean_fpr = np.linspace(0, 1, 100)
             mean_tpr = np.zeros_like(mean_fpr)
-
-            for fpr, tpr in roc_curves_class:
+            for fpr, tpr in roc_curves_class[class_index]:
                 mean_tpr += np.interp(mean_fpr, fpr, tpr)
 
-            mean_tpr /= len(roc_curves_class)
+            #mean_tpr /= len(roc_curves_class)
+            label = f"{classes[class_index]}, (AUC = {round(auc_curves[class_index][0], 2)})"
 
-            label = f'{classes[class_index]} (AUC = {np.mean(roc_auc_per_class[class_index]):.2f})'
             sns.lineplot(x=mean_fpr, y=mean_tpr, lw=2, label=label)
-
         plt.axline([0, 0], [1, 1], color="gray", lw=2, linestyle='--')
         plt.xlim([0.0, 1.0])
         plt.ylim([0.0, 1.05])
         plt.xlabel('False Positive Rate')
         plt.ylabel('True Positive Rate')
-        #plt.title(f'Receiver Operating Characteristic (ROC), One-vs-Rest (OvR) for {model_name}')
+        plt.legend(loc='lower right')
+        for curve_index, curve in enumerate(precision_recall_curves_class):
+            plt.subplot(1, 2, 2)  # Subplot for Precision-Recall curve
+
+            # Access precision and recall for the current class
+            #precision_recall_curves = precision_recall_curves_class[class_index]
+            precision_recall_curves = curve
+            #print(len(precision_recall_curves), flush=True)
+            #print(type(precision_recall_curves), flush=True)
+
+            precision_values, recall_values = precision_recall_curves
+
+            sorted_recall_values, sorted_precision_values = zip(*sorted(zip(recall_values, precision_values)))
+            average_precision = auc(sorted_recall_values, sorted_precision_values)
+
+            label = f'{classes[curve_index]} (AP = {average_precision:.2f})'
+            sns.lineplot(x=recall_values, y=precision_values, lw=2, label=label)
+
+        #plt.axline([0, 0], [1, 1], color="gray", lw=2, linestyle='--')
+        plt.xlim([0.0, 1.0])
+        plt.ylim([0.0, 1.05])
+        plt.xlabel('False Positive Rate')
+        plt.ylabel('True Positive Rate')
+        # plt.title(f'Receiver Operating Characteristic (ROC), One-vs-Rest (OvR) for {model_name}')
         plt.title("")
         plt.legend(loc='lower right')
         plt.savefig(f"{source_path}/results/plots/{save_name}_roc.png", dpi=600)
 
 
 def plot_aggregated_learning_curve(source_path, save_string):
-    with open(f"{source_path}/results/learning_curve_data/{save_string}_learning_curve_data.json", "r", encoding="utf-8") as lc_in:
+    with open(f"{source_path}/results/learning_curve_data/{save_string}_learning_curve_data.json", "r",
+              encoding="utf-8") as lc_in:
         learning_curve_data = json.load(lc_in)
 
     # Calculate the aggregated learning curve
@@ -124,9 +344,41 @@ def plot_aggregated_learning_curve(source_path, save_string):
     plt.savefig(f"{source_path}/results/plots/{save_string}_learning_curve.png", dpi=600)
 
 
+def put_fold_metrics_into_latex_tables():
+    # table for all models and all labels
+    path_full = "data/results/model_metrics/full"
+    saved_models = [f"{path_full}/{x}" for x in os.listdir(path_full) if ".DS_Store" not in x]
+    saved_models.sort()
+
+    path_folds = "data/results/model_metrics/folds"
+    saved_folds = [f"{path_folds}/{x}" for x in os.listdir(path_folds) if ".DS_Store" not in x]
+    saved_folds.sort()
+
+    for idx, (full_metrics, fold_metrics) in enumerate(zip(saved_models, saved_folds), start=1):
+        name = full_metrics.split("/")[-1]
+        name = name.replace(f"{idx}_", "")
+        name = name.replace("_full_report.json", "")
+        template = load_tex("template_combined_fold_metrics.tex")
+        with open(full_metrics, "r") as file_in:
+            full_content = json.loads(file_in.read())
+        with open(fold_metrics, "r") as file_in:
+            fold_content = json.loads(file_in.read())
+        collected_lists = []
+        full_items = list(full_content["combined"]["macro avg"].values())
+        collected_lists.append(full_items)
+        for i, fold in enumerate(fold_content):
+            fold_items = list(fold["macro avg"].values())
+            fold_items = [round(item, 2) for item in fold_items]
+            collected_lists.append(fold_items)
+        for i, items in enumerate(collected_lists):
+            for j, v in enumerate(items):
+                template = template.replace(f"<{i}{j}>", str(v))
+        save_tex(f"fold_metrics_{name}.tex", template)
+
+
 def put_model_metrics_into_latex_tables():
     # table for all models and all labels
-    path = "data/results/model_metrics"
+    path = "data/results/model_metrics/full"
     saved_models = [f"{path}/{x}" for x in os.listdir(path) if ".DS_Store" not in x]
     saved_models.sort()
 
@@ -138,7 +390,6 @@ def put_model_metrics_into_latex_tables():
         name = name.replace("_full_report.json", "")
         fig_name = name.split("_")[1:]
         fig_name = "_".join(fig_name)
-        print(fig_name)
         name = name.replace(f"{idx}_", "")
         name = name.split("_")
         name = [token.capitalize() for token in name]
@@ -271,8 +522,11 @@ def most_prominent_token_across_genres(length):
 
 locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 
-#put_model_metrics_into_latex_tables()
-#roc("data")
-#put_review_metrics_into_latex_table()
-#put_tf_idf_values_into_latex_table(15)
-most_prominent_token_across_genres(10)
+# put_model_metrics_into_latex_tables()
+roc("data")
+# put_review_metrics_into_latex_table()
+# put_tf_idf_values_into_latex_table(15)
+# most_prominent_token_across_genres(10)
+#put_fold_metrics_into_latex_tables()
+#fill_stacked_latex_model_table()
+#plot_roc_and_precision_recall("data")
