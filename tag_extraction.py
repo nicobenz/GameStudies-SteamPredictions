@@ -22,16 +22,16 @@ def exstract_tags(source_files):
             app_id = file.split("_")[0]
             soup = BeautifulSoup(file_in.read(), "lxml")
 
-            text_roi = soup.find('script', string=re.compile('.*InitAppTagModal.*'))
+            text_roi = soup.find("script", string=re.compile(".*InitAppTagModal.*"))
             text_roi = str(text_roi).replace("\n", "")
-            cleaned_text = re.sub(r'\s+', '', text_roi)
+            cleaned_text = re.sub(r"\s+", "", text_roi)
             print(app_id, cleaned_text)
 
             cleaned_text = cleaned_text.split(f"InitAppTagModal({app_id}")[1][1:]
             cleaned_text = cleaned_text.split(",[")[0]
             tag_list = json.loads(cleaned_text)
 
-            sorted_tags = sorted(tag_list, key=lambda x: x['count'], reverse=True)
+            sorted_tags = sorted(tag_list, key=lambda x: x["count"], reverse=True)
 
             tag_path = "/Volumes/Data/steam/tags"
             with open(f"{tag_path}/{file}", "w") as tags_out:
@@ -91,12 +91,12 @@ def count_all_reviews(files):
 
     for i, (v, p) in enumerate(zip(review_bars, y_perc)):
         if v > 1500:
-            ax.text(i, v + (0.002*sum(review_bars)), str(v), color='black', ha='center')
-            ax.text(i, v - (0.01*sum(review_bars)), p, color='white', ha='center')
+            ax.text(i, v + (0.002*sum(review_bars)), str(v), color="black", ha="center")
+            ax.text(i, v - (0.01*sum(review_bars)), p, color="white", ha="center")
         elif v > 0:
-            ax.text(i, v + (0.002 * sum(review_bars)), str(v), color='black', ha='center')
+            ax.text(i, v + (0.002 * sum(review_bars)), str(v), color="black", ha="center")
         else:
-            ax.text(i, v + 0.05, "", color='black', ha='center')
+            ax.text(i, v + 0.05, "", color="black", ha="center")
 
     plt.xlabel("Number of reviews")
     plt.ylabel("Number of games")
@@ -130,12 +130,12 @@ def review_plot():
 
     for i, (v, p, label) in enumerate(zip(review_bars, y_perc, review_bars_labels)):
         if v > 1500:
-            ax.text(i, v + (0.002*sum(review_bars)), label, color='black', ha='center')
-            ax.text(i, v - (0.01*sum(review_bars)), p, color='black', ha='center')
+            ax.text(i, v + (0.002*sum(review_bars)), label, color="black", ha="center")
+            ax.text(i, v - (0.01*sum(review_bars)), p, color="black", ha="center")
         elif v > 0:
-            ax.text(i, v + (0.002 * sum(review_bars)), label, color='black', ha='center')
+            ax.text(i, v + (0.002 * sum(review_bars)), label, color="black", ha="center")
         else:
-            ax.text(i, v + 0.05, "", color='black', ha='center')
+            ax.text(i, v + 0.05, "", color="black", ha="center")
 
     formatter = FuncFormatter(format_separator)
     ax.yaxis.set_major_formatter(formatter)
@@ -154,7 +154,7 @@ def count_tags(files):
         with open(f"/Volumes/Data/steam/tags/{file}", "r") as tag_in:
             content = tag_in.read()
             tags = ast.literal_eval(content)
-            tags = sorted(tags, key=lambda x: x['count'], reverse=True)
+            tags = sorted(tags, key=lambda x: x["count"], reverse=True)
 
             for tag in tags[:3]:
                 if tag["name"] in tag_dict:
@@ -217,8 +217,8 @@ def plot_tag_distribution(maximum):
         ax = sns.barplot(x=x, y=y, palette="Spectral")
 
         for i, (v, p, label) in enumerate(zip(y, y_perc, y_labels)):
-            ax.text(i, v + (0.002 * sum(y)), label, color='black', ha='center')
-            ax.text(i, v - (0.01 * sum(y)), p, color='black', ha='center')
+            ax.text(i, v + (0.002 * sum(y)), label, color="black", ha="center")
+            ax.text(i, v - (0.01 * sum(y)), p, color="black", ha="center")
 
         formatter = FuncFormatter(format_separator)
         ax.yaxis.set_major_formatter(formatter)
@@ -235,7 +235,7 @@ source_path = "/Volumes/Data/steam/source"
 review_path = "/Volumes/Data/steam/reviews"
 review_files = [f for f in listdir(review_path) if isfile(join(review_path, f)) and f != ".DS_Store"]
 
-locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
+locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
 
 plot_tag_distribution(12)
 review_plot()

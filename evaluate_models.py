@@ -14,7 +14,7 @@ def save_tex(file_name, template):
 
 def load_tex(file_name):
     with open(f"tex_templates/{file_name}", "rb") as template_in:
-        template = template_in.read().decode('utf-8', 'ignore')
+        template = template_in.read().decode("utf-8", "ignore")
     return template
 
 
@@ -60,34 +60,6 @@ def create_combined_table(directory, output_name):
 
 
 def fill_stacked_latex_model_table(stacked_list, file_name):
-    """
-    stacked_list = [
-        [
-            ["1a", 2, 3, 4],
-            [5, 6, 7, 8],
-            [9, 10, 11, 12],
-            [13, 14, 15, 16],
-            [17, 18, 19, 20],
-            [21, 22, 23, 24],
-        ],
-        [
-            ["1b", 2, 3, 4],
-            [5, 6, 7, 8],
-            [9, 10, 11, 12],
-            [13, 14, 15, 16],
-            [17, 18, 19, 20],
-            [21, 22, 23, 24],
-        ],
-        [
-            ["1c", 2, 3, 4],
-            [5, 6, 7, 8],
-            [9, 10, 11, 12],
-            [13, 14, 15, 16],
-            [17, 18, 19, 20],
-            [21, 22, 23, 24],
-        ]
-    ]
-    """
     template = load_tex(f"template_{file_name}")
     for i, sub in enumerate(stacked_list):
         for j, subsub in enumerate(sub):
@@ -122,7 +94,7 @@ def stacked_roc(source_path):
 
         # prepare data for roc
         all_labels = set(label for fold in predictions["actual"] for label in fold)
-        classes = sorted(list(all_labels))  # Sort for consistency
+        classes = sorted(list(all_labels))
         all_roc_curves = []
         all_roc_auc = []
         all_precision_values = []
@@ -133,7 +105,6 @@ def stacked_roc(source_path):
             roc_curves_per_class = []
             roc_auc_per_class = []
 
-            # Initialize arrays to store precision and recall values
             precision_values = []
             recall_values = []
 
@@ -149,25 +120,23 @@ def stacked_roc(source_path):
                 pred_labels = [1 if class_name in test_labels else 0 for test_labels in pred_labels]
                 actual_labels = [1 if class_name in test_labels else 0 for test_labels in test]
 
-                roc_curves_class = []  # Initialize roc_curves_class here
-                roc_auc_class = []  # Initialize roc_auc_class here
+                roc_curves_class = []
+                roc_auc_class = []
 
-                # ROC curve calculations
+                # roc curve calculations
                 fpr, tpr, _ = roc_curve(actual_labels, actual_probs)
                 roc_auc = auc(fpr, tpr)
 
                 roc_curves_class.append((fpr, tpr))
                 roc_auc_class.append(roc_auc)
 
-                # Calculate the area under the precision-recall curve (optional)
                 precision, recall, _ = precision_recall_curve(actual_labels, actual_probs)
                 precision_values.append(precision)
                 recall_values.append(recall)
-                # Append the roc_curves_class and roc_auc_class for this fold
+
                 roc_curves_per_class.append(roc_curves_class)
                 roc_auc_per_class.append(roc_auc_class)
 
-                # Append the precision-recall values for this class to the list
             all_precision_values.append(precision_values)
             all_recall_values.append(recall_values)
             all_roc_curves.append(roc_curves_per_class)
@@ -183,27 +152,27 @@ def stacked_roc(source_path):
             label = f"{classes[class_index]}, (AUC = {round(auc_curves[class_index][0], 2)})"
             sns.lineplot(x=mean_fpr, y=mean_tpr, lw=2, label=label, ax=axs[row, 0])
 
-        axs[row, 0].axline([0, 0], [1, 1], color="gray", lw=2, linestyle='--')
+        axs[row, 0].axline([0, 0], [1, 1], color="gray", lw=2, linestyle="--")
         axs[row, 0].set_xlim([0.0, 1.0])
         axs[row, 0].set_ylim([0.0, 1.05])
-        axs[row, 0].set_title(f'{model_name}\nROC Curves', fontsize=12, loc='center')
-        axs[row, 0].set_xlabel('False Positive Rate')
-        axs[row, 0].set_ylabel('True Positive Rate')
-        axs[row, 0].legend(loc='lower right')
+        axs[row, 0].set_title(f"{model_name}\nROC Curves", fontsize=12, loc="center")
+        axs[row, 0].set_xlabel("False Positive Rate")
+        axs[row, 0].set_ylabel("True Positive Rate")
+        axs[row, 0].legend(loc="lower right")
 
         for curve_index, (precision_vals, recall_vals) in enumerate(zip(all_precision_values, all_recall_values)):
             average_precision = auc(recall_vals[curve_index], precision_vals[curve_index])
 
-            label = f'{classes[curve_index]} (AP = {average_precision:.2f})'
+            label = f"{classes[curve_index]} (AP = {average_precision:.2f})"
 
             sns.lineplot(x=recall_vals[curve_index], y=precision_vals[curve_index], lw=2, label=label, ax=axs[row, 1])
 
         axs[row, 1].set_xlim([0.0, 1.0])
         axs[row, 1].set_ylim([0.0, 1.05])
-        axs[row, 1].set_title(f'{model_name}\nPrecision-Recall Curves', fontsize=12, loc='center')
-        axs[row, 1].set_xlabel('Recall')
-        axs[row, 1].set_ylabel('Precision')
-        axs[row, 1].legend(loc='lower right')
+        axs[row, 1].set_title(f"{model_name}\nPrecision-Recall Curves", fontsize=12, loc="center")
+        axs[row, 1].set_xlabel("Recall")
+        axs[row, 1].set_ylabel("Precision")
+        axs[row, 1].legend(loc="lower right")
 
     plt.title("ROC and Precision Recall Curves")
     plt.tight_layout()
@@ -215,7 +184,7 @@ def create_heatmap_from_confusion_matrices(source_path):
     matrix_files.sort()
     confusion_matrices = []
     for file in matrix_files:
-        mat = np.loadtxt(f"{source_path}/{file}", dtype=float, delimiter='\t')
+        mat = np.loadtxt(f"{source_path}/{file}", dtype=float, delimiter="\t")
         confusion_matrices.append(mat)
     mean_matrix = np.mean(confusion_matrices, axis=0)
     mean_matrix = np.round(mean_matrix, 2)
@@ -228,14 +197,13 @@ def create_heatmap_from_confusion_matrices(source_path):
     sns.set_palette(custom_palette)
 
     plt.figure(figsize=(8, 6))
-    sns.set(font_scale=1.2)  # Adjust the font scale as needed
+    sns.set(font_scale=1.2)
     sns.heatmap(mean_matrix, cmap="Blues", annot=True, fmt=".2f",
                 xticklabels=class_labels, yticklabels=class_labels, cbar=True)
-    plt.xlabel('Predicted')
-    plt.ylabel('Actual')
-    plt.title('Confusion Matrix')
+    plt.xlabel("Predicted")
+    plt.ylabel("Actual")
+    plt.title("Confusion Matrix")
     plt.savefig(f"data/results/plots/mean_confusion_matrix.pdf")
-
 
 
 def plot_aggregated_learning_curve(source_path, save_string):
@@ -243,18 +211,18 @@ def plot_aggregated_learning_curve(source_path, save_string):
               encoding="utf-8") as lc_in:
         learning_curve_data = json.load(lc_in)
 
-    # Calculate the aggregated learning curve
-    aggregated_train_sizes = np.mean(learning_curve_data['train_sizes'], axis=0)
-    aggregated_train_scores = np.mean(learning_curve_data['train_scores'], axis=0)
-    aggregated_test_scores = np.mean(learning_curve_data['test_scores'], axis=0)
+    # calculate learning curve
+    aggregated_train_sizes = np.mean(learning_curve_data["train_sizes"], axis=0)
+    aggregated_train_scores = np.mean(learning_curve_data["train_scores"], axis=0)
+    aggregated_test_scores = np.mean(learning_curve_data["test_scores"], axis=0)
 
-    # Plot the aggregated learning curve
+    # plot learning curve
     plt.figure(figsize=(8, 6))
-    plt.plot(aggregated_train_sizes, aggregated_train_scores, label='Training Accuracy', marker='o')
-    plt.plot(aggregated_train_sizes, aggregated_test_scores, label='Test Accuracy', marker='o')
-    plt.xlabel('Number of Training Samples')
-    plt.ylabel('Accuracy')
-    plt.title('Aggregated Learning Curve')
+    plt.plot(aggregated_train_sizes, aggregated_train_scores, label="Training Accuracy", marker="o")
+    plt.plot(aggregated_train_sizes, aggregated_test_scores, label="Test Accuracy", marker="o")
+    plt.xlabel("Number of Training Samples")
+    plt.ylabel("Accuracy")
+    plt.title("Aggregated Learning Curve")
     plt.legend()
     plt.grid(True)
     plt.savefig(f"{source_path}/results/plots/{save_string}_learning_curve.pdf")
@@ -322,22 +290,16 @@ def put_model_metrics_into_latex_tables():
 
     for name, model in zip(model_names, model_metrics):
         with open("tex_templates/template_model_metrics_table.tex", "rb") as template_in:
-            template = template_in.read().decode('utf-8', 'ignore')
+            template = template_in.read().decode("utf-8", "ignore")
         template = template.replace("tab:model_metrics", f"tab:model_metrics_{name[1]}")
         template = template.replace("<name>", name[0])
         for i, mod in enumerate(model):
             for j, value in enumerate(mod):
                 template = template.replace(f"<{i}{j}>", str(value))
-        file_label = name[0].split(" ")
-        file_label = [label.lower() for label in file_label]
-        file_label = "_".join(file_label)
-
-        #with open(f"tex/model_metrics_table_{file_label}.tex", "w", encoding="utf-8") as latex_out:
-        #    latex_out.write(template)
 
     # table for mean values across models
     with open("tex_templates/template_model_aggregation_metrics_table.tex", "rb") as template_in:
-        template = template_in.read().decode('utf-8', 'ignore')
+        template = template_in.read().decode("utf-8", "ignore")
 
     model_mean = [model[0] for model in model_metrics]
     num_sublists = len(model_mean)
@@ -436,7 +398,7 @@ def most_prominent_token_across_genres(length):
     save_tex("prominent_tokens.tex", template)
 
 
-locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
+locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
 
 put_model_metrics_into_latex_tables()
 stacked_roc("data")

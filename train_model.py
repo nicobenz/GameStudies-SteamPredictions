@@ -32,7 +32,7 @@ def calculate_prominent_tokens(data, source_path, num_of_tokens=50):
     label_prominent_tokens = {}
 
     for label, combined_tokens in data_generator(data):
-        document = ' '.join(combined_tokens)  # Combine tokens into a single document
+        document = ' '.join(combined_tokens)
         token_tfidf_scores = tfidf_vectorizer.transform([document]).toarray()[0]
         token_indices_sorted_by_tfidf = token_tfidf_scores.argsort()[::-1]
         top_prominent_tokens = []
@@ -42,12 +42,12 @@ def calculate_prominent_tokens(data, source_path, num_of_tokens=50):
             top_prominent_tokens.append((token, round(tfidf_score, 2)))
         label_prominent_tokens[label] = top_prominent_tokens
 
-    with open(f"{source_path}/results/tf-idf_frequency.json", 'w') as json_file:
+    with open(f"{source_path}/results/tf-idf_frequency.json", "w") as json_file:
         json.dump(label_prominent_tokens, json_file)
 
 
 def evaluate_most_prominent_tokens_for_stopword_removal(source_path, print_result=True):
-    with open(f"{source_path}/results/tf-idf_frequency.json", 'r') as json_file:
+    with open(f"{source_path}/results/tf-idf_frequency.json", "r") as json_file:
         tfidf_data = json.loads(json_file.read())
 
     # gather all tokens throughout all genres
@@ -68,7 +68,7 @@ def evaluate_most_prominent_tokens_for_stopword_removal(source_path, print_resul
             if print_result:
                 print(t, c)
 
-    with open(f"{source_path}/results/most_common_tokens.json", 'w') as json_file:
+    with open(f"{source_path}/results/most_common_tokens.json", "w") as json_file:
         json.dump(most_prominent_tokens, json_file)
 
 
@@ -98,7 +98,7 @@ def prepare_tfidf(data, folds=5):
         X_val_tfidf = tfidf_vectorizer.transform(X_val)
 
         # apply smote for balance (only on training set though)
-        #smote = SMOTE(sampling_strategy='auto', random_state=42)
+        #smote = SMOTE(sampling_strategy="auto", random_state=42)
         #X_train_smote, y_train_smote = smote.fit_resample(X_train_tfidf, y_train)
         # smote not possible because of computational constraints
 
@@ -143,7 +143,7 @@ def train_model(data, model_name, source_path, save_order, verbose=True, learnin
                 verbose=verbose
             )
         elif save_string == "support_vector_machine":
-            classifier = SVC(kernel='linear', probability=True, verbose=verbose)
+            classifier = SVC(kernel="linear", probability=True, verbose=verbose)
         else:
             classifier = MultinomialNB()
         print(f"Fitting fold {fold}...")
@@ -158,7 +158,7 @@ def train_model(data, model_name, source_path, save_order, verbose=True, learnin
             learning_curve_test_scores.append(test_scores)
 
         report = classification_report(y_test, y_pred, output_dict=True)
-        conf_mat = confusion_matrix(y_test, y_pred, normalize='true')
+        conf_mat = confusion_matrix(y_test, y_pred, normalize="true")
 
         confusion_matrices.append(conf_mat)
         collected_metrics.append(report)
@@ -167,7 +167,7 @@ def train_model(data, model_name, source_path, save_order, verbose=True, learnin
         collected_predictions["actual"].append(y_test)
 
     mean_conf_mat = np.mean(confusion_matrices, axis=0)
-    np.savetxt(f"{source_path}/results/confusion_matrices/{save_order}_{save_string}_conf_mat.txt", mean_conf_mat, fmt='%.2f', delimiter='\t')
+    np.savetxt(f"{source_path}/results/confusion_matrices/{save_order}_{save_string}_conf_mat.txt", mean_conf_mat, fmt="%.2f", delimiter="\t")
     mean_folding_report(collected_metrics, save_string, source_path, save_order)
 
     convert = list(collected_predictions.keys())
@@ -185,9 +185,9 @@ def train_model(data, model_name, source_path, save_order, verbose=True, learnin
 
     if learning_curve:
         learning_curve_data = {
-            'train_sizes': learning_curve_train_sizes,
-            'train_scores': learning_curve_train_scores,
-            'test_scores': learning_curve_test_scores,
+            "train_sizes": learning_curve_train_sizes,
+            "train_scores": learning_curve_train_scores,
+            "test_scores": learning_curve_test_scores,
         }
         with open(f"{source_path}/results/learning_curves/{save_string}_learning_curve.json", "w",
                   encoding="utf-8") as lc_out:
@@ -248,9 +248,9 @@ def recurrent_neural_network(data):  # not used for final paper because of compu
     model = Sequential()
     model.add(Embedding(input_dim=X_train.shape[1], output_dim=64))
     model.add(LSTM(128))
-    model.add(Dense(num_classes, activation='sigmoid'))
+    model.add(Dense(num_classes, activation="sigmoid"))
 
-    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+    model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
 
     print("Fitting...")
     batch_size = 32  # adjust maybe?
@@ -280,9 +280,9 @@ def model_evaluation_overview(file_name, test, pred, print_results=True):
 
     # calculate relevant metrics
     accuracy = accuracy_score(test, pred)
-    precision = precision_score(test, pred, average='weighted')
-    recall = recall_score(test, pred, average='weighted')
-    f1 = f1_score(test, pred, average='weighted')
+    precision = precision_score(test, pred, average="weighted")
+    recall = recall_score(test, pred, average="weighted")
+    f1 = f1_score(test, pred, average="weighted")
 
     # add to dict
     eval_dict["Accuracy"] = round(accuracy, 2)
@@ -306,7 +306,6 @@ def mean_folding_report(metrics_data, filename, source_path, save_order, print_r
     metrics = {}
     for item in metrics_data:
         for key, value in item.items():
-            # print(key, value)
             if key == "accuracy":
                 if key in metrics:
                     metrics[key].append(value)
@@ -358,8 +357,8 @@ with open(f"{path}/finished_corpus/corpora/corpus-1-AdventureStrategySimulationR
     token_data = json.load(file_in)
 
 # calculate most prominent tokens
-#calculate_prominent_tokens(token_data, path)
-#evaluate_most_prominent_tokens_for_stopword_removal(path)
+calculate_prominent_tokens(token_data, path)
+evaluate_most_prominent_tokens_for_stopword_removal(path)
 
 # train models
 train_model(token_data, "Naive Bayes", path, 1, verbose=False)

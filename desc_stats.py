@@ -70,7 +70,7 @@ def collect_review_metrics(path, all_reviews):
             if len(reviews["reviews"]) > 0:
                 for rev in reviews["reviews"]:
                     if rev["review"] is not None:
-                        text = re.sub(r'[^a-zA-Z]', ' ', rev["review"])
+                        text = re.sub(r"[^a-zA-Z]", " ", rev["review"])
                         text = ' '.join(text.split())
                         all_reviews_list.append(len(text))
                         if rev["language"] == "english":

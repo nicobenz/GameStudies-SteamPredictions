@@ -5,17 +5,17 @@ from tqdm import tqdm
 import json
 
 # establish connection
-conn = sqlite3.connect('/Volumes/Data/steam/stats/steam_studies.db')
+conn = sqlite3.connect("/Volumes/Data/steam/stats/steam_studies.db")
 cursor = conn.cursor()
 
 # create db
-cursor.execute('''
+cursor.execute("""
     CREATE TABLE IF NOT EXISTS games (
         name TEXT NULL,
         id INTEGER PRIMARY KEY,
         reviews INTEGER
     )
-''')
+""")
 
 review_path = "/Volumes/Data/steam/reviews"
 review_files = [f for f in listdir(review_path) if isfile(join(review_path, f)) and f != ".DS_Store"]
@@ -30,9 +30,9 @@ for file in tqdm(review_files):
         revs = review["reviews"]
         db_count = len(revs)
 
-        cursor.execute('''
+        cursor.execute("""
                 INSERT INTO games (name, id, reviews) VALUES (?, ?, ?)
-            ''', (db_name, db_id, db_count))
+            """, (db_name, db_id, db_count))
 
 # commit transaction and close
 conn.commit()

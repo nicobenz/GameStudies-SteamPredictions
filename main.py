@@ -35,7 +35,7 @@ def save_reviews(app_list, app_index, current_server, servers, cursor, restart):
             if break_count > 10:
                 break
             if current_reviews > 0:
-                old_num_reviews = len(review_dict['reviews'])
+                old_num_reviews = len(review_dict["reviews"])
             if new_cursor is None:
                 break
             try:
@@ -45,7 +45,7 @@ def save_reviews(app_list, app_index, current_server, servers, cursor, restart):
                     "cursor": new_cursor.encode(),
                     "purchase_type": "all",
                     "num_per_page": reviews_per_it,
-                    'day_range': 9223372036854775807  # for some reason
+                    "day_range": 9223372036854775807  # for some reason
                 }
                 review = requests.get(url_review, allow_redirects=False, params=payload)
                 if new_cursor == "*":
@@ -60,10 +60,10 @@ def save_reviews(app_list, app_index, current_server, servers, cursor, restart):
                             review_dict["reviews"].append(rev)
                             review_ids.append(rev["recommendationid"])
                     print(f"\r{len(review_dict['reviews'])} of {max_reviews} reviews, cursor: {new_cursor}",
-                          end='', flush=True)
+                          end="", flush=True)
                 new_cursor = review.json()["cursor"]
                 new_start = False
-                current_reviews = len(review_dict['reviews'])
+                current_reviews = len(review_dict["reviews"])
             except:
                 server_count += 1
                 if server_count >= len(servers):
@@ -120,13 +120,8 @@ def change_server_macos(server):
 
     command = ['osascript', '-e', applescript]
 
-    # Execute the AppleScript using osascript
+    # execute applescript via subprocess
     process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-    # Wait for the process to finish (optional)
-    # process.wait()
-
-    # Check the output for any error messages
     stdout, stderr = process.communicate()
 
     if stderr:

@@ -611,20 +611,11 @@ if __name__ == '__main__':
     ]
 
     # create a corpus with given parameters
-    #select_random_review_from_random_game_by_tag_list(
-    #    selected_tags[0:1],
-    #    50000,
-    #    20,
-    #    1000,
-    #    1000,
-    #    volume_path
-    #)
-
-    #with open("/Users/nico/code/GameStudies-SteamPredictions/data/finished_corpus/game_counts/corpus-1-AdventureStrategySimulationRPGPuzzle.json", "r") as file_in:
-    #    games = json.load(file_in)
-
-    #plot_distribution(games)
-    #create_full_corpus(1000, 20, 1000)
-    #create_flat_db_corpus()
-    #process_db(5, 1000, 10, 20, 1000)
-
+    select_random_review_from_random_game_by_tag_list(
+        selected_tags[0:1],
+        50000,
+        20,
+        1000,
+        1000,
+        volume_path
+    )
