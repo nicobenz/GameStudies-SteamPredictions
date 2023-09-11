@@ -1,8 +1,7 @@
 import json
 import numpy as np
-from matplotlib import pyplot as plt
 from sklearn.naive_bayes import MultinomialNB
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
@@ -125,14 +124,24 @@ def train_model(data, model_name, source_path, save_order, verbose=True, learnin
 
     collected_metrics = []
     collected_predictions = {"predicted": [], "probability": [], "actual": []}
+    confusion_matrices = []
     # iterate over folds
     for fold, (X_train, X_test, y_train, y_test) in enumerate(prepare_tfidf(data, folds), start=1):
         if save_string == "naive_bayes":
-            classifier = MultinomialNB()
+            classifier = MultinomialNB(
+                alpha=0.5
+            )
         elif save_string == "logistic_regression":
-            classifier = LogisticRegression(max_iter=1000, verbose=verbose)
+            classifier = LogisticRegression(
+                max_iter=1000,
+                C=0.5,
+                verbose=verbose
+            )
         elif save_string == "random_forest":
-            classifier = RandomForestClassifier(n_estimators=100, random_state=42, verbose=verbose)
+            classifier = RandomForestClassifier(
+                random_state=42,
+                verbose=verbose
+            )
         elif save_string == "support_vector_machine":
             classifier = SVC(kernel='linear', probability=True, verbose=verbose)
         else:
@@ -149,11 +158,16 @@ def train_model(data, model_name, source_path, save_order, verbose=True, learnin
             learning_curve_test_scores.append(test_scores)
 
         report = classification_report(y_test, y_pred, output_dict=True)
+        conf_mat = confusion_matrix(y_test, y_pred, normalize='true')
+
+        confusion_matrices.append(conf_mat)
         collected_metrics.append(report)
         collected_predictions["predicted"].append(y_pred)
         collected_predictions["probability"].append(y_probs)
         collected_predictions["actual"].append(y_test)
 
+    mean_conf_mat = np.mean(confusion_matrices, axis=0)
+    np.savetxt(f"{source_path}/results/confusion_matrices/{save_order}_{save_string}_conf_mat.txt", mean_conf_mat, fmt='%.2f', delimiter='\t')
     mean_folding_report(collected_metrics, save_string, source_path, save_order)
 
     convert = list(collected_predictions.keys())

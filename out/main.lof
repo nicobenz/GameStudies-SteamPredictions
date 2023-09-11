@@ -1,5 +1,4 @@
 \contentsline {figure}{\numberline {1}{\ignorespaces Distribution of Reviews Across Games}}{6}{figure.1}%
 \contentsline {figure}{\numberline {2}{\ignorespaces Number of Games for the Ten Most Common Genres}}{7}{figure.2}%
-\contentsline {figure}{\numberline {3}{\ignorespaces ROC Curve OvR for Naive Bayes}}{9}{figure.3}%
-\contentsline {figure}{\numberline {4}{\ignorespaces ROC Curve OvR for Logistic Regression}}{10}{figure.4}%
-\contentsline {figure}{\numberline {5}{\ignorespaces ROC Curve OvR for Random Forest}}{11}{figure.5}%
+\contentsline {figure}{\numberline {3}{\ignorespaces ROC OvR Curves and Precision Recall Curves for All Models}}{11}{figure.3}%
+\contentsline {figure}{\numberline {4}{\ignorespaces Distribution of Reviews Across Games}}{12}{figure.4}%

@@ -1,15 +1,15 @@
 [0] Config.pm:307> INFO - This is Biber 2.17
 [0] Config.pm:310> INFO - Logfile is 'main.blg'
-[97] biber-darwin:340> INFO - === Fri Sep  8, 2023, 22:48:27
-[117] Biber.pm:418> INFO - Reading 'main.bcf'
-[253] Biber.pm:969> INFO - Using all citekeys in bib section 0
-[274] Biber.pm:4383> INFO - Processing section 0
-[287] Biber.pm:4574> INFO - Looking for bibtex file 'literature.bib' for section 0
-[289] bibtex.pm:1713> INFO - LaTeX decoding ...
-[321] bibtex.pm:1518> INFO - Found BibTeX data source '/Users/nico/code/GameStudies-SteamPredictions/literature.bib'
-[535] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[535] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[535] Biber.pm:4203> INFO - Sorting list 'apa/global//global/global' of type 'entry' with template 'apa' and locale 'en-US'
-[535] Biber.pm:4209> INFO - No sort tailoring available for locale 'en-US'
-[571] bbl.pm:654> INFO - Writing 'main.bbl' with encoding 'UTF-8'
-[589] bbl.pm:757> INFO - Output to main.bbl
+[82] biber-darwin:340> INFO - === Mon Sep 11, 2023, 14:03:57
+[101] Biber.pm:418> INFO - Reading '/Users/nico/code/GameStudies-SteamPredictions/main.bcf'
+[216] Biber.pm:969> INFO - Using all citekeys in bib section 0
+[235] Biber.pm:4383> INFO - Processing section 0
+[248] Biber.pm:4574> INFO - Looking for bibtex file 'literature.bib' for section 0
+[249] bibtex.pm:1713> INFO - LaTeX decoding ...
+[269] bibtex.pm:1518> INFO - Found BibTeX data source '/Users/nico/code/GameStudies-SteamPredictions/literature.bib'
+[422] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[422] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[423] Biber.pm:4203> INFO - Sorting list 'apa/global//global/global' of type 'entry' with template 'apa' and locale 'en-US'
+[423] Biber.pm:4209> INFO - No sort tailoring available for locale 'en-US'
+[445] bbl.pm:654> INFO - Writing 'main.bbl' with encoding 'UTF-8'
+[455] bbl.pm:757> INFO - Output to main.bbl

@@ -1,11 +1,8 @@
 import os
 import json
-import time
-
 import numpy as np
 from matplotlib import pyplot as plt
-from sklearn.metrics import roc_curve, auc, precision_recall_curve, average_precision_score, precision_score, \
-    recall_score
+from sklearn.metrics import roc_curve, auc, precision_recall_curve
 import seaborn as sns
 import locale
 
@@ -100,7 +97,7 @@ def fill_stacked_latex_model_table(stacked_list, file_name):
     save_tex(file_name, template)
 
 
-def roc(source_path):
+def stacked_roc(source_path):
     # set seaborn stuff
     sns.set_theme()
     sns.set_context("paper")
@@ -112,8 +109,10 @@ def roc(source_path):
     pred_files = [file for file in os.listdir(file_path) if ".DS_Store" not in file]
     pred_files = [f"{file_path}/{file}" for file in pred_files]
 
+    fig, axs = plt.subplots(len(pred_files), 2, figsize=(12, 6 * len(pred_files)))
+
     # loop over all prediction files
-    for file in pred_files:
+    for row, file in enumerate(pred_files):
         with open(file, "r") as pred_in:
             predictions = json.load(pred_in)
         save_name = file.split("/")[-1].replace("_predictions.json", "")
@@ -133,7 +132,6 @@ def roc(source_path):
         for class_name in classes:
             roc_curves_per_class = []
             roc_auc_per_class = []
-            #precision_recall_curves_class = []  # Store Precision-Recall curves
 
             # Initialize arrays to store precision and recall values
             precision_values = []
@@ -176,42 +174,68 @@ def roc(source_path):
             all_roc_auc.append(roc_auc_per_class)
 
         # plot
-        plt.figure(figsize=(8, 6))
-        plt.subplot(1, 2, 1)  # Subplot for ROC curve
         for class_index, (roc_curves_class, auc_curves) in enumerate(zip(all_roc_curves, all_roc_auc)):
             mean_fpr = np.linspace(0, 1, 100)
             mean_tpr = np.zeros_like(mean_fpr)
             for fpr, tpr in roc_curves_class[class_index]:
                 mean_tpr += np.interp(mean_fpr, fpr, tpr)
 
-            #mean_tpr /= len(roc_curves_class)
             label = f"{classes[class_index]}, (AUC = {round(auc_curves[class_index][0], 2)})"
+            sns.lineplot(x=mean_fpr, y=mean_tpr, lw=2, label=label, ax=axs[row, 0])
 
-            sns.lineplot(x=mean_fpr, y=mean_tpr, lw=2, label=label)
-        plt.axline([0, 0], [1, 1], color="gray", lw=2, linestyle='--')
-        plt.xlim([0.0, 1.0])
-        plt.ylim([0.0, 1.05])
-        plt.xlabel('False Positive Rate')
-        plt.ylabel('True Positive Rate')
-        plt.legend(loc='lower right')
+        axs[row, 0].axline([0, 0], [1, 1], color="gray", lw=2, linestyle='--')
+        axs[row, 0].set_xlim([0.0, 1.0])
+        axs[row, 0].set_ylim([0.0, 1.05])
+        axs[row, 0].set_title(f'{model_name}\nROC Curves', fontsize=12, loc='center')
+        axs[row, 0].set_xlabel('False Positive Rate')
+        axs[row, 0].set_ylabel('True Positive Rate')
+        axs[row, 0].legend(loc='lower right')
+
         for curve_index, (precision_vals, recall_vals) in enumerate(zip(all_precision_values, all_recall_values)):
-            plt.subplot(1, 2, 2)  # Subplot for Precision-Recall curve
-
             average_precision = auc(recall_vals[curve_index], precision_vals[curve_index])
 
             label = f'{classes[curve_index]} (AP = {average_precision:.2f})'
 
-            sns.lineplot(x=recall_vals[curve_index], y=precision_vals[curve_index], lw=2, label=label)
+            sns.lineplot(x=recall_vals[curve_index], y=precision_vals[curve_index], lw=2, label=label, ax=axs[row, 1])
 
-        #plt.axline([0, 0], [1, 1], color="gray", lw=2, linestyle='--')
-        plt.xlim([0.0, 1.0])
-        plt.ylim([0.0, 1.05])
-        plt.xlabel('Recall')
-        plt.ylabel('Precision')
-        # plt.title(f'Receiver Operating Characteristic (ROC), One-vs-Rest (OvR) for {model_name}')
-        plt.title("")
-        plt.legend(loc='lower right')
-        plt.savefig(f"{source_path}/results/plots/{save_name}_roc.pdf")
+        axs[row, 1].set_xlim([0.0, 1.0])
+        axs[row, 1].set_ylim([0.0, 1.05])
+        axs[row, 1].set_title(f'{model_name}\nPrecision-Recall Curves', fontsize=12, loc='center')
+        axs[row, 1].set_xlabel('Recall')
+        axs[row, 1].set_ylabel('Precision')
+        axs[row, 1].legend(loc='lower right')
+
+    plt.title("ROC and Precision Recall Curves")
+    plt.tight_layout()
+    plt.savefig(f"{source_path}/results/plots/combined_roc.pdf")
+
+
+def create_heatmap_from_confusion_matrices(source_path):
+    matrix_files = [file for file in os.listdir(source_path) if ".DS_Store" not in file]
+    matrix_files.sort()
+    confusion_matrices = []
+    for file in matrix_files:
+        mat = np.loadtxt(f"{source_path}/{file}", dtype=float, delimiter='\t')
+        confusion_matrices.append(mat)
+    mean_matrix = np.mean(confusion_matrices, axis=0)
+    mean_matrix = np.round(mean_matrix, 2)
+
+    class_labels = ["Adventure", "Strategy", "Simulation", "RPG", "Puzzle"]
+
+    sns.set_theme()
+    sns.set_context("paper")
+    custom_palette = sns.color_palette("Spectral")
+    sns.set_palette(custom_palette)
+
+    plt.figure(figsize=(8, 6))
+    sns.set(font_scale=1.2)  # Adjust the font scale as needed
+    sns.heatmap(mean_matrix, cmap="Blues", annot=True, fmt=".2f",
+                xticklabels=class_labels, yticklabels=class_labels, cbar=True)
+    plt.xlabel('Predicted')
+    plt.ylabel('Actual')
+    plt.title('Confusion Matrix')
+    plt.savefig(f"data/results/plots/mean_confusion_matrix.pdf")
+
 
 
 def plot_aggregated_learning_curve(source_path, save_string):
@@ -415,10 +439,11 @@ def most_prominent_token_across_genres(length):
 locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 
 put_model_metrics_into_latex_tables()
-roc("data")
+stacked_roc("data")
 put_review_metrics_into_latex_table()
 put_tf_idf_values_into_latex_table(15)
 most_prominent_token_across_genres(10)
 put_fold_metrics_into_latex_tables()
 create_combined_table("full", "combined_model_metrics.tex")
 create_combined_table("folds", "combined_fold_metrics.tex")
+create_heatmap_from_confusion_matrices("data/results/confusion_matrices")

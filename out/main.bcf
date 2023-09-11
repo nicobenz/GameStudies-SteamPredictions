@@ -2791,7 +2791,41 @@
     <bcf:datasource type="file" datatype="bibtex" glob="false">literature.bib</bcf:datasource>
   </bcf:bibdata>
   <bcf:section number="0">
-    <bcf:citekey order="0" nocite="1">*</bcf:citekey>
+    <bcf:citekey order="1">Aarseth2001</bcf:citekey>
+    <bcf:citekey order="2">Aarseth2001</bcf:citekey>
+    <bcf:citekey order="3">Aarseth1997</bcf:citekey>
+    <bcf:citekey order="4">Aarseth1997</bcf:citekey>
+    <bcf:citekey order="5">Aarseth1997</bcf:citekey>
+    <bcf:citekey order="6">Apperley2006</bcf:citekey>
+    <bcf:citekey order="7">Aarseth2001</bcf:citekey>
+    <bcf:citekey order="8">Apperley2006</bcf:citekey>
+    <bcf:citekey order="9">Zagal2011</bcf:citekey>
+    <bcf:citekey order="10">Apperley2006</bcf:citekey>
+    <bcf:citekey order="11">Heintz2015</bcf:citekey>
+    <bcf:citekey order="12">Heintz2015</bcf:citekey>
+    <bcf:citekey order="13">Heintz2015</bcf:citekey>
+    <bcf:citekey order="14">Atkins2003</bcf:citekey>
+    <bcf:citekey order="15">Simonson2023</bcf:citekey>
+    <bcf:citekey order="16">Windleharth2016</bcf:citekey>
+    <bcf:citekey order="17">Windleharth2016</bcf:citekey>
+    <bcf:citekey order="18">Bahuleyan2018</bcf:citekey>
+    <bcf:citekey order="19">Kumar2022</bcf:citekey>
+    <bcf:citekey order="20">Gupta2019</bcf:citekey>
+    <bcf:citekey order="21">Goering2020</bcf:citekey>
+    <bcf:citekey order="22">Jiang2023</bcf:citekey>
+    <bcf:citekey order="23">Aarseth2001</bcf:citekey>
+    <bcf:citekey order="24">Aarseth1997</bcf:citekey>
+    <bcf:citekey order="25">Apperley2006</bcf:citekey>
+    <bcf:citekey order="26">Zagal2011</bcf:citekey>
+    <bcf:citekey order="27">Heintz2015</bcf:citekey>
+    <bcf:citekey order="28">Atkins2003</bcf:citekey>
+    <bcf:citekey order="29">Simonson2023</bcf:citekey>
+    <bcf:citekey order="30">Windleharth2016</bcf:citekey>
+    <bcf:citekey order="31">Bahuleyan2018</bcf:citekey>
+    <bcf:citekey order="32">Kumar2022</bcf:citekey>
+    <bcf:citekey order="33">Gupta2019</bcf:citekey>
+    <bcf:citekey order="34">Goering2020</bcf:citekey>
+    <bcf:citekey order="35">Jiang2023</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="apa">

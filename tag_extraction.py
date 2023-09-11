@@ -141,6 +141,7 @@ def review_plot():
     ax.yaxis.set_major_formatter(formatter)
 
     plt.xticks(rotation=-30, ha="left")
+    plt.title("Review Distribution")
     plt.xlabel("Number of Reviews")
     plt.ylabel("Number of Games")
     plt.tight_layout()
@@ -223,6 +224,7 @@ def plot_tag_distribution(maximum):
         ax.yaxis.set_major_formatter(formatter)
 
         plt.xticks(rotation=-30, ha="left")
+        plt.title("Tag Distribution")
         plt.ylabel("Number of Games")
         plt.tight_layout()
         plt.savefig("data/results/plots/tags_plot.pdf")

@@ -4,7 +4,11 @@ from tqdm import tqdm
 with open("data/finished_corpus/corpora/corpus-1-AdventureStrategySimulationRPGPuzzle.json", "r") as file_in:
     corpus = json.loads(file_in.read())
 
-additional_stopwords = ["nt", "dlc", "dlcs", "rts", "got", "simulator"]
+additional_stopwords = [
+    "nt", "dlc", "dlcs", "rts",
+    "got", "simulator", "strategy", "better",
+    "buy", "thing", "things"
+]
 
 for key, value in corpus.items():
     for i in tqdm(range(len(value))):
