@@ -150,7 +150,8 @@ def stacked_roc(source_path):
                 mean_tpr += np.interp(mean_fpr, fpr, tpr)
 
             label = f"{classes[class_index]}, (AUC = {round(auc_curves[class_index][0], 2)})"
-            sns.lineplot(x=mean_fpr, y=mean_tpr, lw=2, label=label, ax=axs[row, 0])
+            with sns.plotting_context(font_scale=1.5):
+                sns.lineplot(x=mean_fpr, y=mean_tpr, lw=2, label=label, ax=axs[row, 0])
 
         axs[row, 0].axline([0, 0], [1, 1], color="gray", lw=2, linestyle="--")
         axs[row, 0].set_xlim([0.0, 1.0])
@@ -165,7 +166,8 @@ def stacked_roc(source_path):
 
             label = f"{classes[curve_index]} (AP = {average_precision:.2f})"
 
-            sns.lineplot(x=recall_vals[curve_index], y=precision_vals[curve_index], lw=2, label=label, ax=axs[row, 1])
+            with sns.plotting_context(font_scale=1.5):
+                sns.lineplot(x=recall_vals[curve_index], y=precision_vals[curve_index], lw=2, label=label, ax=axs[row, 1])
 
         axs[row, 1].set_xlim([0.0, 1.0])
         axs[row, 1].set_ylim([0.0, 1.05])

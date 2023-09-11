@@ -95,13 +95,13 @@ isbn=false
 \section*{Abstract}
 This paper focuses on computational game studies as an increasingly popular branch of digital humanities.
 Video game reviews, together with user-generated genre tags for each game, have been extracted from the video game
-platform Steam, resulting in an exhaustive corpus of more than one billion token, which provides a comprehensive
+platform Steam, resulting in an exhaustive corpus of more than one billion tokens, which provides a comprehensive
 basis for analysis.
 Machine learning models including Multinomial Naive Bayes, Logistic Regression and Random Forest, were trained on review texts
-along with the genre tags associated with the game that each particular review is belonging to.
-The findings show that these models are capable of predicting a games genre given review texts, highlighting the
+along with the genre tags associated with the game that each particular review belongs to.
+The findings show that these models are capable of predicting a games genre from review texts, highlighting the
 presence of underlying genre-specific thematic features embedded within these texts.
-Analysis of TF-IDF vector scores also show different ranking of tokens related to topics or game content within each
+Analysis of TF-IDF vector scores also shows different ranking of tokens related to topics or game content within each
 genre, further supporting the hypothesis of genre-specific thematic features in video game reviews.\\
 
 \noindent\textbf{Keywords}: Computational Game Studies, Natural Language Processing (NLP), Machine Learning (ML),
@@ -122,7 +122,7 @@ Computational Linguistics (CL), Steam Reviews, TF-IDF, Classifier Model
 % basic information about the paper and research question
 Game studies are a highly interdisciplinary field attracting researcher with various backgrounds including anthropology,
 sociology, psychology, philology and others~\parencite{Aarseth2001}.
-This diverse combination of involved disciplines is the first indicator that video games are not easily described or
+This diverse combination of involved disciplines is the first indicator that video games are not easily labled or
 categorised.
 Video games offer a vast amount of aspects to study including their visuals, sounds, texts, mechanics, narrative
 strategies, perspectives and many more.
@@ -130,7 +130,7 @@ Because of this, researchers in the past struggled to put video games into their
 They have tried analysing video games as films like a variant of cinema or as texts like a variant of literature.
 But doing so does not capture their essence enough to be able to fully analyse them~\parencite{Aarseth2001}.
 \cite{Aarseth1997} considers games cybertexts and ergodic literature, where the reader is considered a player and
-has to do non-trivial things to advance in the text and reach further parts of it~\parencite[1, 4]{Aarseth1997}.
+has to do non-trivial tasks to advance in the text and reach further parts of it~\parencite[1, 4]{Aarseth1997}.
 In cybertexts access to parts of the text is based on the players decisions, actions or paths taken what
 results in a higher degree of narrative control that is not the case for traditional cinema or
 literature~\parencite[3-4]{Aarseth1997}.
@@ -149,14 +149,14 @@ games especially leaving out the important aspect of interactivity that should a
 in video game genres~\parencite[7]{Apperley2006}.
 
 This interactivity is probably the main connection between the player and the game.
-This paper assumes that player interactions with games of differing genres shows a statistical pattern of thematic
+This paper assumes that player interactions with games of differing genres show a statistical pattern of thematic
 properties that is dictated by the games genre.
-These genre-specific patterns can then be detected and measured in user-generated reviews as thematic pattern.
-The goal of this paper is to find evidence for these pattern by training machine learning classifiers on game
+These genre-specific patterns can then be detected and measured in user-generated reviews as thematic patterns.
+The goal of this paper is to find evidence for these patterns by training machine learning classifiers on game
 reviews written by players and by analysing TF-IDF scores of the relevant tokens for each genre.
-Game reviews can be a way of accessing how players in general think about certain games~\cite[358]{Zagal2011} and the
+Game reviews can be a way of accessing how players in general think about certain games~\parencite[358]{Zagal2011} and the
 results of this study could therefore be helpful to further investigate the culture of gaming and what players find most
-interesting in different genres.
+important in different genres.
 
 
 \section{Related work}\label{sec:related-work}
@@ -169,8 +169,8 @@ interesting in different genres.
 As already mentioned, in the past genres in video games have suffered from the fact that researchers tried to force
 genres of films or literature on them with a focus too strong on aesthetics instead on their ergodic nature~\parencite[7]{Apperley2006}.
 \cite{Heintz2015} argue that even in the recent literature, video game genres lack clarity and consistency what can
-be seen in their definition on unrelated aspects like camera position as in first- or third-person shooter or intention
-as in educational games~\parencite[176-177]{Heintz2015}.
+be seen in their definition on unrelated aspects like camera position as in First- or Third-Person Shooter or intention
+as in Educational Games~\parencite[176-177]{Heintz2015}.
 Combined with the fact that games genres are not easy to distinct from one another or from their sub-genres because
 of their fluidity, this makes games hard to categorise in genre labels~\parencites[177]{Heintz2015}[23]{Atkins2003}.
 
@@ -221,7 +221,7 @@ This results in a differing amount of ways where the classifier could fail or pe
 When looking at the genres that most of these studies chose, it is interesting to see that most of these genres
 were very destinct from each other, no matter if game, music or movie genre.
 
-All of these studies have in common though, that they chose different kinds of data to train their models, while non
+All of these studies have in common though, that they chose different kinds of data to train their models, while none
 of them chose to use text reviews.
 
 
@@ -231,9 +231,11 @@ of them chose to use text reviews.
 % what can the results explain or show
 As already mentioned, researchers in the past could show that machine learning models are very capable of performing
 class or genre classification in various situations and for various types of media.
-Because of that it can be expected that these classifiers will also perform well when trained on review data from
-games of different genres, given the assumption that there are genre-specific features like lexical choice or selection
-of thematic focus.
+Classifier models are statistical machine learning algorithmns that can be trained on labeled data to perform
+distinction tasks to classify data not seen in training stages based on their training data.
+Because of their long history of usage in science it can be expected that these classifiers will also perform well when
+trained on review data from games of different genres, given the assumption that there are genre-specific features like
+lexical choice or selection of thematic focus.
 
 To get the data, reviews were collected from the Steam platform using their API as part of a custom script to boost
 collection rates.
@@ -246,11 +248,13 @@ Data collection finished after 50,000 reviews for every genre were collected.
 
 In order to reduce noise from other confounding features like syntax or semantics, Term Frequency--Inverse Document
 Frequency (TF-IDF) vectors were chosen as training data for the classifier models.
-TF-IDF vectors are inherently better at showing lexical importance of terms in a collection of documents than they are
+TF-IDF vectors are statistical metrics on a dataset of several documents that show the relative importance of terms
+in one document or class of documents over the rest of the dataset.
+These vectors are inherently better at showing lexical importance of terms in a collection of documents than they are
 capable of showing semantic relations within texts.
 For the goal of this paper this is an advantage in two ways:
-It reduces the noise that semantic patterns could create, and it also boosts the importance of lexical items and the
-thematic patterns that can be infered from their presence through TF-IDF scores.
+It reduces the noise that semantic or syntactic patterns could create, and it also boosts the importance of lexical
+items and the thematic patterns that can be infered from their presence through TF-IDF scores.
 The three models Multinomial Naive Bayes, Logistic Regression and Random Forest were selected as models for the
 classification task.
 These models could show in the past that they are very capable of multi class classification tasks while not being
@@ -266,15 +270,15 @@ and evaluated.
 % information on the filtered corpus: explain selection algorithm and explain restrictions in selection
 On the Steam platform users have the ability to write a public text review for any game.
 These reviews can be retrieved using the official Steam API.
-Given the vast amount of review data available on steam, this process took some time with a Python script generating
+Given the vast amount of review data available on Steam, this process took some time with a Python script generating
 API requests and saving the retrieved reviews non-stop for more than two months between May and July 2023.
 The user generated genre tags were not part of the data retrieved from the API and have been retrieved using a custom
-script crawling each Steam games web page and scraping the tags from the HTML content.
+script crawling each Steam games' web page and scraping the tags from the HTML content.
 Both processes were running in parallel but the crawling of the tags finished much faster, because of the very low
 amount of target data.
-This resulted in very small discrepancies between the review and the tag dataset because of games being removed from
+This resulted in very small discrepancies between the review and the tag corpus because of games being removed from
 or added to Steam in the time window when the tag crawling was already finished but the review extraction not yet.
-Affected games where either the review set or the tag set was missing were not used in the combined corpus.
+Affected games where either the review data or the tag data was missing were not used in the combined corpus.
 
 \subsection{Games}\label{subsec:games}
 In total, data of 134,076 games was downloaded which includes all games present on the platform at that time.
@@ -294,7 +298,7 @@ See figure~\ref{fig:review_plot} for an overview of the distribution of games an
 
 \subsection{Reviews}\label{subsec:reviews}
 Among all these games the numbers of reviews for each game are not evenly distributed, as was expected.
-The biggest portion of games do not have reviews at all, while some games have more than one million reviews.
+The biggest portion of games does not have reviews at all, while some games have more than one million reviews.
 These reviews also vary strongly in their length but all within the dimensions set by Steam which needs a review to
 be between 5 and 8,000 characters.
 The Steam API returns reviews as batches in a JSON format containing the reviews along with some anonymous metadata
@@ -306,14 +310,14 @@ For some basic metrics of the reviews see table~\ref{tab:review_metrics}.
 
 \subsection{Genres}\label{subsec:genres}
 The genre term is used very loosely in this paper.
-Through the mechanic of user-generated tags, games have a list of user given labels along with the number of users
+Through the mechanic of user-generated tags, games have a list of user-given labels along with the number of users
 that have given or upvoted a tag.
 If a game has more than 20 tags associated with it, only the 20 most common tags will be displayed on Steam.
-While most tags correspond to traditional genre labels (e.g. adventure, strategy, RPG) some of them focus more on
-features that could be present in any genre (e.g.\ early access, free to play, VR). There are also tags where it is
-not entirely clear whether they correspond to a genre or not (e.g.\ indie, exploration, casual) because of the fluidity
+While most tags correspond to traditional genre labels (e.g. Adventure, Strategy, RPG) some of them focus more on
+features that could be present in any genre (e.g.\ EarlyAccess, FreetoPlay, VR). There are also tags where it is
+not entirely clear whether they correspond to a genre or not (e.g.\ Indie, Exploration, Casual) because of the fluidity
 of emerging new genres and subgenres.
-To avoid biased selection this paper will consider all user generated tags genres.
+To avoid biased selection this paper will consider all user-generated tags genres.
 Further sampling and clustering of these tags into more traditional genres is always possible for future research at a
 later date.
 See figure~\ref{fig:genre_plot} for an overview of genres that are found within the 5 most common genres of all games
@@ -337,18 +341,18 @@ in the corpus.
 \subsection{Corpus generation}\label{subsec:corpus-generation}
 The review data was gathered utilising Python scripts\footnote{See the repository linked on the front page for access
 to all scripts and code used.} along with the Steam API. The genre data
-was not part of the Steam API and was therefore crawled through a custom script accessing each games page on the Steam
+was not part of the Steam API and was therefore crawled through a custom script accessing each games' page on the Steam
 website and downloading its HTML content for scraping in a later step.
-Review and genre data has been combined by saving it in JSON files storing information like game id, review id,
+Review and genre data has been combined by saving it in JSON files storing information like game ID, review ID,
 review text and most common genre tags for every review.
 
 \subsection{Dataset sampling}
 Only games were included that had at least 10 reviews and each review was randomly chosen and had to be between 20 and
 1000 token while collecting maximum of 1000 reviews per game.
 Collected reviews where tokenised, cleaned from stopwords and custom stopwords, special characters and any other
-noise like ASCII art, and then lemmatised if possible.
-Custom stopwords were collected through comparison of most prominent tokens in earlier corpora using TF-IDF scores
-among all genres present in the corpora.
+noise like ASCII art, and then lemmatised, if possible, using spaCy.
+Custom stopwords were collected through comparison of most prominent tokens from earlier corpora using TF-IDF scores
+among all genres present in the specific corpus.
 The 50 most common tokens for all genres have been collected and counted.
 Among these tokens, only those present in at least three genres have been removed.
 Those consisted mostly of tokens belonging to the text genre review like \textit{recommend}, \textit{feel} or
@@ -357,18 +361,18 @@ Tokens belonging to the broad field of video games like \textit{game} or \textit
 stopwords.
 Content-specific words like \textit{level} or \textit{gameplay}, however, have not been removed.
 For a full list of all custom stopwords that were removed see appendix~\ref{sec:stops}.
-TF-IDF vectors were created off the cleaned reviews and then passed on to training.
+TF-IDF vectors were created off the cleaned reviews and then passed on to model training.
 During early stages of dataset sampling the usage of Synthetic Minority Oversampling Technique (SMOTE) was
 planed in order to reduce small imbalances in the dataset that resulted from small differences in review lengths in
 each genre.
-Unfortunately SMOTE proved to be too computationally intensive to be implemented for a paper of this scope.
-Because of the general attention for a balanced dataset this will be of no major consequences.
+Unfortunately, SMOTE proved to be too computationally intensive to be implemented for a paper of this scope.
+Because of the general focus on a balanced dataset this will be of no major consequences.
 
 
 \subsection{Model training}\label{subsec:model-training}
 The already prepared dataset was separated into TF-IDF vectors and genre labels, and an 80/20 split has been performed
 for separating the training from the test set.
-The models were trained using cross-validation in the form of k-folds with five folds.
+The models were trained using cross-validation in the form of k-folds with five folds each.
 Various configurations in hyperparameter tuning were tested, but the standard values of the models implementations in
 Scikit-learn were nearly perfect.
 Random Forest was left on the standard values while setting Multinomial Naive Bayes alpha value to 0.5 and Logistic
@@ -376,7 +380,7 @@ Regressions C value to 0.5 achieved best results.
 Metrics like precision, recall and F1 score for each fold were taken both in the form of mean values and
 genre-specific and will be reported within the next section.
 These metrics were also used to draw receiver operating characteristic (ROC) curves in a One-versus-Rest (OvR) fashion
-and precision recall curves for better model evaluation.
+and precision-recall curves for better model evaluation.
 After training, relevant metrics like accuracy, recall, precision and F1 score were collected.
 
 \section{Results and discussion}\label{sec:results-and-discussion}
@@ -393,8 +397,8 @@ The relatively high values in F1 scores show that the models can predict the gen
 above baseline level of random guessing what would be at values of around 0.2.
 Another indicator of good model performance is the fact that precision, recall and F1 score are all very closely
 together, hinting at very stable model performance.
-Additionally, performance across all five folds is very similar what further enhances the claim of stable and well
-performing models.
+Additionally, performance across all five folds is very similar with slightly lower values in the first fold
+what further enhances the claim of stable and well performing models.
 See table~\ref{tab:combined_fold_metrics} for the metrics for every fold.
 
 \input{tex/combined_fold_metrics}
@@ -407,25 +411,25 @@ value across all genres.
 \input{tex/combined_model_metrics}
 
 Interestingly, genres do not perform on the same level.
-While most genres perform on a similar level, adventure games are harder to predict for the models than puzzle games,
-having a difference in F1 score of 0.16 in Multinomial Naive Bayes and with similar values in the other two models.
-I argue that this lies in the nature of the adventure genre that shows more overlap with other genres and more
-individual fluidity for every instance of adventure games.
+While most genres perform on a similar level, Adventure games are harder to predict for the models than Puzzle games,
+having a difference in F1 score of 0.16 to Puzzle games in Multinomial Naive Bayes and with similar values in the other two models.
+I argue that this lies in the nature of the Adventure genre that shows more overlap with other genres and more
+individual fluidity for every instance of Adventure games.
 These games contain elements of other genres to a differing degree and also have fuzzy boundaries to the genres like
-action-adventure or RPG.
-This can be further observed in the ROC and precision recall curves in figure~\ref{fig:roc}.
+Action-Adventure or RPG.
+This can be further observed in the ROC and precision-recall curves in figure~\ref{fig:roc}.
 
 \input{tex/combined_roc}
 
-The adventure genre has the lowest area under curve (AUC) from all genres in their respective ROC curves, even across
+The Adventure genre has the lowest area under curve (AUC) from all genres in their respective ROC curves, even across
 all models, indicating that this is not because of model performance issues but a problem inherent to the genre.
-The precision recall curves show the lowest average precision (AP) for adventure and also a stronger initial decline in
-performance for this genre alone, also across all models with the steepest fall in the Random Forest classifier.
+The precision-recall curves show the lowest average precision~(AP) for Adventure and also a stronger initial decline in
+performance for this genre alone, also across all models, with the steepest fall in the Random Forest classifier.
 The curve shows the trade-off relation of how many predictions are actually of the predicted label (precision) and how
 many instances of a label are correctly predicted (recall).
 The strong initial decline compared to other genres shows that the model struggles especially with positive predictions
-of the adventure genre what I regard as evidence for either a stronger distraction from other genre labels or missing
-predictive power in the adventure class.
+of the Adventure genre what I regard as evidence for either a stronger distraction from other genre labels or missing
+predictive power in the Adventure class.
 
 To further investigate the nature of the failing prediction within this class, one should pay attention to the TF-IDF
 scores for every genre to see the most prominent tokens for every genre.
@@ -435,53 +439,55 @@ See table~\ref{tab:tfidf_by_genre} for an overview.
 
 The table shows the most relevant tokens for every genre along with their TF-IDF score.
 While most genres have one token standing out with a value a bit higher than other tokens, the highest scoring token for
-adventure is scored nearly twice as high as the following token.
-That indicates that the token \textit{story} is the main predictor for the genre adventure.
-Having a good predictor is usually a good sign for a class but the problem for the adventure genre arises especially in
+Adventure is scored twice as high as the following token.
+That indicates that the token \textit{story} is the strongest predictor for the genre Adventure.
+Having a strong predictor is usually a good sign for a class but the problem for the Adventure genre arises especially in
 the fact that there are no other strong predictors and that their main predictor is not unique for this genre while
-the other genres have strong and especially unique predictors.
+the other genres have strong and unique predictors.
 This will get more clear when looking at the ten highest mean TF-IDF scores in table~\ref{tab:prominent_tokens}.
 
 \input{tex/prominent_tokens}
 
 It is clearly visible that \textit{story} is the most important token across all genres when looking at the mean TF-IDF
-scores across all classes since it is present in all classes but strategy.
+scores across all classes since it is present in all classes but Strategy.
 It could be easily assumed that classes that also have high TF-IDF scores for the token \textit{story} like RPG and
-puzzle are the main distractors for this class and cause the most false positives.
+Puzzle are the main distractors for this class and cause the most false positives.
 Interestingly, looking at the confusion matrix in figure~\ref{fig:conf_mat_plot} reveales that actually the opposite
 is the case.
 
 \input{tex/confusion_matrix_plot}
 
-The highest amount of false positives for the adventure genre is caused by the strategy genre, followed by the
-simulation genre.
+The confusion matrix shows false positives in the rows, false negatives in the columns and true positives at the
+intersections of both.
+The highest amount of false positives for the Adventure genre is caused by the Strategy genre, followed by the
+Simulation genre, as seen on the first row of the matrix.
 The other two genres that also have a high TF-IDF score with the token \textit{story} are responsible for the least
 amount of false positives.
 While this seems counter-intuitive at first glance, I argue that the answer for that is quite easy.
-The false positives are most probably causes by review texts that do not deal with the topic of story and avoid the
+The false positives are most probably caused by review texts that do not deal with the topic of story and avoid the
 token.
-Without its main predictor, a review text for a game of the adventure genre could easily be regarded as a review for
-a game of the strategy or simulation genre, mostly because reviews in these genres are characterised through the
+Without its main predictor, a review text for a game of the Adventure genre could easily be regarded as a review for
+a game of the Strategy or Simulation genre, mostly because reviews in these genres are characterised through the
 statistical lack of mentioning the story of a game.
 When looking at the other genre that has high TF-IDF scores for the token \textit{story}, RPG, the problem does not
-occur since the confusion matrix indicates that strategy and simulation are responsible for the least amount of false
+occur since the confusion matrix indicates that Strategy and Simulation are responsible for the least amount of false
 positives for the genre RPG.
 This can be explained by the fact that this genre, while having \textit{story} as their highest ranked TF-IDF score,
-also has strong other predictors that also are not ranked high for the other genres.
-The distribution of RPGs predictive power is not as strongly centered on one token like in the case
-of adventure and RPG has other strong predictors like \textit{combat} that are way less relevant for the other genres
+also has strong other predictors that importantly are not ranked high for the other genres.
+The distribution of RPGs' predictive power is not as strongly centered on one token like in the case
+of Adventure, and RPG has other strong predictors like \textit{combat} that are way less relevant for the other genres
 analysed.
-This creates further evidence for my claim that the low performance of the adventure genre is caused by a lack of unique
-predictors that other genres have like \textit{units} for strategy, \textit{route} for simulation, \textit{combat} for
-RPG or \textit{level} for puzzle.
+This creates further evidence for my claim that the low performance of the Adventure genre is caused by a lack of unique
+predictors that other genres have, like \textit{units} for Strategy, \textit{route} for Simulation, \textit{combat} for
+RPG or \textit{level} for Puzzle.
 I regard the existance of these differing TF-IDF scores to be genre-specific thematic patterns.
 The data shows that some tokens like \textit{graphics} or \textit{price} show a rather similar
-distribution across genres, while other token like \textit{story} show a higher score in adventure and RPG genre.
+distribution across genres, while other token like \textit{story} show a higher score in Adventure and RPG genres.
 There is also evidence for topics that are relevant to most genres but less relevant to one genre, like in the case of
-\textit{gameplay} that has a very similar score across all genres except simulation, where it is scored much
+\textit{gameplay} that has a very similar score across all genres except Simulation, where it is scored much
 lower.
 
-However, there are still some limitations of this study that are needed to be mentioned.
+However, there are still some limitations of this study that need to be mentioned.
 First of all, the dataset with its size of 250,000 review texts is rather small compared to the size of the whole corpus
 of several million review texts.
 Future research should be done including more review texts of the corpus.
@@ -491,23 +497,23 @@ used in this study.
 When using more genres, future research should also consider not excluding games with overlapping genres or make
 it a multi label classification task in the first place where models are trained on more than one genre label for each
 review text.
-In this context the use of weighted genre labels, generated through the number of user that upvoted a certain genre tag,
+In this context the use of weighted genre labels, generated through the number of users that upvoted a certain genre tag,
 could be used for less distortion caused by including many labels.
 
 
 \section{Conclusion}\label{sec:conclusion}
-For this paper I trained three different machine learning classifiers on review texts from the platform Steam and
-analysed TF-IDF vectors created from these review texts in order to investigate thematic differences between
+For this paper, I trained three different machine learning classifiers on video game review texts and
+analysed the TF-IDF vectors generated from these review texts in order to investigate thematic differences between
 genres.
-I could show that models like Multinomial Naive Bayes, Logistic Regression and Random Forest are in fact capable of
-achieving reasonable results when predicting genres learned from user-generated reviews texts along with user-generated
+I was able to show that models such as Multinomial Naive Bayes, Logistic Regression and Random Forest are indeed able to
+achieve reasonable results when predicting genres learned from user-generated review texts along with user-generated
 genre tags.
-I could further show that there are thematic patterns that are genre-specific by analysing TF-IDF vectors
+I was able to show that there are thematic patterns that are genre-specific by analysing TF-IDF vectors
 and their scores between genres.
-While there are some topics like \textit{gameplay}, \textit{graphics} and \textit{price} that seem to have the same
-relevance to players across the tested genres, other themes like \textit{story} seem to matter way more to players of
-adventure games than to players of strategy or simulation games.
-Future research has to see whether these findings can be replicated on other genres then the ones analysed in this
+While there are some topics like \textit{gameplay}, \textit{graphics} and \textit{price} that seem to be equally important
+to players across the genres tested, other themes such as \textit{story} seem to be much more important to players of
+Adventure games than to players of Strategy or Simulation games.
+Future research has to show whether these findings can be replicated on other genres then the ones analysed in this
 study.
 
 
@@ -520,12 +526,12 @@ study.
 
 \begin{appendices}
 \section{Custom stopwords}\label{sec:stops}
-Custom stopwords that were removed from the corpora before model training:
+Custom stopwords that were removed from the dataset before model training:
 \begin{itquote}
     game, like, good, games, time, play, fun, way, great, little, bit, lot, pretty, feel, think, recommend, playing,
     things, want, different, played, worth, got, love, better, new, need, find, bad, nice, steam, know, dlc, use, hours,
     people, nt\footnote{This is probably an artifact created by stemming the falsely written \textit{dont} (without
-    apostrophe).}, adventure, strategy, simulation, rpg, puzzle, better, buy, thing, things
+    apostrophe).}, adventure, strategy, strategys, simulation, rpg, puzzle, better, buy, thing, things
 \end{itquote}
 \end{appendices}
 

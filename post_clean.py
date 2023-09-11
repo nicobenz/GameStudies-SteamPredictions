@@ -1,13 +1,13 @@
 import json
 from tqdm import tqdm
 
-with open("data/finished_corpus/corpora/corpus-1-AdventureStrategySimulationRPGPuzzle.json", "r") as file_in:
+with open("data/finished_corpus/corpora/corpus-1-AdventureStrategySimulationRPGPuzzle_cleaned.json", "r") as file_in:
     corpus = json.loads(file_in.read())
 
 additional_stopwords = [
     "nt", "dlc", "dlcs", "rts",
     "got", "simulator", "strategy", "better",
-    "buy", "thing", "things"
+    "buy", "thing", "things", "strategys"
 ]
 
 for key, value in corpus.items():

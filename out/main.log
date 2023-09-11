@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.15)  11 SEP 2023 14:03
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.15)  11 SEP 2023 21:12
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -948,57 +948,51 @@ File: data/results/plots/review_plot.pdf Graphic file (type pdf)
 Package pdftex.def Info: data/results/plots/review_plot.pdf  used on input line
  3.
 (pdftex.def)             Requested size: 435.32422pt x 326.49118pt.
-) (./tex/review_metrics.tex
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-) (./tex/genre_plot.tex
-<data/results/plots/tags_plot.pdf, id=189, 505.89pt x 289.08pt>
+) (./tex/review_metrics.tex [6 <./data/results/plots/review_plot.pdf>]) (./tex/
+genre_plot.tex
+<data/results/plots/tags_plot.pdf, id=229, 505.89pt x 289.08pt>
 File: data/results/plots/tags_plot.pdf Graphic file (type pdf)
 <use data/results/plots/tags_plot.pdf>
 Package pdftex.def Info: data/results/plots/tags_plot.pdf  used on input line 3
 .
 (pdftex.def)             Requested size: 435.32422pt x 248.76274pt.
-) [6 <./data/results/plots/review_plot.pdf>]
+)
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <9> on input line 339.
+(Font)              <9> on input line 343.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 339.
+(Font)              <5> on input line 343.
  [7 <./data/results/plots/tags_plot.pdf>] (./tex/model_aggregation_metrics_tabl
-e.tex
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-) (./tex/combined_fold_metrics.tex [8]) (./tex/combined_model_metrics.tex
+e.tex [8])
+(./tex/combined_fold_metrics.tex) (./tex/combined_model_metrics.tex
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 ) (./tex/combined_roc.tex
-<data/results/plots/combined_roc.pdf, id=298, 722.7pt x 1084.05pt>
+<data/results/plots/combined_roc.pdf, id=298, 867.24pt x 1300.86pt>
 File: data/results/plots/combined_roc.pdf Graphic file (type pdf)
 <use data/results/plots/combined_roc.pdf>
 Package pdftex.def Info: data/results/plots/combined_roc.pdf  used on input lin
 e 3.
-(pdftex.def)             Requested size: 435.32422pt x 652.98238pt.
+(pdftex.def)             Requested size: 435.32422pt x 652.989pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-) [9] (./tex/tfidf_by_genre.tex) (./tex/prominent_tokens.tex
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-) [10] [11 <./data/results/plots/combined_roc.pdf>]
-(./tex/confusion_matrix_plot.tex
+) [9] (./tex/tfidf_by_genre.tex) [10] [11 <./data/results/plots/combined_roc.pd
+f>] (./tex/prominent_tokens.tex) (./tex/confusion_matrix_plot.tex
 <data/results/plots/mean_confusion_matrix.pdf, id=366, 578.16pt x 433.62pt>
 File: data/results/plots/mean_confusion_matrix.pdf Graphic file (type pdf)
 <use data/results/plots/mean_confusion_matrix.pdf>
 Package pdftex.def Info: data/results/plots/mean_confusion_matrix.pdf  used on 
 input line 3.
 (pdftex.def)             Requested size: 435.32422pt x 326.49118pt.
-) [12 <./data/results/plots/mean_confusion_matrix.pdf>] [13] [14
 
-] [15
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+) [12] [13 <./data/results/plots/mean_confusion_matrix.pdf>] [14] [15
+
+] [16
 
 ]
 (/Users/nico/code/GameStudies-SteamPredictions/out/main.aux)
@@ -1009,9 +1003,9 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 25112 strings out of 478268
- 473079 string characters out of 5846347
- 1277807 words of memory out of 5000000
+ 25113 strings out of 478268
+ 473086 string characters out of 5846347
+ 1272824 words of memory out of 5000000
  42864 multiletter control sequences out of 15000+600000
  476821 words of font info for 53 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -1031,10 +1025,10 @@ cmr8.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
 fb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pf
 b>
 Output written on /Users/nico/code/GameStudies-SteamPredictions/out/main.pdf (1
-6 pages, 1209239 bytes).
+7 pages, 1230141 bytes).
 PDF statistics:
- 516 PDF objects out of 1000 (max. 8388607)
- 306 compressed objects within 4 object streams
- 63 named destinations out of 1000 (max. 500000)
+ 520 PDF objects out of 1000 (max. 8388607)
+ 309 compressed objects within 4 object streams
+ 64 named destinations out of 1000 (max. 500000)
  169 words of extra memory for PDF output out of 10000 (max. 10000000)
 
